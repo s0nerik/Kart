@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ShoppingAssistant</string>
+    <string name="rv_layout_manager_linear">android.support.v7.widget.LinearLayoutManager</string>
+    <string name="rv_layout_manager_grid">android.support.v7.widget.GridLayoutManager</string>
 </resources>

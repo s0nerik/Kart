@@ -1,6 +1,13 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.app.Application
+import com.github.s0nerik.shoppingassistant.model.*
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmList
+import khronos.days
+import khronos.minus
+import khronos.minutes
 
 /**
  * Created by Alex on 12/25/2016.
@@ -10,6 +17,50 @@ import android.app.Application
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        Realm.init(this)
+        Realm.setDefaultConfiguration(
+                RealmConfiguration.Builder()
+                        .deleteRealmIfMigrationNeeded()
+                        .build()
+        )
+        createDummyPurchases()
+    }
 
+    private fun createDummyPurchases() {
+        val realm = Realm.getDefaultInstance()
+        realm.executeTransaction {
+            realm.deleteAll()
+
+            (0..10).forEach { i ->
+                val item = it.createObject(Purchase::class.java, i)
+                item.amount = 1
+
+                val date = i.days.ago
+                item.date = date
+
+                val category = it.createObject(PurchaseCategory::class.java, i)
+                category.name = i.toString()
+                item.category = category
+
+                val currency = it.createObject(Currency::class.java, i)
+                currency.name = i.toString()
+                currency.sign = "$"
+                item.currency = currency
+
+                val shop = it.createObject(Shop::class.java, i)
+                shop.name = "$i Shop"
+
+                val priceChange = it.createObject(PriceChange::class.java, i)
+                priceChange.date = date - 1.minutes
+                priceChange.value = i.toFloat()
+
+                val price = it.createObject(Price::class.java, i)
+                price.shop = shop
+                price.valueChanges = RealmList(priceChange)
+
+                item.itemPrice = price
+            }
+        }
+        realm.close()
     }
 }

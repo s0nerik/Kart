@@ -16,7 +16,18 @@ open class Price(
         open var valueChanges: RealmList<PriceChange> = RealmList()
 ) : RealmObject() {
     // TODO: implement this
-    fun getPriceForDate(date: Date) {
-
+    fun getPriceForDate(date: Date): Float? {
+        if (valueChanges.size > 0) {
+            var price: Float? = null
+            valueChanges.sortedBy { it.date }.forEach {
+                if (date < it.date!!) {
+                    return price
+                }
+                price = it.value
+            }
+            return price
+        } else {
+            return null
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 /**
  * Created by Alex on 12/25/2016.
@@ -8,7 +9,7 @@ import io.realm.RealmObject
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Currency(
-        open var id: Long = 0,
+        @PrimaryKey open var id: Long = 0,
         open var sign: String = "",
         open var name: String = ""
 ) : RealmObject() {

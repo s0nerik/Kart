@@ -17,5 +17,5 @@ open class Purchase(
         open var date: Date? = null,
         open var amount: Int = 0,
         open var itemPrice: Price? = null,
-        open var currency: Currency
+        open var currency: Currency? = null
 ) : RealmObject()
