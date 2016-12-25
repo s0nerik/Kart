@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.1-M03'
+        kotlin_version = '1.1-M04'
         anko_version = '0.8.3'
         support_version = '25.1.0'
         dagger_version = '2.5'
@@ -16,6 +16,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.realm:realm-gradle-plugin:2.2.1"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'realm-android'
 
 kapt {
     generateStubs = true
@@ -74,6 +75,7 @@ dependencies {
 
     // UI
     compile 'eu.davidea:flexible-adapter:5.0.0-b8'
+    compile 'blue.aodev:material-values:1.1.1'
 
     // Image loading
     compile 'com.github.bumptech.glide:glide:3.7.0'
