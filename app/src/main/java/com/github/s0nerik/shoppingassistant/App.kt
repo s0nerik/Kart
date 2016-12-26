@@ -32,33 +32,36 @@ class App : Application() {
             realm.deleteAll()
 
             (0..10).forEach { i ->
-                val item = it.createObject(Purchase::class.java, i)
-                item.amount = 1
+                val purchase = it.createObject(Purchase::class.java, i)
+                purchase.amount = 1
 
                 val date = i.days.ago
-                item.date = date
+                purchase.date = date
 
-                val category = it.createObject(PurchaseCategory::class.java, i)
+                val category = it.createObject(Category::class.java, i)
                 category.name = i.toString()
-                item.category = category
-
-                val currency = it.createObject(Currency::class.java, i)
-                currency.name = i.toString()
-                currency.sign = "$"
-                item.currency = currency
 
                 val shop = it.createObject(Shop::class.java, i)
                 shop.name = "$i Shop"
 
+                val currency = it.createObject(Currency::class.java, i)
+                currency.name = i.toString()
+                currency.sign = "$"
+
                 val priceChange = it.createObject(PriceChange::class.java, i)
                 priceChange.date = date - 1.minutes
                 priceChange.value = i.toFloat()
+                priceChange.currency = currency
 
                 val price = it.createObject(Price::class.java, i)
                 price.shop = shop
                 price.valueChanges = RealmList(priceChange)
 
-                item.itemPrice = price
+                val item = it.createObject(Item::class.java, i)
+                item.category = category
+                item.price = price
+
+                purchase.item = item
             }
         }
         realm.close()

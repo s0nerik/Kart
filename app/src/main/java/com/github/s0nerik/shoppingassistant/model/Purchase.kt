@@ -9,13 +9,16 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-// TODO: add a way to distinguish different shops
-// TODO: add a way for accounting price changes
 open class Purchase(
         @PrimaryKey open var id: Long = 0,
-        open var category: PurchaseCategory? = null,
+        open var item: Item? = null,
         open var date: Date? = null,
-        open var amount: Int = 0,
-        open var itemPrice: Price? = null,
-        open var currency: Currency? = null
-) : RealmObject()
+        open var amount: Int = 0
+) : RealmObject() {
+    val readablePrice
+        get() = "${amount}x ${item!!.price!!.getPriceWithCurrency(date!!)}"
+    val readableCategory
+        get() = item!!.category!!.name
+    val readableShop
+        get() = item!!.price!!.shop!!.name
+}

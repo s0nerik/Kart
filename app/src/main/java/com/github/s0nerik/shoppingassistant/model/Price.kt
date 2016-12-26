@@ -15,19 +15,23 @@ open class Price(
         open var shop: Shop? = null,
         open var valueChanges: RealmList<PriceChange> = RealmList()
 ) : RealmObject() {
-    // TODO: implement this
-    fun getPriceForDate(date: Date): Float? {
+    fun getPriceForDate(date: Date): Pair<Float?, Currency?> {
+        var price: Float? = null
+        var currency: Currency? = null
         if (valueChanges.size > 0) {
-            var price: Float? = null
             valueChanges.sortedBy { it.date }.forEach {
                 if (date < it.date!!) {
-                    return price
+                    return Pair(price, currency)
                 }
                 price = it.value
+                currency = it.currency
             }
-            return price
-        } else {
-            return null
         }
+        return Pair(price, currency)
+    }
+
+    fun getPriceWithCurrency(date: Date): String {
+        val price = getPriceForDate(date)
+        return "${price.second?.sign}${price.first}"
     }
 }
