@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:padding="16dp"
-        android:textAppearance="@style/MaterialTypography.Locale.Title"
+        android:textAppearance="@style/MaterialTypography.Regular.Body2"
         android:textColor="@color/textColorPrimary"
         android:text='@{item.readableDate, default=December_12}'
         android:background="#fff"

@@ -34,6 +34,9 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
                 .map<PurchaseRealmProxy>(R.layout.item_recent_purchases)
                 .into(recentsRecycler)
 
+        recentsRecycler.isNestedScrollingEnabled = false
+        recentsRecycler.setHasFixedSize(true)
+
         scrollView.applyWrongNestedScrollWorkaround()
     }
 
