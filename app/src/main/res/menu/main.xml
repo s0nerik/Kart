@@ -3,13 +3,16 @@
     <item
         android:id="@+id/dashboard"
         android:title="Dashboard"
+        android:icon="@drawable/chart_arc"
         />
     <item
         android:id="@+id/history"
         android:title="History"
+        android:icon="@drawable/history"
         />
     <item
         android:id="@+id/products"
         android:title="Products"
+        android:icon="@drawable/cart"
         />
 </menu>

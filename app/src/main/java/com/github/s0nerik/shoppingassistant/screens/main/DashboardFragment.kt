@@ -5,6 +5,7 @@ import android.view.View
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
@@ -32,6 +33,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
         LastAdapter.with(purchases, BR.item)
                 .map<PurchaseRealmProxy>(R.layout.item_recent_purchases)
                 .into(recentsRecycler)
+
+        scrollView.applyWrongNestedScrollWorkaround()
     }
 
     override fun onDestroy() {
