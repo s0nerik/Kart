@@ -6,18 +6,20 @@
     tools:context="com.github.s0nerik.shoppingassistant.screens.main.MainActivity"
     >
     <data>
-
+        <import type="com.github.s0nerik.shoppingassistant.R" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
+        android:fitsSystemWindows="true"
         >
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottomNavigation"
+            android:layout_below="@+id/appBar"
             />
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottomNavigation"
@@ -27,5 +29,44 @@
             android:background="@color/material_color_white"
             app:menu="@menu/main"
             />
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:menu="@{R.menu.main_toolbar}"
+                app:menuTint="@{R.color.textColorPrimary}"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kart"
+                        android:textSize="24sp"
+                        android:textColor="@color/textColorPrimary"
+                        app:font='@{"Norican-Regular"}'
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="4dp"
+                        android:text="1.0"
+                        android:textSize="16sp"
+                        android:textColor="@color/textColorPrimary"
+                        android:gravity="top"
+                        app:font='@{"Norican-Regular"}'
+                        />
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
     </RelativeLayout>
 </layout>
