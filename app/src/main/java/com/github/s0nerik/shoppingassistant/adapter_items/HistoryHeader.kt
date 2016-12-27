@@ -8,7 +8,7 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class PurchaseHeader(val date: Date) {
+class HistoryHeader(val date: Date) {
     // TODO: localization
     val readableDate: String
         get() = date.toString("MMMM d")

@@ -5,11 +5,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
-        <variable name="item" type="com.github.s0nerik.shoppingassistant.adapter_items.PurchaseHeader" />
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.adapter_items.HistoryHeader" />
     </data>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text='@{item.readableDate, default="12 December"}'
+        android:layout_marginTop="8dp"
+        android:padding="16dp"
+        android:textAppearance="@style/MaterialTypography.Locale.Title"
+        android:textColor="@color/textColorPrimary"
+        android:text='@{item.readableDate, default=December_12}'
+        android:background="#fff"
+        android:elevation="1dp"
         />
 </layout>

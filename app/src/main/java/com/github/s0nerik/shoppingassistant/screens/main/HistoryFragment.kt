@@ -5,7 +5,7 @@ import android.view.View
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.adapter_items.PurchaseHeader
+import com.github.s0nerik.shoppingassistant.adapter_items.HistoryHeader
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
@@ -34,20 +34,22 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
         super.onViewCreated(view, savedInstanceState)
 
         LastAdapter.with(historyItems, BR.item)
-                .map<PurchaseRealmProxy>(R.layout.item_recent_purchases)
-                .map<PurchaseHeader>(R.layout.item_history_header)
+                .map<PurchaseRealmProxy>(R.layout.item_history)
+                .map<HistoryHeader>(R.layout.item_history_header)
                 .into(recycler)
 
         loadHistoryItems()
     }
 
     private fun loadHistoryItems() {
+        historyItems.clear()
+
         val purchases = realm.where(Purchase::class.java)
                 .findAllSorted("date", Sort.DESCENDING)
                 .groupBy { it.date!!.beginningOfDay }
 
         purchases.forEach {
-            historyItems.add(PurchaseHeader(it.key))
+            historyItems.add(HistoryHeader(it.key))
             historyItems.addAll(it.value)
         }
     }
