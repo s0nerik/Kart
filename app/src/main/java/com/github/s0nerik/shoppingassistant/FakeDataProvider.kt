@@ -66,7 +66,7 @@ fun createDummyPurchases(ctx: Context) {
 
         val providePurchase: (Long, Shop, DateTime, String, Category, Float, Currency) -> Purchase = { id, shop, date, name, category, price, currency ->
             val purchase = it.createObject(Purchase::class.java, id)
-            purchase.amount = 1
+            purchase.amount = 1 + Random().nextInt(2)
             purchase.date = date.toDate()
 
             val item = it.createObject(Item::class.java, id)

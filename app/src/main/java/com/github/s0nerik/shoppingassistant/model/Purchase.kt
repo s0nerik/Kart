@@ -16,9 +16,9 @@ open class Purchase(
         open var amount: Int = 0
 ) : RealmObject() {
     val readableName
-        get() = item!!.name
+        get() = if (amount > 1) "${amount}x ${item!!.name}" else item!!.name
     val readablePrice
-        get() = "${amount}x ${item!!.price!!.getPriceWithCurrency(date!!)}"
+        get() = item!!.price!!.getPriceWithCurrency(date!!, amount)
     val readableCategory
         get() = item!!.category!!.name
     val readableShop

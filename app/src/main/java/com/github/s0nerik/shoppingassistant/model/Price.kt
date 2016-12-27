@@ -15,7 +15,7 @@ open class Price(
         open var shop: Shop? = null,
         open var valueChanges: RealmList<PriceChange> = RealmList()
 ) : RealmObject() {
-    fun getPriceForDate(date: Date): Pair<Float?, Currency?> {
+    fun getPriceForDate(date: Date, amount: Int = 1): Pair<Float?, Currency?> {
         var price: Float? = null
         var currency: Currency? = null
         if (valueChanges.size > 0) {
@@ -27,10 +27,10 @@ open class Price(
                 currency = it.currency
             }
         }
-        return Pair(price, currency)
+        return Pair(price?.times(amount), currency)
     }
 
-    fun getPriceWithCurrency(date: Date): String {
+    fun getPriceWithCurrency(date: Date, amount: Int = 1): String {
         val price = getPriceForDate(date)
         return "%s%.2f".format(price.second?.sign!!, price.first!!)
     }
