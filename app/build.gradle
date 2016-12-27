@@ -81,6 +81,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile 'com.github.florent37:glidepalette:1.0.2@aar'
+    compile 'com.github.s0nerik:glide-bindingadapter:1.1'
 
     // Misc
     compile 'ru.noties:debug:1.1.3'

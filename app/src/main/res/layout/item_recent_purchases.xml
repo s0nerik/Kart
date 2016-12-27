@@ -17,8 +17,10 @@
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_margin="16dp"
-            android:src="@drawable/food_fork_drink"
             android:tint="@color/textColorPrimaryLight"
+            app:glideImageSrc='@{item.iconUrl}'
+            app:glideConfig='@{"purchase_icon"}'
+            tools:src="@drawable/cat_food"
             />
         <TextView
             android:id="@+id/title"
@@ -27,7 +29,7 @@
             android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/icon"
             android:textSize="16sp"
-            android:text='@{item.readableCategory}'
+            android:text='@{item.readableName}'
             android:textColor="@color/textColorPrimary"
             tools:text="Pancake"
             />

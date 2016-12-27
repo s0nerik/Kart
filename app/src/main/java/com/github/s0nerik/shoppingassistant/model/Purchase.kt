@@ -15,10 +15,14 @@ open class Purchase(
         open var date: Date? = null,
         open var amount: Int = 0
 ) : RealmObject() {
+    val readableName
+        get() = item!!.name
     val readablePrice
         get() = "${amount}x ${item!!.price!!.getPriceWithCurrency(date!!)}"
     val readableCategory
         get() = item!!.category!!.name
     val readableShop
         get() = item!!.price!!.shop!!.name
+    val iconUrl
+        get() = item!!.category!!.iconUrl
 }

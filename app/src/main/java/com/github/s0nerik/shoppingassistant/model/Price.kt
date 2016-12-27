@@ -32,6 +32,6 @@ open class Price(
 
     fun getPriceWithCurrency(date: Date): String {
         val price = getPriceForDate(date)
-        return "${price.second?.sign}${price.first}"
+        return "%s %.2f".format(price.second?.sign!!, price.first!!)
     }
 }

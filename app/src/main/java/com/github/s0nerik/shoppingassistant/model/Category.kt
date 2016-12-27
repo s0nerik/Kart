@@ -10,5 +10,6 @@ import io.realm.annotations.PrimaryKey
  */
 open class Category(
         @PrimaryKey open var id: Long = 0,
-        open var name: String = ""
+        open var name: String = "",
+        open var iconUrl: String = ""
 ) : RealmObject()

@@ -7,52 +7,15 @@
     <data>
         <variable name="item" type="com.github.s0nerik.shoppingassistant.model.Purchase" />
     </data>
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/material_list_three_line_normal_height"
-        android:orientation="vertical"
-        android:background="#fff"
+        android:layout_height="wrap_content"
+        android:background="@color/material_color_white"
         android:elevation="1dp"
         >
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="8dp"
-            tools:src="@mipmap/ic_launcher"
+        <include
+            layout="@layout/item_recent_purchases"
+            app:item="@{item}"
             />
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_toRightOf="@+id/icon"
-            android:textSize="18sp"
-            android:text='@{item.readableCategory}'
-            tools:text="Pancake"
-            />
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_marginRight="8dp"
-            android:layout_toRightOf="@+id/icon"
-            android:textSize="16sp"
-            android:text='@{item.readablePrice}'
-            tools:text="$ 3.20"
-            />
-        <TextView
-            android:id="@+id/shop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/price"
-            android:layout_marginRight="8dp"
-            android:layout_toRightOf="@+id/icon"
-            android:textSize="14sp"
-            android:text='@{item.readableShop}'
-            tools:text="Silpo"
-            />
-    </RelativeLayout>
+    </FrameLayout>
 </layout>
