@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".screens.main.MainActivity">
+        <activity
+            android:name=".screens.main.MainActivity"
+            android:theme="@style/AppTheme.MainActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
