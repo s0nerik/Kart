@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
 import android.view.View
+import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
@@ -12,7 +13,6 @@ import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.PurchaseRealmProxy
 import io.realm.Realm
 import io.realm.Sort
-import khronos.beginningOfDay
 import kotlinx.android.synthetic.main.fragment_history.*
 
 /**
@@ -46,10 +46,10 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
 
         val purchases = realm.where(Purchase::class.java)
                 .findAllSorted("date", Sort.DESCENDING)
-                .groupBy { it.date!!.beginningOfDay }
+                .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
 
         purchases.forEach {
-            historyItems.add(HistoryHeader(it.key))
+            historyItems.add(HistoryHeader(it.key.toDate()))
             historyItems.addAll(it.value)
         }
     }

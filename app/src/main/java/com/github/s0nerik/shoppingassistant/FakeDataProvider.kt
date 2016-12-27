@@ -1,13 +1,14 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
+import com.github.debop.kodatimes.ago
+import com.github.debop.kodatimes.days
+import com.github.debop.kodatimes.minutes
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
 import io.realm.Realm
 import io.realm.RealmList
-import khronos.days
-import khronos.minus
-import khronos.minutes
+import org.joda.time.DateTime
 import java.util.*
 
 /**
@@ -50,9 +51,9 @@ fun createDummyPurchases(ctx: Context) {
         atb.name = "АТБ"
         //endregion
 
-        val providePrice: (Long, Shop, Date, Float, Currency) -> Price = { id, shop, date, value, currency ->
+        val providePrice: (Long, Shop, DateTime, Float, Currency) -> Price = { id, shop, date, value, currency ->
             val priceChange = it.createObject(PriceChange::class.java, id)
-            priceChange.date = date - 1.minutes
+            priceChange.date = (date - 1.minutes().minutes).toDate()
             priceChange.value = value
             priceChange.currency = currency
 
@@ -63,10 +64,10 @@ fun createDummyPurchases(ctx: Context) {
             price
         }
 
-        val providePurchase: (Long, Shop, Date, String, Category, Float, Currency) -> Purchase = { id, shop, date, name, category, price, currency ->
+        val providePurchase: (Long, Shop, DateTime, String, Category, Float, Currency) -> Purchase = { id, shop, date, name, category, price, currency ->
             val purchase = it.createObject(Purchase::class.java, id)
             purchase.amount = 1
-            purchase.date = date
+            purchase.date = date.toDate()
 
             val item = it.createObject(Item::class.java, id)
             item.name = name
@@ -85,7 +86,7 @@ fun createDummyPurchases(ctx: Context) {
             providePurchase(
                     i.toLong(),
                     if (i % 2 == 0) atb else silpo,
-                    Random().nextInt(10).days.ago,
+                    Random().nextInt(10).days().ago(),
                     if (i % 2 == 0) foodsNames[i / 2] else clothesNames[i / 2],
                     if (i % 2 == 0) food else clothes,
                     Random().nextFloat() * 500,

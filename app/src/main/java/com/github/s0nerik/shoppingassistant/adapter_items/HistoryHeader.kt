@@ -1,6 +1,6 @@
 package com.github.s0nerik.shoppingassistant.adapter_items
 
-import khronos.toString
+import com.github.debop.kodatimes.toDateTime
 import java.util.*
 
 /**
@@ -8,8 +8,8 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class HistoryHeader(val date: Date) {
+data class HistoryHeader(val date: Date) {
     // TODO: localization
     val readableDate: String
-        get() = date.toString("MMMM d")
+        get() = date.toDateTime().toString("MMMM d")
 }
