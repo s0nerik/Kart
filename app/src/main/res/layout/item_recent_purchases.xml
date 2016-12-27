@@ -14,20 +14,21 @@
         >
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="8dp"
-            tools:src="@mipmap/ic_launcher"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/food_fork_drink"
+            android:tint="@color/textColorPrimaryLight"
             />
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
             android:layout_toRightOf="@+id/icon"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:text='@{item.readableCategory}'
+            android:textColor="@color/textColorPrimary"
             tools:text="Pancake"
             />
         <TextView
@@ -37,8 +38,9 @@
             android:layout_below="@+id/title"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@+id/icon"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text='@{item.readablePrice}'
+            android:textColor="@color/textColorPrimaryLight"
             tools:text="$ 3.20"
             />
         <TextView
@@ -50,6 +52,7 @@
             android:layout_toRightOf="@+id/icon"
             android:textSize="14sp"
             android:text='@{item.readableShop}'
+            android:textColor="@color/textColorSecondary"
             tools:text="Silpo"
             />
     </RelativeLayout>
