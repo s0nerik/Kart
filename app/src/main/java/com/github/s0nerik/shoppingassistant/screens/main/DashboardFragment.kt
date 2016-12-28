@@ -51,7 +51,9 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initDistributionChart() {
-        val dataSet = PieDataSet(listOf(PieEntry(10f, "Food"), PieEntry(10f, "Clothes"), PieEntry(10f, "Instruments")), null)
+        val entries = purchases.groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
+
+        val dataSet = PieDataSet(entries, null)
         dataSet.apply {
             setColors(intArrayOf(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent), act)
             sliceSpace = 4f
