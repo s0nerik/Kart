@@ -8,15 +8,11 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.nitrico.lastadapter.LastAdapter
-import com.github.s0nerik.shoppingassistant.BR
-import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
+import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
-import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import io.realm.PurchaseRealmProxy
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.startActivity
@@ -27,21 +23,12 @@ import org.jetbrains.anko.support.v4.startActivity
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class DashboardViewModel(val fragment: DashboardFragment) {
-    init {
-
-    }
-
     fun onCreateNewPurchase(v: View) {
         fragment.startActivity<CreatePurchaseActivity>()
     }
 }
 
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
-
-    private val purchases: RealmResults<Purchase> by lazy {
-        realm.where(Purchase::class.java).findAll()
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = DashboardViewModel(this)
@@ -51,7 +38,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initRecents() {
-        LastAdapter.with(purchases, BR.item)
+        LastAdapter.with(recentPurchases(realm), BR.item)
                 .map<PurchaseRealmProxy>(R.layout.item_purchase)
                 .into(recentsRecycler)
 
@@ -62,7 +49,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initDistributionChart() {
-        val entries = purchases.groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
+        val entries = purchases(realm).groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
 
         val dataSet = PieDataSet(entries, null)
         dataSet.apply {
