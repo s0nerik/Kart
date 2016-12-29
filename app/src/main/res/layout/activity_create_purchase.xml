@@ -148,9 +148,10 @@
                     style="@style/FloatingSearchIcon"
                     />
                 <ImageView
-                    android:id="@+id/iconBack"
-                    android:src="@drawable/ic_arrow_back"
+                    android:id="@+id/btnClear"
+                    android:src="@drawable/ic_clear_black_24dp"
                     android:visibility="@{viewModel.isSearching ? View.VISIBLE : View.GONE}"
+                    android:onClick="@{viewModel::clearSearch}"
                     tools:visibility="gone"
                     style="@style/FloatingSearchIcon"
                     />

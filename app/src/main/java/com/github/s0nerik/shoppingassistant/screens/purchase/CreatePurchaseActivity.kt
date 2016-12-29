@@ -3,6 +3,7 @@ package com.github.s0nerik.shoppingassistant.screens.purchase
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
+import android.view.View
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
@@ -39,6 +40,10 @@ class CreatePurchaseViewModel(
                         filteredSearchResults += purchases.filter { it.readableName.contains(s, true) }
                     }
         }
+    }
+
+    fun clearSearch(v: View) {
+        activity.etSearch.setText("")
     }
 }
 
