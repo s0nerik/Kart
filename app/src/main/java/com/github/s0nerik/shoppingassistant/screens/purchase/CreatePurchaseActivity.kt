@@ -1,8 +1,11 @@
 package com.github.s0nerik.shoppingassistant.screens.purchase
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.view.View
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.*
@@ -21,6 +24,8 @@ class CreatePurchaseViewModel(
         private val activity: CreatePurchaseActivity,
         private val realm: Realm
 ) {
+    val VOICE_SEARCH_REQ_CODE = 672
+
     val isSearching: ObservableBoolean = ObservableBoolean(false)
 
     val frequents: RealmResults<Purchase> by lazy { frequentPurchases(realm) }
@@ -44,6 +49,15 @@ class CreatePurchaseViewModel(
 
     fun clearSearch(v: View) {
         activity.etSearch.setText("")
+    }
+
+    fun voiceSearch(v: View) {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        activity.startActivityForResult(intent, VOICE_SEARCH_REQ_CODE)
+    }
+
+    fun notifyVoiceSearchResult(text: String) {
+        activity.etSearch.setText(text)
     }
 }
 
@@ -82,5 +96,14 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
         rvFrequents.isNestedScrollingEnabled = false
         rvFrequents.setHasFixedSize(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == binding.viewModel.VOICE_SEARCH_REQ_CODE && resultCode == Activity.RESULT_OK) {
+            data?.apply {
+                binding.viewModel.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
+            }
+        }
     }
 }
