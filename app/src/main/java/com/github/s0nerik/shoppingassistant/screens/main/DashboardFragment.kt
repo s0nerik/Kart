@@ -14,17 +14,29 @@ import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import io.realm.PurchaseRealmProxy
 import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
+import org.jetbrains.anko.support.v4.startActivity
 
 /**
  * Created by Alex on 12/25/2016.
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+class DashboardViewModel(val fragment: DashboardFragment) {
+    init {
+
+    }
+
+    fun onCreateNewPurchase(v: View) {
+        fragment.startActivity<CreatePurchaseActivity>()
+    }
+}
+
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
 
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
@@ -35,6 +47,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = DashboardViewModel(this)
+
         initRecents()
         initDistributionChart()
     }

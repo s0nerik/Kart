@@ -3,9 +3,9 @@ package com.github.s0nerik.shoppingassistant.base
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : RxAppCompatActivity() {
     protected open val layoutId: Int?
         get() = null
 
@@ -17,7 +17,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
 abstract class BaseBoundActivity<out T : ViewDataBinding>(
         protected val layoutId: Int
-) : AppCompatActivity() {
+) : RxAppCompatActivity() {
     private lateinit var innerBinding: T
     protected val binding: T by lazy { innerBinding }
 

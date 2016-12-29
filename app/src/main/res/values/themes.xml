@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.MainActivity">
+        <item name="android:navigationBarColor">@color/colorPrimaryDarkShaded</item>
+    </style>
+
+    <style name="AppTheme.CreatePurchaseActivity" parent="AppTheme.SemiTransparent">
+
+    </style>
+</resources>

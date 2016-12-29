@@ -3,14 +3,14 @@ package com.github.s0nerik.shoppingassistant.base
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.trello.rxlifecycle.components.support.RxFragment
 
 abstract class BaseFragment(
         protected val layoutId: Int
-) : Fragment() {
+) : RxFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(layoutId, container, false)
         return view
@@ -19,7 +19,7 @@ abstract class BaseFragment(
 
 abstract class BaseBoundFragment<out T : ViewDataBinding>(
         protected val layoutId: Int
-) : Fragment() {
+) : RxFragment() {
     private lateinit var innerBinding: T
     protected val binding: T by lazy { innerBinding }
 

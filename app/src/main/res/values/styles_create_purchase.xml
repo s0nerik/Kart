@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="FloatingSearchLeftIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="CreatePurchase" />
+
+    <style name="CreatePurchase.Card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="CreatePurchase.Card.Title" parent="CreatePurchase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:textAppearance">@style/MaterialTypography.Locale.Body2</item>
+    </style>
+</resources>

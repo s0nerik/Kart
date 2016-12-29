@@ -7,7 +7,18 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
     </style>
 
-    <style name="AppTheme.MainActivity">
-        <item name="android:navigationBarColor">@color/colorPrimaryDarkShaded</item>
+    <style name="AppTheme.Transparent">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <style name="AppTheme.SemiTransparent" parent="AppTheme.Transparent">
+        <item name="android:windowBackground">@color/material_color_black_38_percent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 </resources>

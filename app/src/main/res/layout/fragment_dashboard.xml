@@ -4,11 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.main.DashboardViewModel"
+            />
     </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -110,6 +111,7 @@
             android:layout_margin="16dp"
             android:src="@drawable/cart_plus"
             android:tint="@color/material_color_white"
+            android:onClick='@{viewModel::onCreateNewPurchase}'
             app:fabSize="normal"
             />
     </RelativeLayout>

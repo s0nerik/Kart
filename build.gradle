@@ -6,6 +6,8 @@ buildscript {
         anko_version = '0.8.3'
         support_version = '25.1.0'
         dagger_version = '2.5'
+        ext.rxbinding_version = '1.0.0'
+        ext.rxlifecycle_version = '1.0'
     }
 
     repositories {
