@@ -27,6 +27,7 @@
         <activity
             android:name=".screens.purchase.CreatePurchaseActivity"
             android:theme="@style/AppTheme.CreatePurchaseActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
             />
     </application>
 
