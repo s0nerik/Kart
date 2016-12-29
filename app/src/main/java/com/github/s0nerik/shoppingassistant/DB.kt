@@ -23,3 +23,8 @@ fun favoritePurchases(realm: Realm): RealmResults<Purchase> {
 fun frequentPurchases(realm: Realm): RealmResults<Purchase> {
     return purchases(realm)
 }
+
+// TODO: implement this by creating a new purchase for a recently bought product
+fun recentPurchases(realm: Realm): RealmResults<Purchase> {
+    return realm.where(Purchase::class.java).findAll()
+}

@@ -29,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 app:applyNavBarPadding='@{true}'
                 >
                 <Button
@@ -41,57 +42,65 @@
                     android:text="Add new product"
                     style="@style/Widget.AppCompat.Button.Colored"
                     />
-                <android.support.v7.widget.CardView
-                    android:id="@+id/favoritesCard"
-                    style="@style/CreatePurchase.Card"
+                <LinearLayout
+                    android:id="@+id/nonSearchGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewModel.isSearching ? View.GONE : View.VISIBLE}"
+                    android:orientation="vertical"
                     >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/favoritesCard"
+                        style="@style/CreatePurchase.Card"
                         >
-                        <TextView
-                            android:text="Favorite products"
-                            style="@style/CreatePurchase.Card.Title"
-                            />
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rvFavorites"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layoutManager="@string/rv_layout_manager_linear"
-                            tools:listitem="@layout/item_purchase_horizontal"
-                            />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:id="@+id/frequentsCard"
-                    android:layout_marginBottom="8dp"
-                    style="@style/CreatePurchase.Card"
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:text="Frequent products"
-                            style="@style/CreatePurchase.Card.Title"
-                            />
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rvFrequents"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layoutManager="@string/rv_layout_manager_linear"
-                            tools:listitem="@layout/item_purchase"
-                            />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                            >
+                            <TextView
+                                android:text="Favorite products"
+                                style="@style/CreatePurchase.Card.Title"
+                                />
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rvFavorites"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                app:layoutManager="@string/rv_layout_manager_linear"
+                                tools:listitem="@layout/item_purchase_horizontal"
+                                />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/frequentsCard"
+                        android:layout_marginBottom="8dp"
+                        style="@style/CreatePurchase.Card"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+                            <TextView
+                                android:text="Frequent products"
+                                style="@style/CreatePurchase.Card.Title"
+                                />
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rvFrequents"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layoutManager="@string/rv_layout_manager_linear"
+                                tools:listitem="@layout/item_purchase"
+                                />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
                 <android.support.v7.widget.CardView
                     android:id="@+id/searchResultsCard"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
+                    android:visibility="@{viewModel.isSearching ? View.VISIBLE : View.GONE}"
                     tools:visibility="gone"
                     style="@style/CreatePurchase.Card"
                     >
