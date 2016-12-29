@@ -7,13 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trello.rxlifecycle.components.support.RxFragment
+import io.realm.Realm
 
 abstract class BaseFragment(
         protected val layoutId: Int
 ) : RxFragment() {
+    protected val realm: Realm by lazy { Realm.getDefaultInstance() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(layoutId, container, false)
         return view
+    }
+
+    override fun onDestroy() {
+        realm.close()
+        super.onDestroy()
     }
 }
 
@@ -23,9 +31,16 @@ abstract class BaseBoundFragment<out T : ViewDataBinding>(
     private lateinit var innerBinding: T
     protected val binding: T by lazy { innerBinding }
 
+    protected val realm: Realm by lazy { Realm.getDefaultInstance() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(layoutId, container, false)
         innerBinding = DataBindingUtil.bind(view)
         return view
+    }
+
+    override fun onDestroy() {
+        realm.close()
+        super.onDestroy()
     }
 }

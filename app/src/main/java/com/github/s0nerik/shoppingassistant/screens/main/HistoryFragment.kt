@@ -11,7 +11,6 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.PurchaseRealmProxy
-import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
 
@@ -21,14 +20,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragment_history) {
-    private lateinit var realm: Realm
-
     private val historyItems = mutableListOf<Any>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        realm = Realm.getDefaultInstance()
-    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,10 +44,5 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
             historyItems.add(HistoryHeader(it.key.toDate()))
             historyItems.addAll(it.value)
         }
-    }
-
-    override fun onDestroy() {
-        realm.close()
-        super.onDestroy()
     }
 }

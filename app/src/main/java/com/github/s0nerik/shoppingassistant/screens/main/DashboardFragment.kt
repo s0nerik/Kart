@@ -16,7 +16,6 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import io.realm.PurchaseRealmProxy
-import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
@@ -39,8 +38,6 @@ class DashboardViewModel(val fragment: DashboardFragment) {
 
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
 
-    private val realm: Realm by lazy { Realm.getDefaultInstance() }
-
     private val purchases: RealmResults<Purchase> by lazy {
         realm.where(Purchase::class.java).findAll()
     }
@@ -55,7 +52,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     private fun initRecents() {
         LastAdapter.with(purchases, BR.item)
-                .map<PurchaseRealmProxy>(R.layout.item_recent_purchases)
+                .map<PurchaseRealmProxy>(R.layout.item_purchase)
                 .into(recentsRecycler)
 
         recentsRecycler.isNestedScrollingEnabled = false
@@ -91,10 +88,5 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
                 setDrawInside(false)
             }
         }
-    }
-
-    override fun onDestroy() {
-        realm.close()
-        super.onDestroy()
     }
 }

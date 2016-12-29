@@ -14,7 +14,7 @@
         android:elevation="1dp"
         >
         <include
-            layout="@layout/item_recent_purchases"
+            layout="@layout/item_purchase"
             app:item="@{item}"
             />
     </FrameLayout>
