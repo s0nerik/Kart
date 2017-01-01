@@ -2,15 +2,19 @@ package com.github.s0nerik.shoppingassistant.screens.purchase
 
 import android.app.Activity
 import android.content.Intent
+import android.databinding.BaseObservable
+import android.databinding.Bindable
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
+import android.os.Handler
 import android.speech.RecognizerIntent
 import android.view.View
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
+import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.jakewharton.rxbinding.widget.textChanges
 import com.trello.rxlifecycle.android.ActivityEvent
@@ -65,8 +69,20 @@ class CreatePurchaseViewModel(
 class CreateProductViewModel(
         private val activity: CreatePurchaseActivity,
         private val realm: Realm
-) {
+) : BaseObservable() {
     val isExpanded: ObservableBoolean = ObservableBoolean(false)
+
+    private var category: Category? = null
+    @Bindable
+    fun getCategory() = category
+    fun setCategory(c: Category) {
+        category = c
+        notifyPropertyChanged(BR.category)
+        notifyPropertyChanged(BR.categoryIconUrl)
+    }
+
+    @Bindable
+    fun getCategoryIconUrl(): String = category?.iconUrl.orEmpty()
 
     fun expand(v: View) {
         isExpanded.set(true)
@@ -80,19 +96,27 @@ class CreateProductViewModel(
 //
 //    private val purchases: RealmResults<Purchase> by lazy { purchases(realm) }
 //    val filteredSearchResults: ObservableArrayList<Purchase> = ObservableArrayList()
-//
-//    init {
+
+    init {
+        Handler().postDelayed(
+                {
+                    setCategory(realm.where(Category::class.java).findFirst())
+                }, 5000)
+//        activity.apply {
+////            spinnerSelectCategory.adapter =
+//        }
+
 //        activity.apply {
 //            etSearch.textChanges()
 //                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
 //                    .subscribe { s ->
-//                        isSearching.set(s.isNotEmpty())
-//
-//                        filteredSearchResults.clear()
-//                        filteredSearchResults += purchases.filter { it.readableName.contains(s, true) }
+////                        isSearching.set(s.isNotEmpty())
+////
+////                        filteredSearchResults.clear()
+////                        filteredSearchResults += purchases.filter { it.readableName.contains(s, true) }
 //                    }
 //        }
-//    }
+    }
 }
 
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {

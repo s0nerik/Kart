@@ -51,9 +51,11 @@
                     android:paddingLeft="36dp"
                     android:paddingRight="36dp"
                     android:layout_alignTop="@+id/tilNewProductName"
-                    android:layout_alignBottom="@+id/spinnerSelectShop"
+                    android:layout_alignBottom="@+id/cardSelectShop"
                     android:tint="@color/material_color_black"
                     android:src="@drawable/cat_food"
+                    app:glideImageSrc='@{viewModel.categoryIconUrl}'
+                    app:glideConfig='@{"add_product_icon"}'
                     tools:src="@drawable/cat_food"
                     />
                 <android.support.design.widget.TextInputLayout
@@ -76,7 +78,7 @@
                         />
                 </android.support.design.widget.TextInputLayout>
                 <android.support.v7.widget.CardView
-                    android:id="@+id/spinnerSelectCategory"
+                    android:id="@+id/cardSelectCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivNewProductCategory"
@@ -85,9 +87,11 @@
                     app:cardBackgroundColor="@color/colorAccent"
                     >
                     <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinnerSelectCategory"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
                         android:backgroundTint="@color/material_color_white"
+                        android:entries='@{@stringArray/test_cat_names}'
                         />
                     <TextView
                         android:id="@+id/newProductCategoryLabel"
@@ -101,17 +105,18 @@
                         />
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
-                    android:id="@+id/spinnerSelectShop"
+                    android:id="@+id/cardSelectShop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivNewProductCategory"
-                    android:layout_below="@+id/spinnerSelectCategory"
+                    android:layout_below="@+id/cardSelectCategory"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     app:cardBackgroundColor="@color/colorAccent"
                     >
                     <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinnerSelectShop"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
                         android:backgroundTint="@color/material_color_white"
@@ -131,7 +136,7 @@
                     android:id="@+id/btnConfirmNewProduct"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/spinnerSelectShop"
+                    android:layout_below="@+id/cardSelectShop"
                     android:layout_toRightOf="@+id/btnCancelNewProduct"
                     android:text="Create"
                     app:layout_widthPercent="50%"
@@ -141,7 +146,7 @@
                     android:id="@+id/btnCancelNewProduct"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/spinnerSelectShop"
+                    android:layout_below="@+id/cardSelectShop"
                     android:text="Cancel"
                     android:onClick='@{viewModel::shrink}'
                     app:layout_widthPercent="50%"

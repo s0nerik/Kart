@@ -1,12 +1,9 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.app.Application
-import android.graphics.Color
 import android.util.Log
-import com.github.s0nerik.glide_bindingadapter.GlideBindingConfig
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import jp.wasabeef.glide.transformations.ColorFilterTransformation
 import timber.log.Timber
 
 
@@ -28,14 +25,6 @@ class App : Application() {
         createDummyPurchases(this)
         configureGlide()
         configureTimber()
-    }
-
-    // TODO: figure out what to do with local vector drawables not being loaded
-    private fun configureGlide() {
-        GlideBindingConfig.registerProvider("purchase_icon", { iv, request ->
-            request.bitmapTransform(ColorFilterTransformation(this, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
-                    .error(R.drawable.alert_circle_outline)
-        })
     }
 
     private fun configureTimber() {
