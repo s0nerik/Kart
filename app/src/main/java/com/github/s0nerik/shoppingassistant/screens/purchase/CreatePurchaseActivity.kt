@@ -22,7 +22,8 @@ import kotlinx.android.synthetic.main.activity_create_purchase.*
 
 class CreatePurchaseViewModel(
         private val activity: CreatePurchaseActivity,
-        private val realm: Realm
+        private val realm: Realm,
+        val addProductViewModel: CreateProductViewModel
 ) {
     val VOICE_SEARCH_REQ_CODE = 672
 
@@ -61,11 +62,44 @@ class CreatePurchaseViewModel(
     }
 }
 
+class CreateProductViewModel(
+        private val activity: CreatePurchaseActivity,
+        private val realm: Realm
+) {
+    val isExpanded: ObservableBoolean = ObservableBoolean(false)
+
+    fun expand(v: View) {
+        isExpanded.set(true)
+    }
+
+    fun shrink(v: View) {
+        isExpanded.set(false)
+    }
+//    val frequents: RealmResults<Purchase> by lazy { frequentPurchases(realm) }
+//    val favorites: RealmResults<Purchase> by lazy { favoritePurchases(realm) }
+//
+//    private val purchases: RealmResults<Purchase> by lazy { purchases(realm) }
+//    val filteredSearchResults: ObservableArrayList<Purchase> = ObservableArrayList()
+//
+//    init {
+//        activity.apply {
+//            etSearch.textChanges()
+//                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
+//                    .subscribe { s ->
+//                        isSearching.set(s.isNotEmpty())
+//
+//                        filteredSearchResults.clear()
+//                        filteredSearchResults += purchases.filter { it.readableName.contains(s, true) }
+//                    }
+//        }
+//    }
+}
+
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.viewModel = CreatePurchaseViewModel(this, realm)
+        binding.viewModel = CreatePurchaseViewModel(this, realm, CreateProductViewModel(this, realm))
         initFavorites()
         initFrequents()
         initSearchResults()
