@@ -52,7 +52,7 @@
                     android:paddingRight="36dp"
                     android:layout_alignTop="@+id/tilNewProductName"
                     android:layout_alignBottom="@+id/cardSelectShop"
-                    android:tint="@color/material_color_black"
+                    android:tint="@color/textColorPrimary"
                     android:src="@drawable/cat_food"
                     app:glideImageSrc='@{viewModel.categoryIconUrl}'
                     app:glideConfig='@{"add_product_icon"}'
@@ -78,30 +78,35 @@
                         />
                 </android.support.design.widget.TextInputLayout>
                 <android.support.v7.widget.CardView
-                    android:id="@+id/cardSelectCategory"
+                    android:id="@+id/btnSelectCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivNewProductCategory"
                     android:layout_below="@+id/tilNewProductName"
                     android:layout_marginRight="16dp"
+                    android:foreground="?selectableItemBackground"
                     app:cardBackgroundColor="@color/colorAccent"
                     >
-                    <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/spinnerSelectCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:backgroundTint="@color/material_color_white"
-                        android:entries='@{@stringArray/test_cat_names}'
-                        />
                     <TextView
-                        android:id="@+id/newProductCategoryLabel"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvNewProductCategoryName"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="42dp"
                         android:text="Category"
-                        android:textAppearance="@style/MaterialTypography.Dense.Body2"
                         android:textColor="@color/material_color_white"
-                        android:paddingLeft="16dp"
+                        android:maxLines="1"
+                        style="@style/MaterialTypography.Dense.Body2"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="4dp"
+                        android:padding="8dp"
+                        android:src="@drawable/arrow_down_drop_circle"
+                        android:tint="@color/material_color_white"
                         />
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -109,26 +114,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivNewProductCategory"
-                    android:layout_below="@+id/cardSelectCategory"
+                    android:layout_below="@+id/btnSelectCategory"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
+                    android:foreground="?selectableItemBackground"
                     app:cardBackgroundColor="@color/colorAccent"
                     >
-                    <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/spinnerSelectShop"
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:backgroundTint="@color/material_color_white"
-                        />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvNewProductShopName"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="42dp"
                         android:text="Shop"
-                        android:textAppearance="@style/MaterialTypography.Dense.Body2"
                         android:textColor="@color/material_color_white"
-                        android:paddingLeft="16dp"
+                        android:gravity="center_vertical"
+                        style="@style/MaterialTypography.Dense.Body2"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="4dp"
+                        android:padding="8dp"
+                        android:src="@drawable/arrow_down_drop_circle"
+                        android:tint="@color/material_color_white"
                         />
                 </android.support.v7.widget.CardView>
 
