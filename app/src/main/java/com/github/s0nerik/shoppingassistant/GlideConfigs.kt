@@ -17,6 +17,11 @@ fun configureGlide() {
                 .error(R.drawable.alert_circle_outline)
     })
 
+    GlideBindingConfig.registerProvider("category_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.selection)
+    })
+
     GlideBindingConfig.registerProvider("add_product_icon", { iv, request ->
         request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
                 .error(R.drawable.selection)

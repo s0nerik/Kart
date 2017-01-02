@@ -85,6 +85,7 @@
                     android:layout_below="@+id/tilNewProductName"
                     android:layout_marginRight="16dp"
                     android:foreground="?selectableItemBackground"
+                    android:onClick='@{viewModel::selectCategory}'
                     app:cardBackgroundColor="@color/colorAccent"
                     >
                     <TextView

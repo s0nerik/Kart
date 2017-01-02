@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="item"
+            type="com.github.s0nerik.shoppingassistant.model.Category"
+            />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:foreground="?selectableItemBackground"
+        >
+        <ImageView
+            android:id="@+id/ivCategoryIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/cat_food"
+            android:tint="@color/material_color_black"
+            app:glideImageSrc='@{item.iconUrl}'
+            app:glideConfig='@{"category_icon"}'
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/ivCategoryIcon"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text='@{item.name}'
+            android:textAppearance="@style/MaterialTypography.Dense.Body1"
+            tools:text="Food"
+            />
+    </RelativeLayout>
+</layout>
