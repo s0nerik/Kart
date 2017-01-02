@@ -6,8 +6,9 @@ buildscript {
         anko_version = '0.8.3'
         support_version = '25.1.0'
         dagger_version = '2.5'
-        ext.rxbinding_version = '1.0.0'
-        ext.rxlifecycle_version = '1.0'
+        rxbinding_version = '1.0.0'
+        rxlifecycle_version = '1.0'
+        android_plugin_version = '2.3.0-beta1'
     }
 
     repositories {
@@ -16,7 +17,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath "com.android.tools.build:gradle:$android_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "io.realm:realm-gradle-plugin:2.2.1"
 
