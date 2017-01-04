@@ -6,6 +6,7 @@
     >
     <data>
         <import type="android.view.View"/>
+        <import type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel.Action"/>
         <variable
             name="viewModel"
             type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel"
@@ -38,133 +39,158 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 />
 
-            <android.support.percent.PercentRelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:visibility='@{viewModel.isExpanded ? View.VISIBLE : View.GONE}'
                 >
+                <android.support.percent.PercentRelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="visible"
+                    >
 
-                <ImageView
-                    android:id="@+id/ivNewProductCategory"
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:paddingLeft="36dp"
-                    android:paddingRight="36dp"
-                    android:layout_alignTop="@+id/tilNewProductName"
-                    android:layout_alignBottom="@+id/cardSelectShop"
-                    android:tint="@color/textColorPrimary"
-                    android:src="@drawable/cat_food"
-                    app:glideImageSrc='@{viewModel.categoryIconUrl}'
-                    app:glideConfig='@{"add_product_icon"}'
-                    tools:src="@drawable/cat_food"
-                    />
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/tilNewProductName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ivNewProductCategory"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
-                    >
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etNewProductName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/MaterialTypography.Dense.Body2"
-                        android:textColor="@color/material_color_white"
-                        android:hint="Name"
-                        tools:text="Hello"
-                        />
-                </android.support.design.widget.TextInputLayout>
-                <android.support.v7.widget.CardView
-                    android:id="@+id/btnSelectCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ivNewProductCategory"
-                    android:layout_below="@+id/tilNewProductName"
-                    android:layout_marginRight="16dp"
-                    android:foreground="?selectableItemBackground"
-                    android:onClick='@{viewModel::selectCategory}'
-                    app:cardBackgroundColor="@color/colorAccent"
-                    >
-                    <TextView
-                        android:id="@+id/tvNewProductCategoryName"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="42dp"
-                        android:text="Category"
-                        android:textColor="@color/material_color_white"
-                        android:maxLines="1"
-                        style="@style/MaterialTypography.Dense.Body2"
-                        />
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:padding="8dp"
-                        android:src="@drawable/arrow_down_drop_circle"
-                        android:tint="@color/material_color_white"
-                        />
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardSelectShop"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ivNewProductCategory"
-                    android:layout_below="@+id/btnSelectCategory"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:foreground="?selectableItemBackground"
-                    app:cardBackgroundColor="@color/colorAccent"
-                    >
-                    <TextView
-                        android:id="@+id/tvNewProductShopName"
-                        android:layout_width="match_parent"
+                        android:id="@+id/ivNewProductCategory"
+                        android:layout_width="120dp"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="42dp"
-                        android:text="Shop"
-                        android:textColor="@color/material_color_white"
-                        android:gravity="center_vertical"
-                        style="@style/MaterialTypography.Dense.Body2"
+                        android:padding="32dp"
+                        android:layout_alignTop="@+id/groupProductData"
+                        android:layout_alignBottom="@+id/groupProductData"
+                        android:tint="@color/textColorPrimary"
+                        android:src="@drawable/cat_food"
+                        android:scaleType="fitCenter"
+                        app:glideImageSrc='@{viewModel.categoryIconUrl}'
+                        app:glideConfig='@{"add_product_icon"}'
+                        tools:src="@drawable/cat_food"
                         />
-                    <ImageView
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:id="@+id/groupProductData"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="4dp"
-                        android:padding="8dp"
-                        android:src="@drawable/arrow_down_drop_circle"
-                        android:tint="@color/material_color_white"
+                        android:orientation="vertical"
+                        android:layout_toRightOf="@+id/ivNewProductCategory"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        >
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/tilNewProductName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            >
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/etNewProductName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/MaterialTypography.Dense.Body2"
+                                android:textColor="@color/material_color_white"
+                                android:hint="Name"
+                                tools:text="Hello"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <include
+                            android:id="@+id/btnSelectCategory"
+                            layout="@layout/view_btn_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivNewProductCategory"
+                            android:layout_below="@+id/tilNewProductName"
+                            android:visibility='@{viewModel.action == Action.CREATE_PRODUCT ? View.VISIBLE : View.GONE}'
+                            app:onClick='@{viewModel::selectCategory}'
+                            app:text='@{viewModel.category != null ? viewModel.category.name : "Category"}'
+                            tools:visibility="gone"
+                            />
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/cardCreateCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tilNewProductName"
+                            android:layout_toRightOf="@+id/ivNewProductCategory"
+                            android:layout_marginLeft="-2dp"
+                            android:layout_marginRight="-2dp"
+                            android:visibility='@{viewModel.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
+                            app:cardBackgroundColor="@color/material_color_white"
+                            app:cardUseCompatPadding="true"
+                            >
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/tilNewCategoryName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toLeftOf="@+id/btnNewCategoryOk"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginTop="16dp"
+                                    app:counterEnabled="true"
+                                    app:counterMaxLength="32"
+                                    >
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/etNewCategoryName"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="Category name"
+                                        android:textAppearance="@style/MaterialTypography.Dense.Body2"
+                                        android:maxLength="32"
+                                        tools:text="Food"
+                                        />
+                                </android.support.design.widget.TextInputLayout>
+                                <ImageView
+                                    android:id="@+id/btnNewCategoryOk"
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="4dp"
+                                    android:scaleType="center"
+                                    android:src="@drawable/ic_done_black_24dp"
+                                    android:background="?selectableItemBackgroundBorderless"
+                                    android:onClick='@{viewModel::confirmCategotyCreation}'
+                                    />
+                            </RelativeLayout>
+                        </android.support.v7.widget.CardView>
+
+                        <include
+                            android:id="@+id/cardSelectShop"
+                            layout="@layout/view_btn_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ivNewProductCategory"
+                            android:layout_below="@+id/btnSelectCategory"
+                            android:layout_marginTop="16dp"
+                            app:onClick='@{viewModel::selectCategory}'
+                            app:text='@{"Shop"}'
+                            />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnConfirmNewProduct"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/groupProductData"
+                        android:layout_toRightOf="@+id/btnCancelNewProduct"
+                        android:text="Create"
+                        app:layout_widthPercent="50%"
                         />
-                </android.support.v7.widget.CardView>
 
-                <Button
-                    android:id="@+id/btnConfirmNewProduct"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/cardSelectShop"
-                    android:layout_toRightOf="@+id/btnCancelNewProduct"
-                    android:text="Create"
-                    app:layout_widthPercent="50%"
-                    />
-
-                <Button
-                    android:id="@+id/btnCancelNewProduct"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/cardSelectShop"
-                    android:text="Cancel"
-                    android:onClick='@{viewModel::shrink}'
-                    app:layout_widthPercent="50%"
-                    />
-            </android.support.percent.PercentRelativeLayout>
+                    <Button
+                        android:id="@+id/btnCancelNewProduct"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/groupProductData"
+                        android:text="Cancel"
+                        android:onClick='@{viewModel::shrink}'
+                        app:layout_widthPercent="50%"
+                        />
+                </android.support.percent.PercentRelativeLayout>
+            </FrameLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

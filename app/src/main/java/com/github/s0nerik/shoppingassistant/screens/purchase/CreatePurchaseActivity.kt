@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.databinding.*
 import android.os.Bundle
-import android.os.Handler
 import android.speech.RecognizerIntent
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemCategoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.PopupSelectProductCategoryBinding
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.jakewharton.rxbinding.view.focusChanges
 import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import com.trello.rxlifecycle.android.ActivityEvent
@@ -26,6 +26,8 @@ import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_create_purchase.*
 import kotlinx.android.synthetic.main.card_create_product.*
+import java.lang.ref.WeakReference
+import java.util.*
 
 class CreatePurchaseViewModel(
         private val activity: CreatePurchaseActivity,
@@ -73,16 +75,14 @@ class CreateProductViewModel(
         private val activity: CreatePurchaseActivity,
         private val realm: Realm
 ) : BaseObservable() {
+    enum class Action { CREATE_PRODUCT, CREATE_CATEGORY, CREATE_SHOP }
+
     val isExpanded: ObservableBoolean = ObservableBoolean(false)
 
     private var category: Category? = null
+    private var action: Action = Action.CREATE_PRODUCT
 
-    init {
-        Handler().postDelayed(
-                {
-                    setCategory(realm.where(Category::class.java).findFirst())
-                }, 5000)
-    }
+    private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
     @Bindable
     fun getCategory() = category
@@ -90,6 +90,21 @@ class CreateProductViewModel(
         category = c
         notifyPropertyChanged(BR.category)
         notifyPropertyChanged(BR.categoryIconUrl)
+    }
+
+    @Bindable
+    fun getAction() = action
+    fun setAction(a: Action) {
+        action = a
+        notifyPropertyChanged(BR.action)
+        activity.apply {
+            val focusedText = when (a) {
+                Action.CREATE_CATEGORY -> etNewCategoryName
+                Action.CREATE_PRODUCT -> etNewProductName
+                else -> null
+            }
+            focusedText?.requestFocus()
+        }
     }
 
     @Bindable
@@ -104,28 +119,46 @@ class CreateProductViewModel(
     }
 
     fun selectCategory(v: View) {
-        val categories = mutableListOf<Category>()
-        categories += realm.where(Category::class.java).findAll()
-        categories += Category(3, "Add new category", R.drawable.cat_add.getDrawableUri(activity).toString())
+        val categories = realm.where(Category::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectProductCategoryBinding>(activity.layoutInflater, R.layout.popup_select_product_category, null, false)
-        binding.viewModel = SelectCategoryViewModel(activity, realm)
-
-        LastAdapter.with(categories, BR.item)
-                .type { Type<ItemCategoryBinding>(R.layout.item_category) }
-                .into(binding.recycler)
+        binding.viewModel = this
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
         popup.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+
+        currentPopup = WeakReference(popup)
+
+        LastAdapter.with(categories, BR.item)
+                .type {
+                    Type<ItemCategoryBinding>(R.layout.item_category)
+                            .onClick {
+                                setCategory(item as Category)
+                                currentPopup.safe { dismiss() }
+                            }
+                }
+                .into(binding.recycler)
     }
-}
 
-class SelectCategoryViewModel(
-        private val activity: CreatePurchaseActivity,
-        private val realm: Realm
-) : BaseObservable() {
+    fun createCategory(v: View) {
+        setAction(Action.CREATE_CATEGORY)
+        currentPopup.safe { dismiss() }
+        activity.etNewCategoryName.focusChanges()
+                .filter { !it }
+                .take(1)
+                .bindUntilEvent(activity, ActivityEvent.DESTROY)
+                .subscribe { setAction(Action.CREATE_PRODUCT) }
+    }
 
+    fun confirmCategotyCreation(v: View) {
+        realm.executeTransaction {
+            val category = realm.createObject(Category::class.java, Random().nextInt())
+            category.name = activity.etNewCategoryName.text.toString()
+            setCategory(category)
+        }
+        setAction(Action.CREATE_PRODUCT)
+    }
 }
 
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
