@@ -15,14 +15,14 @@ open class Purchase(
         open var date: Date? = null,
         open var amount: Int = 0
 ) : RealmObject() {
-    val readableName
+    val readableName: String
         get() = if (amount > 1) "${amount}x ${item!!.name}" else item!!.name
-    val readablePrice
+    val readablePrice: String
         get() = item!!.price!!.getPriceWithCurrency(date!!, amount)
-    val readableCategory
+    val readableCategory: String
         get() = item!!.category!!.name
-    val readableShop
+    val readableShop: String
         get() = item!!.price!!.shop!!.name
-    val iconUrl
+    val iconUrl: String
         get() = item!!.category!!.iconUrl
 }

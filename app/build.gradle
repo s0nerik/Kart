@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
+apply plugin: 'kotlin-kapt'
 
 kapt {
     generateStubs = true
@@ -47,7 +48,7 @@ dependencies {
 
     // Language features
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'co.metalab.asyncawait:asyncawait:0.7.1'
+//    compile 'co.metalab.asyncawait:asyncawait:0.7.1'
 
     // Support libs
     compile "com.android.support:appcompat-v7:$support_version"
