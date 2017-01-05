@@ -118,7 +118,7 @@
                             android:layout_marginLeft="-2dp"
                             android:layout_marginRight="-2dp"
                             android:visibility='@{viewModel.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
-                            app:cardBackgroundColor="@color/material_color_white"
+                            app:cardBackgroundColor="@color/material_color_grey_100"
                             app:cardUseCompatPadding="true"
                             >
                             <RelativeLayout
@@ -130,8 +130,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_toLeftOf="@+id/btnNewCategoryOk"
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_marginTop="16dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_marginBottom="-4dp"
                                     app:counterEnabled="true"
                                     app:counterMaxLength="32"
                                     >
