@@ -51,27 +51,63 @@
                     tools:visibility="visible"
                     >
 
-                    <ImageView
-                        android:id="@+id/ivNewProductCategory"
-                        android:layout_width="120dp"
+                    <FrameLayout
+                        android:id="@+id/groupNewProductCategory"
+                        android:layout_width="136dp"
                         android:layout_height="match_parent"
-                        android:padding="32dp"
                         android:layout_alignTop="@+id/groupProductData"
+                        android:layout_above="@+id/btnPrice"
+                        >
+                        <ImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:tint="@color/textColorPrimary"
+                            android:src="@drawable/cat_food"
+                            android:scaleType="fitCenter"
+                            android:layout_gravity="center"
+                            app:glideImageSrc='@{viewModel.categoryIconUrl}'
+                            app:glideConfig='@{"add_product_icon"}'
+                            tools:src="@drawable/cat_food"
+                            />
+                    </FrameLayout>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/btnPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/groupNewProductCategory"
+                        android:layout_alignLeft="@+id/groupNewProductCategory"
                         android:layout_alignBottom="@+id/groupProductData"
-                        android:tint="@color/textColorPrimary"
-                        android:src="@drawable/cat_food"
-                        android:scaleType="fitCenter"
-                        app:glideImageSrc='@{viewModel.categoryIconUrl}'
-                        app:glideConfig='@{"add_product_icon"}'
-                        tools:src="@drawable/cat_food"
-                        />
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:onClick='@{() -> 0}'
+                        android:foreground="?selectableItemBackground"
+                        app:cardBackgroundColor="@color/material_color_grey_100"
+                        >
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/cash_multiple"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_marginRight="16dp"
+                            android:textAppearance="@style/MaterialTypography.Regular.Body2"
+                            android:text="$10.00"
+                            />
+                    </android.support.v7.widget.CardView>
 
                     <LinearLayout
                         android:id="@+id/groupProductData"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_toRightOf="@+id/ivNewProductCategory"
+                        android:layout_toRightOf="@+id/groupNewProductCategory"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp"
@@ -97,7 +133,7 @@
                             layout="@layout/view_btn_dropdown"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/ivNewProductCategory"
+                            android:layout_toRightOf="@+id/groupNewProductCategory"
                             android:layout_below="@+id/tilNewProductName"
                             android:visibility='@{viewModel.action == Action.CREATE_PRODUCT ? View.VISIBLE : View.GONE}'
                             app:onClick='@{viewModel::selectCategory}'
@@ -114,7 +150,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tilNewProductName"
-                            android:layout_toRightOf="@+id/ivNewProductCategory"
+                            android:layout_toRightOf="@+id/groupNewProductCategory"
                             android:layout_marginLeft="-2dp"
                             android:layout_marginRight="-2dp"
                             android:visibility='@{viewModel.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
@@ -166,7 +202,7 @@
                             layout="@layout/view_btn_dropdown"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/ivNewProductCategory"
+                            android:layout_toRightOf="@+id/groupNewProductCategory"
                             android:layout_below="@+id/btnSelectCategory"
                             android:layout_marginTop="16dp"
                             app:onClick='@{viewModel::selectShop}'
