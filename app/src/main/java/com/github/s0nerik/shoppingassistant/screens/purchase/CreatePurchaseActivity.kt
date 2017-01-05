@@ -11,9 +11,7 @@ import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
-import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemCategoryBinding
-import com.github.s0nerik.shoppingassistant.databinding.PopupSelectProductCategoryBinding
+import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.model.Shop
@@ -171,6 +169,29 @@ class CreateProductViewModel(
             setCategory(category)
         }
         setAction(Action.CREATE_PRODUCT)
+    }
+
+    fun selectShop(v: View) {
+        val shops = realm.where(Shop::class.java).findAll()
+
+        val binding = DataBindingUtil.inflate<PopupSelectShopBinding>(activity.layoutInflater, R.layout.popup_select_shop, null, false)
+        binding.viewModel = this
+
+        val popup = RelativePopupWindow(binding.root, activity.btnSelectShop.width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        popup.isOutsideTouchable = true
+        popup.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+
+        currentPopup = WeakReference(popup)
+
+        LastAdapter.with(shops, BR.item)
+                .type {
+                    Type<ItemShopBinding>(R.layout.item_shop)
+                            .onClick {
+                                setShop(item as Shop)
+                                currentPopup.safe { dismiss() }
+                            }
+                }
+                .into(binding.recycler)
     }
 }
 
