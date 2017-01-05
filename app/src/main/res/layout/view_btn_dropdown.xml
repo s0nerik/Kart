@@ -10,25 +10,53 @@
             type="String"
             />
         <variable
+            name="bgColor"
+            type="Integer"
+            />
+        <variable
+            name="textColor"
+            type="Integer"
+            />
+        <variable
+            name="iconUrl"
+            type="String"
+            />
+        <variable
+            name="glideConfig"
+            type="String"
+            />
+        <variable
             name="onClick"
             type="android.view.View.OnClickListener"
             />
     </data>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:foreground="?selectableItemBackground"
         android:onClick='@{onClick}'
-        app:cardBackgroundColor="@color/colorAccent"
+        app:cardBackgroundColor="@{bgColor != null ? bgColor : @color/colorAccent, default=@color/colorAccent}"
+        tools:layout_width="180dp"
+        tools:layout_margin="16dp"
         >
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="16dp"
+            android:tint="@{textColor != null ? textColor : @color/material_color_white, default=@color/material_color_white}"
+            app:glideImageSrc='@{iconUrl != null ? iconUrl : ""}'
+            app:glideConfig='@{glideConfig != null ? glideConfig : "purchase_icon"}'
+            tools:src="@drawable/cat_food"
+            />
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="42dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="48dp"
             android:text='@{text}'
-            android:textColor="@color/material_color_white"
+            android:textColor="@{textColor != null ? textColor : @color/material_color_white, default=@color/material_color_white}"
             android:maxLines="1"
             tools:text="Text"
             style="@style/MaterialTypography.Dense.Body2"
@@ -40,7 +68,7 @@
             android:layout_marginRight="4dp"
             android:padding="8dp"
             android:src="@drawable/arrow_down_drop_circle"
-            android:tint="@color/material_color_white"
+            android:tint="@{textColor != null ? textColor : @color/material_color_white, default=@color/material_color_white}"
             />
     </android.support.v7.widget.CardView>
 </layout>

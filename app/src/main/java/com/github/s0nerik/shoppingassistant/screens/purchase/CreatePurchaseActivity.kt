@@ -16,6 +16,7 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemCategoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.PopupSelectProductCategoryBinding
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.Shop
 import com.jakewharton.rxbinding.view.focusChanges
 import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
@@ -80,6 +81,7 @@ class CreateProductViewModel(
     val isExpanded: ObservableBoolean = ObservableBoolean(false)
 
     private var category: Category? = null
+    private var shop: Shop? = null
     private var action: Action = Action.CREATE_PRODUCT
 
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
@@ -90,6 +92,14 @@ class CreateProductViewModel(
         category = c
         notifyPropertyChanged(BR.category)
         notifyPropertyChanged(BR.categoryIconUrl)
+    }
+
+    @Bindable
+    fun getShop() = shop
+    fun setShop(s: Shop) {
+        shop = s
+        notifyPropertyChanged(BR.shop)
+        notifyPropertyChanged(BR.shopIconUrl)
     }
 
     @Bindable
@@ -109,6 +119,9 @@ class CreateProductViewModel(
 
     @Bindable
     fun getCategoryIconUrl(): String = category?.iconUrl.orEmpty()
+
+    @Bindable
+    fun getShopIconUrl(): String = R.drawable.store.getDrawableUri(activity).toString()
 
     fun expand(v: View) {
         isExpanded.set(true)
