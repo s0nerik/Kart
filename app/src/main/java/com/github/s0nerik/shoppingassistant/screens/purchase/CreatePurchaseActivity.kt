@@ -12,19 +12,18 @@ import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.*
-import com.github.s0nerik.shoppingassistant.model.Category
-import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.github.s0nerik.shoppingassistant.model.Shop
+import com.github.s0nerik.shoppingassistant.model.*
+import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.view.focusChanges
 import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
-import io.realm.PurchaseRealmProxy
+import io.realm.ItemRealmProxy
 import io.realm.Realm
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_create_purchase.*
 import kotlinx.android.synthetic.main.card_create_product.*
+import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -35,13 +34,13 @@ class CreatePurchaseViewModel(
 ) {
     val VOICE_SEARCH_REQ_CODE = 672
 
-    val isSearching: ObservableBoolean = ObservableBoolean(false)
+    val isSearching = ObservableBoolean(false)
 
-    val frequents: RealmResults<Purchase> by lazy { frequentPurchases(realm) }
-    val favorites: RealmResults<Purchase> by lazy { favoritePurchases(realm) }
+    val frequents by lazy { frequentItems(realm) }
+    val favorites by lazy { favoriteItems(realm) }
+    private val purchases by lazy { purchases(realm) }
 
-    private val purchases: RealmResults<Purchase> by lazy { purchases(realm) }
-    val filteredSearchResults: ObservableArrayList<Purchase> = ObservableArrayList()
+    val filteredSearchResults = ObservableArrayList<Purchase>()
 
     init {
         activity.apply {
@@ -193,6 +192,41 @@ class CreateProductViewModel(
                 }
                 .into(binding.recycler)
     }
+
+    fun createProduct(v: View) {
+        val name = activity.etNewProductName.text.toString()
+        if (name.isEmpty()) {
+            activity.toast("Can't create a product without a name!")
+            return
+        }
+        if (realm.where(Item::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("Product with the same name already exists!")
+            return
+        }
+        if (category == null) {
+            activity.toast("Category must be selected!")
+            return
+        }
+        if (shop == null) {
+            activity.toast("Shop must be selected!")
+            return
+        }
+        realm.executeTransaction {
+            val item = realm.createObject(Item::class.java, Random().nextInt())
+            item.category = category
+            item.name = name
+
+            val currency = realm.where(Currency::class.java).findFirst()
+            val price = realm.createObject(Price::class.java, Random().nextLong())
+            price.shop = shop
+            val priceChange = realm.createObject(PriceChange::class.java, Random().nextLong())
+            priceChange.value = 0f
+            priceChange.currency = currency
+            priceChange.date = Date()
+            price.valueChanges.add(priceChange)
+            item.price = price
+        }
+    }
 }
 
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
@@ -207,7 +241,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initFavorites() {
         LastAdapter.with(binding.viewModel.favorites, BR.item)
-                .map<PurchaseRealmProxy>(R.layout.item_purchase_horizontal)
+                .map<ItemRealmProxy>(R.layout.item_purchase_item_horizontal)
                 .into(rvFavorites)
 
         rvFavorites.isNestedScrollingEnabled = false
@@ -216,7 +250,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initFrequents() {
         LastAdapter.with(binding.viewModel.frequents, BR.item)
-                .map<PurchaseRealmProxy>(R.layout.item_purchase)
+                .map<ItemRealmProxy>(R.layout.item_purchase_item)
                 .into(rvFrequents)
 
         rvFrequents.isNestedScrollingEnabled = false
@@ -225,7 +259,8 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initSearchResults() {
         LastAdapter.with(binding.viewModel.filteredSearchResults, BR.item)
-                .map<PurchaseRealmProxy>(R.layout.item_purchase)
+                .map<ItemRealmProxy>(R.layout.item_purchase_item)
+//                .map<PurchaseRealmProxy>(R.layout.item_purchase)
                 .into(rvSearchResults)
 
         rvFrequents.isNestedScrollingEnabled = false

@@ -182,6 +182,7 @@
                         android:layout_below="@+id/groupProductData"
                         android:layout_toRightOf="@+id/btnCancelNewProduct"
                         android:text="Create"
+                        android:onClick='@{viewModel::createProduct}'
                         app:layout_widthPercent="50%"
                         />
 

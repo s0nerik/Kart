@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant
 
+import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.Realm
 import io.realm.RealmResults
@@ -22,6 +23,16 @@ fun favoritePurchases(realm: Realm): RealmResults<Purchase> {
 // TODO: implement this by creating a new purchase for a frequently bought product
 fun frequentPurchases(realm: Realm): RealmResults<Purchase> {
     return purchases(realm)
+}
+
+// TODO: implement this by creating a new purchase for a favorite product
+fun favoriteItems(realm: Realm): RealmResults<Item> {
+    return realm.where(Item::class.java).findAll()
+}
+
+// TODO: implement this by creating a new purchase for a frequently bought product
+fun frequentItems(realm: Realm): RealmResults<Item> {
+    return realm.where(Item::class.java).findAll()
 }
 
 // TODO: implement this by creating a new purchase for a recently bought product
