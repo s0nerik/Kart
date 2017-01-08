@@ -76,6 +76,7 @@ class CreateProductViewModel(
     enum class Action { CREATE_PRODUCT, CREATE_CATEGORY, CREATE_SHOP }
 
     val isExpanded: ObservableBoolean = ObservableBoolean(false)
+    val isEditingPrice: ObservableBoolean = ObservableBoolean(false)
 
     private var category: Category? = null
     private var shop: Shop? = null
@@ -120,13 +121,9 @@ class CreateProductViewModel(
     @Bindable
     fun getShopIconUrl(): String = R.drawable.store.getDrawableUri(activity).toString()
 
-    fun expand(v: View) {
-        isExpanded.set(true)
-    }
-
-    fun shrink(v: View) {
-        isExpanded.set(false)
-    }
+    fun expand(v: View) = isExpanded.set(true)
+    fun shrink(v: View) = isExpanded.set(false)
+    fun togglePrice(v: View) = isEditingPrice.set(!isEditingPrice.get())
 
     fun selectCategory(v: View) {
         val categories = realm.where(Category::class.java).findAll()
