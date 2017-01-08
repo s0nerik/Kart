@@ -58,6 +58,7 @@ dependencies {
     compile "com.android.support:palette-v7:$support_version"
     compile "com.android.support:design:$support_version"
     compile "com.android.support:percent:$support_version"
+    compile 'com.android.support.constraint:constraint-layout:+'
 
     // Anko
     compile "org.jetbrains.anko:anko-sdk21:$anko_version"

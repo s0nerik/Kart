@@ -80,6 +80,8 @@ class CreateProductViewModel(
 
     private var category: Category? = null
     private var shop: Shop? = null
+    private var price: Price? = null
+
     private var action: Action = Action.CREATE_PRODUCT
 
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
@@ -98,6 +100,14 @@ class CreateProductViewModel(
         shop = s
         notifyPropertyChanged(BR.shop)
         notifyPropertyChanged(BR.shopIconUrl)
+    }
+
+    @Bindable
+    fun getPrice() = price
+    fun setPrice(p: Price) {
+        price = p
+        notifyPropertyChanged(BR.price)
+        notifyPropertyChanged(BR.priceIconUrl)
     }
 
     @Bindable
@@ -121,9 +131,16 @@ class CreateProductViewModel(
     @Bindable
     fun getShopIconUrl(): String = R.drawable.store.getDrawableUri(activity).toString()
 
+    @Bindable
+    fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
+
     fun expand(v: View) = isExpanded.set(true)
     fun shrink(v: View) = isExpanded.set(false)
     fun togglePrice(v: View) = isEditingPrice.set(!isEditingPrice.get())
+
+    fun selectPrice(v: View) {
+
+    }
 
     fun selectCategory(v: View) {
         val categories = realm.where(Category::class.java).findAll()
@@ -159,6 +176,15 @@ class CreateProductViewModel(
     }
 
     fun confirmCategotyCreation(v: View) {
+        val name = activity.etNewCategoryName.text.toString()
+        if (name.isEmpty()) {
+            activity.toast("Category name can't be empty!")
+            return
+        }
+        if (realm.where(Category::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("Category with the same name already exists!")
+            return
+        }
         realm.executeTransaction {
             val category = realm.createObject(Category::class.java, Random().nextInt())
             category.name = activity.etNewCategoryName.text.toString()

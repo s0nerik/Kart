@@ -32,6 +32,11 @@ fun configureGlide() {
                 .error(R.drawable.tag)
     })
 
+    GlideBindingConfig.registerProvider("product_price_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.cash_multiple)
+    })
+
     GlideBindingConfig.registerProvider("add_product_icon", { iv, request ->
         request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
                 .error(R.drawable.selection)
