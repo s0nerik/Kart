@@ -2,7 +2,6 @@ package com.github.s0nerik.shoppingassistant.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
 
 /**
  * Created by Alex on 12/27/2016.
@@ -16,13 +15,13 @@ open class Item(
         open var price: Price? = null
 ) : RealmObject() {
     val readableName: String
-        get() = name
+        get() = if (name.isNotBlank()) name else "Unnamed"
     val readablePrice: String
-        get() = price!!.getPriceWithCurrency(Date(), 1)
+        get() = if (price != null) price!!.currentValueString else "Unknown price"
     val readableCategory: String
-        get() = category!!.name
+        get() = if (category != null) category!!.name else "Uncategorized"
     val readableShop: String
-        get() = price!!.shop!!.name
+        get() = if (price != null && price!!.shop != null) price!!.shop!!.name else "Unknown shop"
     val iconUrl: String
-        get() = category!!.iconUrl
+        get() = if (category != null) category!!.iconUrl else ""
 }

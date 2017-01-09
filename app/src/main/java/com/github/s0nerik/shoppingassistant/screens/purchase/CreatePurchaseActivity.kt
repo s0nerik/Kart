@@ -81,33 +81,54 @@ class CreateProductViewModel(
     private var category: Category? = null
     private var shop: Shop? = null
     private var price: Price? = null
+    private var previewItem: Item = Item()
 
     private var action: Action = Action.CREATE_PRODUCT
 
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
+    init {
+        activity.etNewProductName
+                .textChanges()
+                .bindUntilEvent(activity, ActivityEvent.DESTROY)
+                .subscribe {
+                    previewItem.name = it.toString()
+                    notifyPropertyChanged(BR.item)
+                }
+    }
+
     @Bindable
     fun getCategory() = category
     fun setCategory(c: Category) {
         category = c
+        previewItem.category = category
         notifyPropertyChanged(BR.category)
         notifyPropertyChanged(BR.categoryIconUrl)
+        notifyPropertyChanged(BR.item)
     }
 
     @Bindable
     fun getShop() = shop
     fun setShop(s: Shop) {
         shop = s
+
+        if (previewItem.price == null)
+            previewItem.price = Price()
+        previewItem.price!!.shop = shop
+
         notifyPropertyChanged(BR.shop)
         notifyPropertyChanged(BR.shopIconUrl)
+        notifyPropertyChanged(BR.item)
     }
 
     @Bindable
     fun getPrice() = price
     fun setPrice(p: Price) {
         price = p
+        previewItem.price = price
         notifyPropertyChanged(BR.price)
         notifyPropertyChanged(BR.priceIconUrl)
+        notifyPropertyChanged(BR.item)
     }
 
     @Bindable
@@ -126,6 +147,13 @@ class CreateProductViewModel(
     }
 
     @Bindable
+    fun getItem() = previewItem
+    fun setItem(i: Item) {
+        previewItem = i
+        notifyPropertyChanged(BR._all)
+    }
+
+    @Bindable
     fun getCategoryIconUrl(): String = category?.iconUrl.orEmpty()
 
     @Bindable
@@ -134,7 +162,10 @@ class CreateProductViewModel(
     @Bindable
     fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
 
-    fun expand(v: View) = isExpanded.set(true)
+    fun expand(v: View){
+        isExpanded.set(true)
+        setItem(Item())
+    }
     fun shrink(v: View) = isExpanded.set(false)
     fun togglePrice(v: View) = isEditingPrice.set(!isEditingPrice.get())
 

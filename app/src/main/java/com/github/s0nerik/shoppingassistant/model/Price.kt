@@ -16,7 +16,10 @@ open class Price(
         open var valueChanges: RealmList<PriceChange> = RealmList()
 ) : RealmObject() {
     val currentValueString: String
-        get() = "%.2f".format(getPriceForDate(Date()).first)
+        get() {
+            val price = getPriceForDate(Date()).first
+            return if (price != null) "%.2f".format(price) else "Unknown price"
+        }
 
     fun getPriceForDate(date: Date, amount: Int = 1): Pair<Float?, Currency?> {
         var price: Float? = null
