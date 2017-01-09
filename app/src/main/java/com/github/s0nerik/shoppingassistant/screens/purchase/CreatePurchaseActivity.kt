@@ -22,6 +22,7 @@ import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import io.realm.ItemRealmProxy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
+import kotlinx.android.synthetic.main.card_create_category.*
 import kotlinx.android.synthetic.main.card_create_product.*
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
