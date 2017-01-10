@@ -14,7 +14,7 @@ import jp.wasabeef.glide.transformations.ColorFilterTransformation
 fun configureGlide() {
     GlideBindingConfig.registerProvider("purchase_icon", { iv, request ->
         request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
-                .error(R.drawable.alert_circle_outline)
+                .error(R.drawable.tag)
     })
 
     GlideBindingConfig.registerProvider("category_icon", { iv, request ->
