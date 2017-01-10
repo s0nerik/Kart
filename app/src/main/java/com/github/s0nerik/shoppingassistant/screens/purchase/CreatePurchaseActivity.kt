@@ -117,9 +117,14 @@ class CreateProductViewModel(
     fun setShop(s: Shop) {
         shop = s
 
-        if (previewItem.price == null)
+        if (previewItem.price == null) {
             previewItem.price = Price()
-        previewItem.price!!.shop = shop
+            previewItem.price!!.shop = shop
+        } else if (previewItem.price!!.isValid) {
+            realm.executeTransaction {
+                previewItem.price!!.shop = shop
+            }
+        }
 
         notifyPropertyChanged(BR.shop)
         notifyPropertyChanged(BR.shopIconUrl)
@@ -254,6 +259,35 @@ class CreateProductViewModel(
     }
 
     fun confirmPriceCreation(v: View) {
+        val priceText = activity.etNewPriceValue.text.toString()
+        if (priceText.isBlank()) {
+            activity.toast("Price can't be blank!")
+            return
+        }
+
+        val priceValue: Float
+        try {
+            priceValue = priceText.toFloat()
+        } catch (e: NumberFormatException) {
+            activity.toast("Wrong price format!")
+            return
+        }
+
+        realm.executeTransaction {
+            val price = it.createObject(Price::class.java, Random().nextLong())
+            price.shop = shop
+
+            val priceChange = it.createObject(PriceChange::class.java, Random().nextLong())
+            priceChange.currency = pendingCurrency.get()
+            priceChange.date = Date()
+            priceChange.value = priceValue
+
+            price.valueChanges.clear()
+            price.valueChanges.add(priceChange)
+
+            setPrice(price)
+        }
+
         // TODO: create Price if doesn't exist
         setAction(Action.CREATE_PRODUCT)
     }
