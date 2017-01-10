@@ -17,19 +17,11 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-fun createDummyPurchases(ctx: Context) {
-    val realm = Realm.getDefaultInstance()
+fun createDummyPurchases(ctx: Context, realm: Realm) {
     realm.executeTransaction {
-        realm.deleteAll()
-
         //region Currencies
-        val usd = it.createObject(Currency::class.java, 0)
-        usd.name = "USD"
-        usd.sign = "$"
-
-        val uah = it.createObject(Currency::class.java, 1)
-        uah.name = "UAH"
-        uah.sign = "₴"
+        val usd = it.where(Currency::class.java).equalTo("code", "USD").findFirst()
+        val uah = it.where(Currency::class.java).equalTo("code", "UAH").findFirst()
         //endregion
 
         //region Categories
@@ -94,5 +86,4 @@ fun createDummyPurchases(ctx: Context) {
             )
         }
     }
-    realm.close()
 }

@@ -83,6 +83,9 @@ class CreateProductViewModel(
     private var category: Category? = null
     private var shop: Shop? = null
     private var price: Price? = null
+
+    private var pendingCurrency: Currency? = null
+
     private var previewItem: Item = Item()
 
     private var action: Action = Action.CREATE_PRODUCT
@@ -182,6 +185,26 @@ class CreateProductViewModel(
     }
 
     fun selectCurrency(v: View) {
+        val currencies = realm.where(Currency::class.java).findAll()
+
+        val binding = DataBindingUtil.inflate<PopupSelectCurrencyBinding>(activity.layoutInflater, R.layout.popup_select_currency, null, false)
+        binding.viewModel = this
+
+        val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        popup.isOutsideTouchable = true
+        popup.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+
+        currentPopup = WeakReference(popup)
+
+        LastAdapter.with(currencies, BR.item)
+                .type {
+                    Type<ItemCurrencyBinding>(R.layout.item_currency)
+                            .onClick {
+                                pendingCurrency = item as Currency
+                                currentPopup.safe { dismiss() }
+                            }
+                }
+                .into(binding.recycler)
     }
 
     fun selectCategory(v: View) {

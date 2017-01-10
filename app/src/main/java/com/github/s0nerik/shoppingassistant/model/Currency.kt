@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Currency(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var code: String = "",
         open var sign: String = "",
         open var name: String = ""
 ) : RealmObject() {

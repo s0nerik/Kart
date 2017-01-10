@@ -22,7 +22,7 @@ class App : Application() {
                         .deleteRealmIfMigrationNeeded()
                         .build()
         )
-        createDummyPurchases(this)
+        initDatabase(this, true)
         configureGlide()
         configureTimber()
     }

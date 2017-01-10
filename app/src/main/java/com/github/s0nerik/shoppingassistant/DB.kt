@@ -1,5 +1,7 @@
 package com.github.s0nerik.shoppingassistant
 
+import android.content.Context
+import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.Realm
@@ -10,6 +12,31 @@ import io.realm.RealmResults
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+
+fun initDatabase(ctx: Context, isDebug: Boolean) {
+    Realm.getDefaultInstance().use {
+        if (isDebug)
+            it.executeTransaction(Realm::deleteAll)
+
+        createCurrenciesIfNeeded(it)
+        createDummyPurchases(ctx, it)
+    }
+}
+
+fun createCurrenciesIfNeeded(realm: Realm) {
+    val currencies = java.util.Currency.getAvailableCurrencies()
+
+    if (realm.where(Currency::class.java).findFirst() == null) {
+        // TODO: replace with async transaction when fake data is no longer needed
+        realm.executeTransaction {
+            currencies.forEach {
+                val currency = realm.createObject(Currency::class.java, it.currencyCode)
+                currency.sign = it.symbol
+                currency.name = it.displayName
+            }
+        }
+    }
+}
 
 fun purchases(realm: Realm): RealmResults<Purchase> {
     return realm.where(Purchase::class.java).findAll()
