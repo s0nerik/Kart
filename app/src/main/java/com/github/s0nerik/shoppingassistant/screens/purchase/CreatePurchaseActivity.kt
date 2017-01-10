@@ -77,14 +77,14 @@ class CreateProductViewModel(
 ) : BaseObservable() {
     enum class Action { CREATE_PRODUCT, CREATE_PRICE, CREATE_CATEGORY, CREATE_SHOP }
 
-    val isExpanded: ObservableBoolean = ObservableBoolean(false)
-    val isEditingPrice: ObservableBoolean = ObservableBoolean(false)
+    val isExpanded = ObservableBoolean(false)
+    val isEditingPrice = ObservableBoolean(false)
+
+    val pendingCurrency = ObservableField<Currency?>(null)
 
     private var category: Category? = null
     private var shop: Shop? = null
     private var price: Price? = null
-
-    private var pendingCurrency: Currency? = null
 
     private var previewItem: Item = Item()
 
@@ -200,7 +200,7 @@ class CreateProductViewModel(
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {
-                                pendingCurrency = item as Currency
+                                pendingCurrency.set(item as Currency)
                                 currentPopup.safe { dismiss() }
                             }
                 }
