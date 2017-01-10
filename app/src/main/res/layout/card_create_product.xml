@@ -101,6 +101,7 @@
                         android:layout_marginBottom="8dp"
                         android:orientation="vertical"
                         android:layout_toEndOf="@+id/preview"
+                        android:animateLayoutChanges="true"
                         >
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/tilNewProductName"
@@ -151,6 +152,12 @@
 
                         <include
                             layout="@layout/card_create_category"
+                            app:viewModel='@{viewModel}'
+                            tools:visibility="gone"
+                            />
+
+                        <include
+                            layout="@layout/card_create_price"
                             app:viewModel='@{viewModel}'
                             tools:visibility="gone"
                             />

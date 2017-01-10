@@ -23,6 +23,7 @@ import io.realm.ItemRealmProxy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
 import kotlinx.android.synthetic.main.card_create_category.*
+import kotlinx.android.synthetic.main.card_create_price.*
 import kotlinx.android.synthetic.main.card_create_product.*
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
@@ -74,7 +75,7 @@ class CreateProductViewModel(
         private val activity: CreatePurchaseActivity,
         private val realm: Realm
 ) : BaseObservable() {
-    enum class Action { CREATE_PRODUCT, CREATE_CATEGORY, CREATE_SHOP }
+    enum class Action { CREATE_PRODUCT, CREATE_PRICE, CREATE_CATEGORY, CREATE_SHOP }
 
     val isExpanded: ObservableBoolean = ObservableBoolean(false)
     val isEditingPrice: ObservableBoolean = ObservableBoolean(false)
@@ -141,9 +142,16 @@ class CreateProductViewModel(
             val focusedText = when (a) {
                 Action.CREATE_CATEGORY -> etNewCategoryName
                 Action.CREATE_PRODUCT -> etNewProductName
+                Action.CREATE_PRICE -> etNewPriceValue
                 else -> null
             }
             focusedText?.requestFocus()
+            if (a != Action.CREATE_PRODUCT)
+                focusedText?.focusChanges()
+                        ?.filter { !it }
+                        ?.take(1)
+                        ?.bindUntilEvent(activity, ActivityEvent.DESTROY)
+                        ?.subscribe { setAction(Action.CREATE_PRODUCT) }
         }
     }
 
@@ -168,10 +176,12 @@ class CreateProductViewModel(
         setItem(Item())
     }
     fun shrink(v: View) = isExpanded.set(false)
-    fun togglePrice(v: View) = isEditingPrice.set(!isEditingPrice.get())
 
     fun selectPrice(v: View) {
+        setAction(Action.CREATE_PRICE)
+    }
 
+    fun selectCurrency(v: View) {
     }
 
     fun selectCategory(v: View) {
@@ -200,11 +210,6 @@ class CreateProductViewModel(
     fun createCategory(v: View) {
         setAction(Action.CREATE_CATEGORY)
         currentPopup.safe { dismiss() }
-        activity.etNewCategoryName.focusChanges()
-                .filter { !it }
-                .take(1)
-                .bindUntilEvent(activity, ActivityEvent.DESTROY)
-                .subscribe { setAction(Action.CREATE_PRODUCT) }
     }
 
     fun confirmCategotyCreation(v: View) {
@@ -222,6 +227,11 @@ class CreateProductViewModel(
             category.name = activity.etNewCategoryName.text.toString()
             setCategory(category)
         }
+        setAction(Action.CREATE_PRODUCT)
+    }
+
+    fun confirmPriceCreation(v: View) {
+        // TODO: create Price if doesn't exist
         setAction(Action.CREATE_PRODUCT)
     }
 
