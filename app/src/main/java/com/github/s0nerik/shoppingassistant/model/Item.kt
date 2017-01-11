@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Item(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var id: String = "",
         open var name: String = "",
         open var category: Category? = null,
         open var price: Price? = null

@@ -10,7 +10,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class PriceChange(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var id: String = "",
         open var value: Float = 0f,
         open var currency: Currency? = null,
         open var date: Date? = null

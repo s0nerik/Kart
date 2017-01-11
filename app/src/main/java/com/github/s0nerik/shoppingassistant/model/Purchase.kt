@@ -10,7 +10,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Purchase(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var id: String = "",
         open var item: Item? = null,
         open var date: Date? = null,
         open var amount: Int = 0

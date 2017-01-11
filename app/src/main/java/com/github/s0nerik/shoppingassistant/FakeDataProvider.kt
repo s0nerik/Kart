@@ -25,31 +25,31 @@ fun createDummyPurchases(ctx: Context, realm: Realm) {
         //endregion
 
         //region Categories
-        val food = it.createObject(Category::class.java, 0)
+        val food = it.createObject(Category::class)
         food.name = "Food"
         food.iconUrl = R.drawable.cat_food.getDrawableUri(ctx).toString()
 
-        val clothes = it.createObject(Category::class.java, 1)
+        val clothes = it.createObject(Category::class)
         clothes.name = "Clothes"
 //            clothes.iconUrl = "https://api.icons8.com/download/c5c8b5ba35e008ea471e9a53c5fa74c03ef6e78c/iOS7/PNG/256/Very_Basic/search-256.png"
         clothes.iconUrl = R.drawable.cat_clothes.getDrawableUri(ctx).toString()
         //endregion
 
         //region Shops
-        val silpo = it.createObject(Shop::class.java, 0)
+        val silpo = it.createObject(Shop::class)
         silpo.name = "Сильпо"
 
-        val atb = it.createObject(Shop::class.java, 1)
+        val atb = it.createObject(Shop::class)
         atb.name = "АТБ"
         //endregion
 
         val providePrice: (Long, Shop, DateTime, Float, Currency) -> Price = { id, shop, date, value, currency ->
-            val priceChange = it.createObject(PriceChange::class.java, id)
+            val priceChange = it.createObject(PriceChange::class)
             priceChange.date = (date - 1.minutes().minutes).toDate()
             priceChange.value = value
             priceChange.currency = currency
 
-            val price = it.createObject(Price::class.java, id)
+            val price = it.createObject(Price::class)
             price.shop = shop
             price.valueChanges = RealmList(priceChange)
 
@@ -57,11 +57,11 @@ fun createDummyPurchases(ctx: Context, realm: Realm) {
         }
 
         val providePurchase: (Long, Shop, DateTime, String, Category, Float, Currency) -> Purchase = { id, shop, date, name, category, price, currency ->
-            val purchase = it.createObject(Purchase::class.java, id)
+            val purchase = it.createObject(Purchase::class)
             purchase.amount = 1 + Random().nextInt(2)
             purchase.date = date.toDate()
 
-            val item = it.createObject(Item::class.java, id)
+            val item = it.createObject(Item::class)
             item.name = name
             item.category = category
             item.price = providePrice(id, shop, date, price, currency)

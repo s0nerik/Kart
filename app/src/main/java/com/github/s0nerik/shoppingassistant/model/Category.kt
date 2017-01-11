@@ -10,7 +10,7 @@ import io.realm.annotations.PrimaryKey
  */
 // TODO: replace Long id with UUID
 open class Category(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var id: String = "",
         open var name: String = "",
         open var iconUrl: String = ""
 ) : RealmObject()

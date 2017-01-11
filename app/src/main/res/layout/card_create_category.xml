@@ -61,7 +61,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="4dp"
                 android:background="?selectableItemBackgroundBorderless"
-                android:onClick='@{viewModel::confirmCategotyCreation}'
+                android:onClick='@{viewModel::confirmCategoryCreation}'
                 android:scaleType="center"
                 android:src="@drawable/ic_done_black_24dp"
                 />

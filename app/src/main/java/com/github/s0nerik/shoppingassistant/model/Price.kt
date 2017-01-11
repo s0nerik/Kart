@@ -11,7 +11,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Price(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var id: String = "",
         open var shop: Shop? = null,
         open var valueChanges: RealmList<PriceChange> = RealmList()
 ) : RealmObject() {

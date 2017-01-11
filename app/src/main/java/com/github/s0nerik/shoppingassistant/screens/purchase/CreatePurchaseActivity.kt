@@ -78,51 +78,59 @@ class CreateProductViewModel(
     enum class Action { CREATE_PRODUCT, CREATE_PRICE, CREATE_CATEGORY, CREATE_SHOP }
 
     val isExpanded = ObservableBoolean(false)
-    val isEditingPrice = ObservableBoolean(false)
 
     val pendingCurrency = ObservableField<Currency?>(null)
 
-    private var category: Category? = null
-    private var shop: Shop? = null
-    private var price: Price? = null
+    private val itemCategory by lazy { realm.createObject(Category::class) }
+    private val itemShop by lazy { realm.createObject(Shop::class) }
+    private val itemPrice by lazy { realm.createObject(Price::class) }
+    private val itemPriceChange by lazy { realm.createObject(PriceChange::class) }
 
-    private var previewItem: Item = Item()
+    private lateinit var pendingItem: Item
 
     private var action: Action = Action.CREATE_PRODUCT
 
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
     init {
+        realm.executeTransaction {
+            pendingItem = it.createObject(Item::class)
+        }
+
         activity.etNewProductName
                 .textChanges()
                 .bindUntilEvent(activity, ActivityEvent.DESTROY)
                 .subscribe {
-                    previewItem.name = it.toString()
+                    val name = it.toString()
+                    realm.executeTransaction {
+                        pendingItem.name = name
+                    }
                     notifyPropertyChanged(BR.item)
                 }
     }
 
     @Bindable
-    fun getCategory() = category
+    fun getCategory() = pendingItem.category
     fun setCategory(c: Category) {
-        category = c
-        previewItem.category = category
+        realm.executeTransaction {
+            pendingItem.category = c
+        }
         notifyPropertyChanged(BR.category)
         notifyPropertyChanged(BR.categoryIconUrl)
         notifyPropertyChanged(BR.item)
     }
 
     @Bindable
-    fun getShop() = shop
+    fun getShop() = pendingItem.price?.shop
     fun setShop(s: Shop) {
-        shop = s
+        realm.executeTransaction {
+            pendingItem.price?.shop = s
 
-        if (previewItem.price == null) {
-            previewItem.price = Price()
-            previewItem.price!!.shop = shop
-        } else if (previewItem.price!!.isValid) {
-            realm.executeTransaction {
-                previewItem.price!!.shop = shop
+            if (pendingItem.price == null) {
+                pendingItem.price = itemPrice
+                pendingItem.price!!.shop = s
+            } else if (pendingItem.price!!.isValid) {
+                pendingItem.price!!.shop = s
             }
         }
 
@@ -132,10 +140,11 @@ class CreateProductViewModel(
     }
 
     @Bindable
-    fun getPrice() = price
+    fun getPrice() = pendingItem.price
     fun setPrice(p: Price) {
-        price = p
-        previewItem.price = price
+        realm.executeTransaction {
+            pendingItem.price = p
+        }
         notifyPropertyChanged(BR.price)
         notifyPropertyChanged(BR.priceIconUrl)
         notifyPropertyChanged(BR.item)
@@ -164,14 +173,14 @@ class CreateProductViewModel(
     }
 
     @Bindable
-    fun getItem() = previewItem
+    fun getItem() = pendingItem
     fun setItem(i: Item) {
-        previewItem = i
+        pendingItem = i
         notifyPropertyChanged(BR._all)
     }
 
     @Bindable
-    fun getCategoryIconUrl(): String = category?.iconUrl.orEmpty()
+    fun getCategoryIconUrl(): String = pendingItem.category?.iconUrl.orEmpty()
 
     @Bindable
     fun getShopIconUrl(): String = R.drawable.store.getDrawableUri(activity).toString()
@@ -240,7 +249,7 @@ class CreateProductViewModel(
         currentPopup.safe { dismiss() }
     }
 
-    fun confirmCategotyCreation(v: View) {
+    fun confirmCategoryCreation(v: View) {
         val name = activity.etNewCategoryName.text.toString()
         if (name.isEmpty()) {
             activity.toast("Category name can't be empty!")
@@ -250,11 +259,12 @@ class CreateProductViewModel(
             activity.toast("Category with the same name already exists!")
             return
         }
+
         realm.executeTransaction {
-            val category = realm.createObject(Category::class.java, Random().nextInt())
-            category.name = activity.etNewCategoryName.text.toString()
-            setCategory(category)
+            itemCategory.name = activity.etNewCategoryName.text.toString()
         }
+        setCategory(itemCategory)
+
         setAction(Action.CREATE_PRODUCT)
     }
 
@@ -274,19 +284,14 @@ class CreateProductViewModel(
         }
 
         realm.executeTransaction {
-            val price = it.createObject(Price::class.java, Random().nextLong())
-            price.shop = shop
+            itemPriceChange.currency = pendingCurrency.get()
+            itemPriceChange.date = Date()
+            itemPriceChange.value = priceValue
 
-            val priceChange = it.createObject(PriceChange::class.java, Random().nextLong())
-            priceChange.currency = pendingCurrency.get()
-            priceChange.date = Date()
-            priceChange.value = priceValue
-
-            price.valueChanges.clear()
-            price.valueChanges.add(priceChange)
-
-            setPrice(price)
+            itemPrice.valueChanges.clear()
+            itemPrice.valueChanges.add(itemPriceChange)
         }
+        setPrice(itemPrice)
 
         // TODO: create Price if doesn't exist
         setAction(Action.CREATE_PRODUCT)
@@ -325,29 +330,19 @@ class CreateProductViewModel(
             activity.toast("Product with the same name already exists!")
             return
         }
-        if (category == null) {
+        if (pendingItem.category == null) {
             activity.toast("Category must be selected!")
             return
         }
-        if (shop == null) {
+        if (pendingItem.price?.shop == null) {
             activity.toast("Shop must be selected!")
             return
         }
-        realm.executeTransaction {
-            val item = realm.createObject(Item::class.java, Random().nextInt())
-            item.category = category
-            item.name = name
 
-            val currency = realm.where(Currency::class.java).findFirst()
-            val price = realm.createObject(Price::class.java, Random().nextLong())
-            price.shop = shop
-            val priceChange = realm.createObject(PriceChange::class.java, Random().nextLong())
-            priceChange.value = 0f
-            priceChange.currency = currency
-            priceChange.date = Date()
-            price.valueChanges.add(priceChange)
-            item.price = price
+        realm.executeTransaction {
+            pendingItem.name = name
         }
+        shrink(v)
     }
 }
 

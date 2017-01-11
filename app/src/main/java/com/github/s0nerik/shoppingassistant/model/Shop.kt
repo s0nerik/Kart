@@ -9,6 +9,6 @@ import io.realm.annotations.PrimaryKey
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Shop(
-        @PrimaryKey open var id: Long = 0,
+        @PrimaryKey open var id: String = "",
         open var name: String = ""
 ) : RealmObject()
