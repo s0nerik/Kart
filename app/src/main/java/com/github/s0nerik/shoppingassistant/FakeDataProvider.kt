@@ -1,8 +1,6 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
-import com.github.debop.kodatimes.ago
-import com.github.debop.kodatimes.days
 import com.github.debop.kodatimes.minutes
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
@@ -74,16 +72,16 @@ fun createDummyPurchases(ctx: Context, realm: Realm) {
         val foodsNames = arrayOf("Картошка", "Мясо", "Молоко", "Рыба", "Помидоры")
         val clothesNames = arrayOf("Штаны", "Свитер", "Пальто", "Шарф", "Рубашка")
 
-        (0..9).forEach { i ->
-            providePurchase(
-                    i.toLong(),
-                    if (i % 2 == 0) atb else silpo,
-                    Random().nextInt(10).days().ago(),
-                    if (i % 2 == 0) foodsNames[i / 2] else clothesNames[i / 2],
-                    if (i % 2 == 0) food else clothes,
-                    Random().nextFloat() * 500,
-                    if (i % 2 == 0) usd else uah
-            )
-        }
+//        (0..9).forEach { i ->
+//            providePurchase(
+//                    i.toLong(),
+//                    if (i % 2 == 0) atb else silpo,
+//                    Random().nextInt(10).days().ago(),
+//                    if (i % 2 == 0) foodsNames[i / 2] else clothesNames[i / 2],
+//                    if (i % 2 == 0) food else clothes,
+//                    Random().nextFloat() * 500,
+//                    if (i % 2 == 0) usd else uah
+//            )
+//        }
     }
 }

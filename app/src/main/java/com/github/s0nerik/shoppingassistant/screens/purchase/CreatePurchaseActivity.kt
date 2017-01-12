@@ -86,17 +86,13 @@ class CreateProductViewModel(
     private val itemPrice by lazy { realm.createObject(Price::class) }
     private val itemPriceChange by lazy { realm.createObject(PriceChange::class) }
 
-    private lateinit var pendingItem: Item
+    private var pendingItem = Item()
 
     private var action: Action = Action.CREATE_PRODUCT
 
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
     init {
-        realm.executeTransaction {
-            pendingItem = it.createObject(Item::class)
-        }
-
         activity.etNewProductName
                 .textChanges()
                 .bindUntilEvent(activity, ActivityEvent.DESTROY)
@@ -190,9 +186,18 @@ class CreateProductViewModel(
 
     fun expand(v: View){
         isExpanded.set(true)
-        setItem(Item())
+        realm.executeTransaction {
+            setItem(it.createObject(Item::class))
+        }
     }
     fun shrink(v: View) = isExpanded.set(false)
+
+    private fun shrink(v: View, shouldSave: Boolean) {
+        if (!shouldSave)
+            realm.executeTransaction { pendingItem.deleteFromRealm() }
+
+        shrink(v)
+    }
 
     fun selectPrice(v: View) {
         setAction(Action.CREATE_PRICE)
@@ -326,7 +331,7 @@ class CreateProductViewModel(
             activity.toast("Can't create a product without a name!")
             return
         }
-        if (realm.where(Item::class.java).equalTo("name", name).findFirst() != null) {
+        if (realm.where(Item::class.java).equalTo("name", name).findAllAsync().size > 0) {
             activity.toast("Product with the same name already exists!")
             return
         }
@@ -339,10 +344,7 @@ class CreateProductViewModel(
             return
         }
 
-        realm.executeTransaction {
-            pendingItem.name = name
-        }
-        shrink(v)
+        shrink(v, true)
     }
 }
 

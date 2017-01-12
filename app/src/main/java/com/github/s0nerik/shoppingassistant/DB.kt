@@ -5,7 +5,10 @@ import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.Realm
+import io.realm.RealmModel
 import io.realm.RealmResults
+import java.util.*
+import kotlin.reflect.KClass
 
 /**
  * Created by Alex on 12/29/2016.
@@ -65,4 +68,8 @@ fun frequentItems(realm: Realm): RealmResults<Item> {
 // TODO: implement this by creating a new purchase for a recently bought product
 fun recentPurchases(realm: Realm): RealmResults<Purchase> {
     return realm.where(Purchase::class.java).findAll()
+}
+
+fun <E : RealmModel> Realm.createObject(clazz: KClass<E>): E {
+    return createObject(clazz.java, UUID.randomUUID().toString())
 }
