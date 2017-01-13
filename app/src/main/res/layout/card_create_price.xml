@@ -44,7 +44,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="4dp"
                     android:foreground="?selectableItemBackgroundBorderless"
-                    android:onClick='@{vm::selectCurrency}'
+                    android:onClick='@{() -> vm.selectCurrency()}'
                     >
                     <include
                         layout="@layout/view_currency_sign"
@@ -85,7 +85,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="4dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:onClick='@{vm::confirmPriceCreation}'
+                    android:onClick='@{() -> vm.confirmPriceCreation()}'
                     android:scaleType="center"
                     android:src="@drawable/ic_done_black_24dp"
                     />
@@ -94,7 +94,7 @@
 
         <include
             layout="@layout/view_btn_close_popup"
-            app:onClick='@{vm::discardPriceCreation}'
+            app:onClick='@{() -> vm.discardPriceCreation()}'
             />
     </FrameLayout>
 </layout>

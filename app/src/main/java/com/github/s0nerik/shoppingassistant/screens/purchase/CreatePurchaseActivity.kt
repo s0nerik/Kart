@@ -5,7 +5,6 @@ import android.content.Intent
 import android.databinding.*
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.view.View
 import android.view.ViewGroup
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
@@ -57,11 +56,11 @@ class CreatePurchaseViewModel(
         }
     }
 
-    fun clearSearch(v: View) {
+    fun clearSearch() {
         activity.etSearch.setText("")
     }
 
-    fun voiceSearch(v: View) {
+    fun voiceSearch() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         activity.startActivityForResult(intent, VOICE_SEARCH_REQ_CODE)
     }
@@ -186,7 +185,7 @@ class CreateProductViewModel(
     fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
     //endregion
 
-    fun expand(v: View){
+    fun expand(){
         if (!isExpanded.get()) {
             realm.executeTransaction {
                 setItem(it.createObject(Item::class))
@@ -194,7 +193,7 @@ class CreateProductViewModel(
             isExpanded.set(true)
         }
     }
-    fun shrink(v: View) {
+    fun shrink() {
         shrink(false)
     }
 
@@ -208,11 +207,11 @@ class CreateProductViewModel(
     }
 
     //region Price methods
-    fun selectPrice(v: View) {
+    fun selectPrice() {
         setAction(Action.CREATE_PRICE)
     }
 
-    fun selectCurrency(v: View) {
+    fun selectCurrency() {
         val currencies = realm.where(Currency::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectCurrencyBinding>(activity.layoutInflater, R.layout.popup_select_currency, null, false)
@@ -220,7 +219,7 @@ class CreateProductViewModel(
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
-        popup.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+        popup.showOnAnchor(activity.btnCurrency, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
 
         currentPopup = WeakReference(popup)
 
@@ -235,7 +234,7 @@ class CreateProductViewModel(
                 .into(binding.recycler)
     }
 
-    fun confirmPriceCreation(v: View) {
+    fun confirmPriceCreation() {
         val priceText = activity.etNewPriceValue.text.toString()
         if (priceText.isBlank()) {
             activity.toast("Price can't be blank!")
@@ -264,13 +263,13 @@ class CreateProductViewModel(
         setAction(Action.CREATE_PRODUCT)
     }
 
-    fun discardPriceCreation(v: View) {
+    fun discardPriceCreation() {
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 
     //region Category methods
-    fun selectCategory(v: View) {
+    fun selectCategory() {
         val categories = realm.where(Category::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectProductCategoryBinding>(activity.layoutInflater, R.layout.popup_select_product_category, null, false)
@@ -278,7 +277,7 @@ class CreateProductViewModel(
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
-        popup.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+        popup.showOnAnchor(activity.btnSelectCategory, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
 
         currentPopup = WeakReference(popup)
 
@@ -293,12 +292,12 @@ class CreateProductViewModel(
                 .into(binding.recycler)
     }
 
-    fun createCategory(v: View) {
+    fun createCategory() {
         setAction(Action.CREATE_CATEGORY)
         currentPopup.safe { dismiss() }
     }
 
-    fun confirmCategoryCreation(v: View) {
+    fun confirmCategoryCreation() {
         val name = activity.etNewCategoryName.text.toString()
         if (name.isEmpty()) {
             activity.toast("Category name can't be empty!")
@@ -317,13 +316,13 @@ class CreateProductViewModel(
         setAction(Action.CREATE_PRODUCT)
     }
 
-    fun discardCategoryCreation(v: View) {
+    fun discardCategoryCreation() {
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 
     //region Shop methods
-    fun selectShop(v: View) {
+    fun selectShop() {
         val shops = realm.where(Shop::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectShopBinding>(activity.layoutInflater, R.layout.popup_select_shop, null, false)
@@ -331,7 +330,7 @@ class CreateProductViewModel(
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectShop.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
-        popup.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+        popup.showOnAnchor(activity.btnSelectShop, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
 
         currentPopup = WeakReference(popup)
 
@@ -346,20 +345,20 @@ class CreateProductViewModel(
                 .into(binding.recycler)
     }
 
-    fun createShop(v: View) {
+    fun createShop() {
 
     }
 
-    fun confirmShopCreation(v: View) {
+    fun confirmShopCreation() {
 
     }
 
-    fun discardShopCreation(v: View) {
+    fun discardShopCreation() {
 
     }
     //endregion
 
-    fun createProduct(v: View) {
+    fun createProduct() {
         val name = activity.etNewProductName.text.toString()
         if (name.isEmpty()) {
             activity.toast("Can't create a product without a name!")
@@ -430,11 +429,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     }
 
     override fun onBackPressed() {
-        binding.vm.addProductViewModel.apply {
-            if (isExpanded.get()) {
-                shrink(binding.searchCard)
-            }
-        }
+        binding.vm.addProductViewModel.shrink()
         super.onBackPressed()
     }
 }

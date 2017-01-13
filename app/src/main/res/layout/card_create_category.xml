@@ -65,7 +65,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="4dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:onClick='@{vm::confirmCategoryCreation}'
+                    android:onClick='@{() -> vm.confirmCategoryCreation()}'
                     android:scaleType="center"
                     android:src="@drawable/ic_done_black_24dp"
                     />
@@ -74,7 +74,7 @@
 
         <include
             layout="@layout/view_btn_close_popup"
-            app:onClick='@{vm::discardCategoryCreation}'
+            app:onClick='@{() -> vm.discardCategoryCreation()}'
             />
     </FrameLayout>
 </layout>

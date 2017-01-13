@@ -35,7 +35,7 @@
                 android:layout_marginTop="-8dp"
                 android:layout_marginBottom="-8dp"
                 android:clickable='@{vm.isExpanded ? false : true}'
-                android:onClick='@{vm::expand}'
+                android:onClick='@{() -> vm.expand()}'
                 style="@style/Widget.AppCompat.Button.Borderless"
                 />
 
@@ -133,7 +133,7 @@
                             app:bgColor='@{vm.price != null ? @color/material_color_grey_800 : @color/colorAccent}'
                             app:glideConfig='@{"product_price_icon"}'
                             app:iconUrl='@{vm.priceIconUrl}'
-                            app:onClick='@{vm::selectPrice}'
+                            app:onClick='@{() -> vm.selectPrice()}'
                             app:text='@{vm.price != null ? vm.price.currentValueString : "Price"}'
                             app:textColor='@{@color/material_color_white}'
                             tools:visibility="visible"
@@ -148,7 +148,7 @@
                             app:bgColor='@{vm.category != null ? @color/material_color_grey_800 : @color/colorAccent}'
                             app:glideConfig='@{"product_category_icon"}'
                             app:iconUrl='@{vm.categoryIconUrl}'
-                            app:onClick='@{vm::selectCategory}'
+                            app:onClick='@{() -> vm.selectCategory()}'
                             app:text='@{vm.category != null ? vm.category.name : "Category"}'
                             app:textColor='@{@color/material_color_white}'
                             tools:visibility="visible"
@@ -175,7 +175,7 @@
                             android:layout_marginBottom="4dp"
                             app:bgColor='@{vm.shop != null ? @color/material_color_grey_800 : @color/colorAccent}'
                             app:glideConfig='@{"shop_category_icon"}'
-                            app:onClick='@{vm::selectShop}'
+                            app:onClick='@{() -> vm.selectShop()}'
                             app:text='@{vm.shop != null ? vm.shop.name : "Shop"}'
                             />
                     </LinearLayout>
@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/groupProductData"
                         android:layout_toRightOf="@+id/btnCancelNewProduct"
-                        android:onClick='@{vm::createProduct}'
+                        android:onClick='@{() -> vm.createProduct()}'
                         android:text="Create"
                         app:layout_widthPercent="50%"
                         />
@@ -196,7 +196,7 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/groupProductData"
-                        android:onClick='@{vm::shrink}'
+                        android:onClick='@{() -> vm.shrink()}'
                         android:text="Cancel"
                         app:layout_widthPercent="50%"
                         />

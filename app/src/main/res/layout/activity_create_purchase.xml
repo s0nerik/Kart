@@ -150,7 +150,7 @@
                     android:id="@+id/btnClear"
                     android:src="@drawable/ic_clear_black_24dp"
                     android:visibility="@{vm.isSearching ? View.VISIBLE : View.GONE}"
-                    android:onClick="@{vm::clearSearch}"
+                    android:onClick="@{() -> vm.clearSearch()}"
                     tools:visibility="gone"
                     style="@style/FloatingSearchIcon"
                     />
@@ -167,7 +167,7 @@
                     android:id="@+id/btnVoiceSearch"
                     android:src="@drawable/ic_mic_black_24dp"
                     android:visibility="@{vm.isSearching ? View.GONE : View.VISIBLE}"
-                    android:onClick="@{vm::voiceSearch}"
+                    android:onClick="@{() -> vm.voiceSearch()}"
                     style="@style/FloatingSearchIcon"
                     />
             </LinearLayout>

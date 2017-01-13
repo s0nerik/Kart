@@ -23,7 +23,7 @@ import org.jetbrains.anko.support.v4.startActivity
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class DashboardViewModel(val fragment: DashboardFragment) {
-    fun onCreateNewPurchase(v: View) {
+    fun onCreateNewPurchase() {
         fragment.startActivity<CreatePurchaseActivity>()
     }
 }
