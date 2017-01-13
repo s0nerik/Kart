@@ -49,6 +49,7 @@
                 <android.support.percent.PercentRelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clipChildren="false"
                     tools:visibility="visible"
                     >
 
@@ -102,11 +103,14 @@
                         android:orientation="vertical"
                         android:layout_toEndOf="@+id/preview"
                         android:animateLayoutChanges="true"
+                        android:clipChildren="false"
                         >
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/tilNewProductName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="-4dp"
+                            android:layout_marginRight="-4dp"
                             >
 
                             <android.support.design.widget.TextInputEditText

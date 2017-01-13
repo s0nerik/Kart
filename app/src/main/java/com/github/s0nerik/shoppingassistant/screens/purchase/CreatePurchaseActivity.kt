@@ -105,6 +105,7 @@ class CreateProductViewModel(
                 }
     }
 
+    //region Bindable properties
     @Bindable
     fun getCategory() = pendingItem.category
     fun setCategory(c: Category) {
@@ -183,22 +184,30 @@ class CreateProductViewModel(
 
     @Bindable
     fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
+    //endregion
 
     fun expand(v: View){
-        isExpanded.set(true)
-        realm.executeTransaction {
-            setItem(it.createObject(Item::class))
+        if (!isExpanded.get()) {
+            realm.executeTransaction {
+                setItem(it.createObject(Item::class))
+            }
+            isExpanded.set(true)
         }
     }
-    fun shrink(v: View) = isExpanded.set(false)
-
-    private fun shrink(v: View, shouldSave: Boolean) {
-        if (!shouldSave)
-            realm.executeTransaction { pendingItem.deleteFromRealm() }
-
-        shrink(v)
+    fun shrink(v: View) {
+        shrink(false)
     }
 
+    private fun shrink(shouldSave: Boolean) {
+        if (isExpanded.get()) {
+            if (!shouldSave)
+                realm.executeTransaction { pendingItem.deleteFromRealm() }
+
+            isExpanded.set(false)
+        }
+    }
+
+    //region Price methods
     fun selectPrice(v: View) {
         setAction(Action.CREATE_PRICE)
     }
@@ -226,6 +235,41 @@ class CreateProductViewModel(
                 .into(binding.recycler)
     }
 
+    fun confirmPriceCreation(v: View) {
+        val priceText = activity.etNewPriceValue.text.toString()
+        if (priceText.isBlank()) {
+            activity.toast("Price can't be blank!")
+            return
+        }
+
+        val priceValue: Float
+        try {
+            priceValue = priceText.toFloat()
+        } catch (e: NumberFormatException) {
+            activity.toast("Wrong price format!")
+            return
+        }
+
+        realm.executeTransaction {
+            itemPriceChange.currency = pendingCurrency.get()
+            itemPriceChange.date = Date()
+            itemPriceChange.value = priceValue
+
+            itemPrice.valueChanges.clear()
+            itemPrice.valueChanges.add(itemPriceChange)
+        }
+        setPrice(itemPrice)
+
+        // TODO: create Price if doesn't exist
+        setAction(Action.CREATE_PRODUCT)
+    }
+
+    fun discardPriceCreation(v: View) {
+        setAction(Action.CREATE_PRODUCT)
+    }
+    //endregion
+
+    //region Category methods
     fun selectCategory(v: View) {
         val categories = realm.where(Category::class.java).findAll()
 
@@ -273,35 +317,12 @@ class CreateProductViewModel(
         setAction(Action.CREATE_PRODUCT)
     }
 
-    fun confirmPriceCreation(v: View) {
-        val priceText = activity.etNewPriceValue.text.toString()
-        if (priceText.isBlank()) {
-            activity.toast("Price can't be blank!")
-            return
-        }
-
-        val priceValue: Float
-        try {
-            priceValue = priceText.toFloat()
-        } catch (e: NumberFormatException) {
-            activity.toast("Wrong price format!")
-            return
-        }
-
-        realm.executeTransaction {
-            itemPriceChange.currency = pendingCurrency.get()
-            itemPriceChange.date = Date()
-            itemPriceChange.value = priceValue
-
-            itemPrice.valueChanges.clear()
-            itemPrice.valueChanges.add(itemPriceChange)
-        }
-        setPrice(itemPrice)
-
-        // TODO: create Price if doesn't exist
+    fun discardCategoryCreation(v: View) {
         setAction(Action.CREATE_PRODUCT)
     }
+    //endregion
 
+    //region Shop methods
     fun selectShop(v: View) {
         val shops = realm.where(Shop::class.java).findAll()
 
@@ -325,6 +346,19 @@ class CreateProductViewModel(
                 .into(binding.recycler)
     }
 
+    fun createShop(v: View) {
+
+    }
+
+    fun confirmShopCreation(v: View) {
+
+    }
+
+    fun discardShopCreation(v: View) {
+
+    }
+    //endregion
+
     fun createProduct(v: View) {
         val name = activity.etNewProductName.text.toString()
         if (name.isEmpty()) {
@@ -344,7 +378,7 @@ class CreateProductViewModel(
             return
         }
 
-        shrink(v, true)
+        shrink(true)
     }
 }
 
@@ -393,5 +427,14 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 binding.viewModel.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
             }
         }
+    }
+
+    override fun onBackPressed() {
+        binding.viewModel.addProductViewModel.apply {
+            if (isExpanded.get()) {
+                shrink(binding.searchCard)
+            }
+        }
+        super.onBackPressed()
     }
 }

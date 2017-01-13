@@ -14,57 +14,67 @@
             />
     </data>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardCreateCategory"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-2dp"
-        android:layout_marginRight="-2dp"
         android:visibility='@{viewModel.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
-        app:cardBackgroundColor="@color/material_color_grey_100"
-        app:cardUseCompatPadding="true"
         >
-
-        <RelativeLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardCreateCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="-2dp"
+            android:layout_marginRight="-2dp"
+            app:cardBackgroundColor="@color/material_color_grey_100"
+            app:cardUseCompatPadding="true"
             >
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/tilNewCategoryName"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="-4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/btnNewCategoryOk"
-                app:counterEnabled="true"
-                app:counterMaxLength="32"
                 >
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/etNewCategoryName"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilNewCategoryName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Category name"
-                    android:maxLength="32"
-                    android:textAppearance="@style/MaterialTypography.Dense.Body2"
-                    tools:text="Food"
-                    />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginBottom="-4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toLeftOf="@+id/btnNewCategoryOk"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="32"
+                    >
 
-            <ImageView
-                android:id="@+id/btnNewCategoryOk"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="4dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:onClick='@{viewModel::confirmCategoryCreation}'
-                android:scaleType="center"
-                android:src="@drawable/ic_done_black_24dp"
-                />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/etNewCategoryName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Category name"
+                        android:maxLength="32"
+                        android:textAppearance="@style/MaterialTypography.Dense.Body2"
+                        tools:text="Food"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/btnNewCategoryOk"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:onClick='@{viewModel::confirmCategoryCreation}'
+                    android:scaleType="center"
+                    android:src="@drawable/ic_done_black_24dp"
+                    />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <include
+            layout="@layout/view_btn_close_popup"
+            app:onClick='@{viewModel::discardCategoryCreation}'
+            />
+    </FrameLayout>
 </layout>
