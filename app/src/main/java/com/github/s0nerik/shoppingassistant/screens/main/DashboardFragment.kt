@@ -31,7 +31,7 @@ class DashboardViewModel(val fragment: DashboardFragment) {
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = DashboardViewModel(this)
+        binding.vm = DashboardViewModel(this)
 
         initRecents()
         initDistributionChart()

@@ -6,7 +6,7 @@
     >
     <data>
         <variable
-            name="viewModel"
+            name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.main.DashboardViewModel"
             />
     </data>
@@ -111,7 +111,7 @@
             android:layout_margin="16dp"
             android:src="@drawable/cart_plus"
             android:tint="@color/material_color_white"
-            android:onClick='@{viewModel::onCreateNewPurchase}'
+            android:onClick='@{vm::onCreateNewPurchase}'
             app:fabSize="normal"
             />
     </RelativeLayout>

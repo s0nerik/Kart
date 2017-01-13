@@ -30,7 +30,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
 class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.viewModel = MainActivityViewModel(this)
+        binding.vm = MainActivityViewModel(this)
 
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, DashboardFragment())

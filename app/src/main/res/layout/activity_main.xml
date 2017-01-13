@@ -7,7 +7,7 @@
     >
     <data>
         <import type="com.github.s0nerik.shoppingassistant.R" />
-        <variable name="viewModel" type="com.github.s0nerik.shoppingassistant.screens.main.MainActivityViewModel" />
+        <variable name="vm" type="com.github.s0nerik.shoppingassistant.screens.main.MainActivityViewModel" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"

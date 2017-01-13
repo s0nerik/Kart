@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <import type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel.Action"/>
         <variable
-            name="viewModel"
+            name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel"
             />
     </data>
@@ -17,7 +17,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility='@{viewModel.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
+        android:visibility='@{vm.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
         >
         <android.support.v7.widget.CardView
             android:id="@+id/cardCreateCategory"
@@ -65,7 +65,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="4dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:onClick='@{viewModel::confirmCategoryCreation}'
+                    android:onClick='@{vm::confirmCategoryCreation}'
                     android:scaleType="center"
                     android:src="@drawable/ic_done_black_24dp"
                     />
@@ -74,7 +74,7 @@
 
         <include
             layout="@layout/view_btn_close_popup"
-            app:onClick='@{viewModel::discardCategoryCreation}'
+            app:onClick='@{vm::discardCategoryCreation}'
             />
     </FrameLayout>
 </layout>

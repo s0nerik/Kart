@@ -6,7 +6,7 @@
     >
     <data>
         <variable
-            name="viewModel"
+            name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel"
             />
     </data>
@@ -34,7 +34,7 @@
                 android:orientation="horizontal"
                 android:background="@color/material_color_black_06_percent"
                 android:foreground="?selectableItemBackground"
-                android:onClick='@{viewModel::createCategory}'
+                android:onClick='@{vm::createCategory}'
                 >
                 <ImageView
                     android:layout_width="wrap_content"

@@ -216,7 +216,7 @@ class CreateProductViewModel(
         val currencies = realm.where(Currency::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectCurrencyBinding>(activity.layoutInflater, R.layout.popup_select_currency, null, false)
-        binding.viewModel = this
+        binding.vm = this
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
@@ -274,7 +274,7 @@ class CreateProductViewModel(
         val categories = realm.where(Category::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectProductCategoryBinding>(activity.layoutInflater, R.layout.popup_select_product_category, null, false)
-        binding.viewModel = this
+        binding.vm = this
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
@@ -327,7 +327,7 @@ class CreateProductViewModel(
         val shops = realm.where(Shop::class.java).findAll()
 
         val binding = DataBindingUtil.inflate<PopupSelectShopBinding>(activity.layoutInflater, R.layout.popup_select_shop, null, false)
-        binding.viewModel = this
+        binding.vm = this
 
         val popup = RelativePopupWindow(binding.root, activity.btnSelectShop.width, ViewGroup.LayoutParams.WRAP_CONTENT)
         popup.isOutsideTouchable = true
@@ -386,14 +386,14 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.viewModel = CreatePurchaseViewModel(this, realm, CreateProductViewModel(this, realm))
+        binding.vm = CreatePurchaseViewModel(this, realm, CreateProductViewModel(this, realm))
         initFavorites()
         initFrequents()
         initSearchResults()
     }
 
     private fun initFavorites() {
-        LastAdapter.with(binding.viewModel.favorites, BR.item)
+        LastAdapter.with(binding.vm.favorites, BR.item)
                 .map<ItemRealmProxy>(R.layout.item_purchase_item_horizontal)
                 .into(rvFavorites)
 
@@ -402,7 +402,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     }
 
     private fun initFrequents() {
-        LastAdapter.with(binding.viewModel.frequents, BR.item)
+        LastAdapter.with(binding.vm.frequents, BR.item)
                 .map<ItemRealmProxy>(R.layout.item_purchase_item)
                 .into(rvFrequents)
 
@@ -411,7 +411,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     }
 
     private fun initSearchResults() {
-        LastAdapter.with(binding.viewModel.filteredSearchResults, BR.item)
+        LastAdapter.with(binding.vm.filteredSearchResults, BR.item)
                 .map<ItemRealmProxy>(R.layout.item_purchase_item)
 //                .map<PurchaseRealmProxy>(R.layout.item_purchase)
                 .into(rvSearchResults)
@@ -422,15 +422,15 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == binding.viewModel.VOICE_SEARCH_REQ_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == binding.vm.VOICE_SEARCH_REQ_CODE && resultCode == Activity.RESULT_OK) {
             data?.apply {
-                binding.viewModel.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
+                binding.vm.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
             }
         }
     }
 
     override fun onBackPressed() {
-        binding.viewModel.addProductViewModel.apply {
+        binding.vm.addProductViewModel.apply {
             if (isExpanded.get()) {
                 shrink(binding.searchCard)
             }

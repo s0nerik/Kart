@@ -6,7 +6,7 @@
     >
     <data>
         <variable
-            name="viewModel"
+            name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel"
             />
     </data>
