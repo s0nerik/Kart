@@ -44,6 +44,12 @@ class CreatePurchaseViewModel(
 
     val filteredSearchResults = ObservableArrayList<Purchase>()
 
+    val favoritesSize: Int
+        get() = favorites.size
+
+    val frequentsSize: Int
+        get() = frequents.size
+
     init {
         activity.apply {
             etSearch.textChanges()
