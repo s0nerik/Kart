@@ -34,7 +34,7 @@
                 android:orientation="horizontal"
                 android:background="@color/material_color_black_06_percent"
                 android:foreground="?selectableItemBackground"
-                android:onClick='@{() -> vm.createCategory()}'
+                android:onClick='@{() -> vm.createShop()}'
                 >
                 <ImageView
                     android:layout_width="wrap_content"

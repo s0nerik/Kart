@@ -167,6 +167,12 @@
                             />
 
                         <include
+                            layout="@layout/card_create_shop"
+                            app:vm='@{vm}'
+                            tools:visibility="gone"
+                            />
+
+                        <include
                             android:id="@+id/btnSelectShop"
                             layout="@layout/view_btn_dropdown"
                             android:layout_width="match_parent"

@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_create_purchase.*
 import kotlinx.android.synthetic.main.card_create_category.*
 import kotlinx.android.synthetic.main.card_create_price.*
 import kotlinx.android.synthetic.main.card_create_product.*
+import kotlinx.android.synthetic.main.card_create_shop.*
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
 import java.util.*
@@ -346,15 +347,31 @@ class CreateProductViewModel(
     }
 
     fun createShop() {
-
+        setAction(Action.CREATE_SHOP)
+        currentPopup.safe { dismiss() }
     }
 
     fun confirmShopCreation() {
+        val name = activity.etNewShopName.text.toString()
+        if (name.isEmpty()) {
+            activity.toast("Shop name can't be empty!")
+            return
+        }
+        if (realm.where(Shop::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("Shop with the same name already exists!")
+            return
+        }
 
+        realm.executeTransaction {
+            itemShop.name = name
+        }
+        setShop(itemShop)
+
+        setAction(Action.CREATE_PRODUCT)
     }
 
     fun discardShopCreation() {
-
+        setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 
