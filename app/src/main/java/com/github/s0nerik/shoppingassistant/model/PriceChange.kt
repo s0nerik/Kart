@@ -13,5 +13,14 @@ open class PriceChange(
         @PrimaryKey open var id: String = "",
         open var value: Float = 0f,
         open var currency: Currency? = null,
-        open var date: Date? = null
-) : RealmObject()
+        open var date: Date? = null,
+        open var quantityQualifierValue: String = PriceChange.QuantityQualifier.ITEM.name
+) : RealmObject() {
+    enum class QuantityQualifier { ITEM, KG }
+
+    var quantityQualifier: QuantityQualifier
+        get() = QuantityQualifier.valueOf(quantityQualifierValue)
+        set(value) {
+            quantityQualifierValue = value.name
+        }
+}
