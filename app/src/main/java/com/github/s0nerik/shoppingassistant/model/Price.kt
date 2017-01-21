@@ -1,5 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.getString
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -36,11 +38,11 @@ open class Price(
     fun getPrice(date: Date, withCurrency: Boolean, amount: Float = 1f): String {
         val price = getPriceForDate(date, amount)
         if (price.first == null) {
-            return "Unknown price"
+            return getString(R.string.price_unknown)
         } else if (withCurrency && price.second != null) {
-            return "%s %.2f".format(price.second!!.sign, price.first)
+            return getString(R.string.price_with_currency_fmt, price.second!!.sign, price.first!!)
         } else {
-            return "%.2f".format(price.first)
+            return getString(R.string.price_no_currency_fmt, price.first!!)
         }
     }
 }

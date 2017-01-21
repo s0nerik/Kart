@@ -1,12 +1,11 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import timber.log.Timber
-
-
 
 /**
  * Created by Alex on 12/25/2016.
@@ -14,8 +13,17 @@ import timber.log.Timber
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class App : Application() {
+    companion object {
+        private lateinit var ctx: Context
+
+        val context: Context
+            get() = ctx
+    }
+
     override fun onCreate() {
         super.onCreate()
+        ctx = this
+
         Realm.init(this)
         Realm.setDefaultConfiguration(
                 RealmConfiguration.Builder()

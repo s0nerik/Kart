@@ -94,6 +94,7 @@ dependencies {
     // Rx
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.4'
+    compile 'io.reactivex:rxkotlin:0.60.0'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
     compile "com.jakewharton.rxbinding:rxbinding-kotlin:$rxbinding_version"
     compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7-kotlin:$rxbinding_version"

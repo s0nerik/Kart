@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">ShoppingAssistant</string>
+
+    // RecyclerView's LayoutManagers
     <string name="rv_layout_manager_linear">android.support.v7.widget.LinearLayoutManager</string>
     <string name="rv_layout_manager_grid">android.support.v7.widget.GridLayoutManager</string>
-    <string-array name="test_cat_names">
-        <item>Food</item>
-        <item>Clothes</item>
-        <item>Household</item>
-    </string-array>
+
+    // Price formats
+    <string name="price_unknown">Unknown price</string>
+    <string name="price_with_currency_fmt">%1$s %2$.2f</string>
+    <string name="price_no_currency_fmt">%.2f</string>
+
 </resources>
