@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -10,7 +11,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Purchase(
-        @PrimaryKey open var id: String = "",
+        @PrimaryKey open var id: String = randomUuidString(),
         open var item: Item? = null,
         open var date: Date? = null,
         open var amount: Float = 1f

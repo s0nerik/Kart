@@ -73,3 +73,7 @@ fun recentPurchases(realm: Realm): RealmResults<Purchase> {
 fun <E : RealmModel> Realm.createObject(clazz: KClass<E>): E {
     return createObject(clazz.java, UUID.randomUUID().toString())
 }
+
+fun randomUuidString(): String {
+    return UUID.randomUUID().toString()
+}

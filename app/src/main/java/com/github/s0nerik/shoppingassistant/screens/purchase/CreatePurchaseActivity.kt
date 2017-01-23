@@ -20,6 +20,8 @@ import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
+import com.vicpin.krealmextensions.create
+import com.vicpin.krealmextensions.query
 import io.realm.ItemRealmProxy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
@@ -89,10 +91,10 @@ class CreateProductViewModel(
 
     val pendingCurrency = ObservableField<Currency?>(null)
 
-    private val itemCategory by lazy { realm.createObject(Category::class) }
-    private val itemShop by lazy { realm.createObject(Shop::class) }
-    private val itemPrice by lazy { realm.createObject(Price::class) }
-    private val itemPriceChange by lazy { realm.createObject(PriceChange::class) }
+    private val itemCategory by lazy { Category() }
+    private val itemShop by lazy { Shop() }
+    private val itemPrice by lazy { Price() }
+    private val itemPriceChange by lazy { PriceChange() }
 
     private var pendingItem = Item()
 
@@ -107,9 +109,7 @@ class CreateProductViewModel(
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe {
                         val name = it.toString()
-                        realm.executeTransaction {
-                            pendingItem.name = name
-                        }
+                        pendingItem.name = name
                         notifyPropertyChanged(BR.item)
                     }
 
@@ -117,12 +117,10 @@ class CreateProductViewModel(
             spinnerQuantityQualifier.itemSelections()
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe { i ->
-                        realm.executeTransaction {
-                            itemPriceChange.quantityQualifier = when (i) {
-                                0 -> PriceChange.QuantityQualifier.ITEM
-                                1 -> PriceChange.QuantityQualifier.KG
-                                else -> PriceChange.QuantityQualifier.ITEM
-                            }
+                        itemPriceChange.quantityQualifier = when (i) {
+                            0 -> PriceChange.QuantityQualifier.ITEM
+                            1 -> PriceChange.QuantityQualifier.KG
+                            else -> PriceChange.QuantityQualifier.ITEM
                         }
                     }
         }
@@ -132,9 +130,7 @@ class CreateProductViewModel(
     @Bindable
     fun getCategory() = pendingItem.category
     fun setCategory(c: Category) {
-        realm.executeTransaction {
-            pendingItem.category = c
-        }
+        pendingItem.category = c
         notifyPropertyChanged(BR.category)
         notifyPropertyChanged(BR.categoryIconUrl)
         notifyPropertyChanged(BR.item)
@@ -143,15 +139,13 @@ class CreateProductViewModel(
     @Bindable
     fun getShop() = pendingItem.price?.shop
     fun setShop(s: Shop) {
-        realm.executeTransaction {
-            pendingItem.price?.shop = s
+        pendingItem.price?.shop = s
 
-            if (pendingItem.price == null) {
-                pendingItem.price = itemPrice
-                pendingItem.price!!.shop = s
-            } else if (pendingItem.price!!.isValid) {
-                pendingItem.price!!.shop = s
-            }
+        if (pendingItem.price == null) {
+            pendingItem.price = itemPrice
+            pendingItem.price!!.shop = s
+        } else if (pendingItem.price!!.isValid) {
+            pendingItem.price!!.shop = s
         }
 
         notifyPropertyChanged(BR.shop)
@@ -162,9 +156,7 @@ class CreateProductViewModel(
     @Bindable
     fun getPrice() = pendingItem.price
     fun setPrice(p: Price) {
-        realm.executeTransaction {
-            pendingItem.price = p
-        }
+        pendingItem.price = p
         notifyPropertyChanged(BR.price)
         notifyPropertyChanged(BR.priceIconUrl)
         notifyPropertyChanged(BR.item)
@@ -211,9 +203,7 @@ class CreateProductViewModel(
 
     fun expand(){
         if (!isExpanded.get()) {
-            realm.executeTransaction {
-                setItem(it.createObject(Item::class))
-            }
+            setItem(Item())
             isExpanded.set(true)
         }
     }
@@ -223,8 +213,8 @@ class CreateProductViewModel(
 
     private fun shrink(shouldSave: Boolean) {
         if (isExpanded.get()) {
-            if (!shouldSave)
-                realm.executeTransaction { pendingItem.deleteFromRealm() }
+            if (shouldSave)
+                pendingItem.create()
 
             isExpanded.set(false)
         }
@@ -273,14 +263,12 @@ class CreateProductViewModel(
             return
         }
 
-        realm.executeTransaction {
-            itemPriceChange.currency = pendingCurrency.get()
-            itemPriceChange.date = Date()
-            itemPriceChange.value = priceValue
+        itemPriceChange.currency = pendingCurrency.get()
+        itemPriceChange.date = Date()
+        itemPriceChange.value = priceValue
 
-            itemPrice.valueChanges.clear()
-            itemPrice.valueChanges.add(itemPriceChange)
-        }
+        itemPrice.valueChanges.clear()
+        itemPrice.valueChanges.add(itemPriceChange)
         setPrice(itemPrice)
 
         // TODO: create Price if doesn't exist
@@ -332,9 +320,7 @@ class CreateProductViewModel(
             return
         }
 
-        realm.executeTransaction {
-            itemCategory.name = activity.etNewCategoryName.text.toString()
-        }
+        itemCategory.name = activity.etNewCategoryName.text.toString()
         setCategory(itemCategory)
 
         setAction(Action.CREATE_PRODUCT)
@@ -385,9 +371,7 @@ class CreateProductViewModel(
             return
         }
 
-        realm.executeTransaction {
-            itemShop.name = name
-        }
+        itemShop.name = name
         setShop(itemShop)
 
         setAction(Action.CREATE_PRODUCT)
@@ -404,7 +388,7 @@ class CreateProductViewModel(
             activity.toast("Can't create a product without a name!")
             return
         }
-        if (realm.where(Item::class.java).equalTo("name", name).findAllAsync().size > 0) {
+        if (Item().query { it.equalTo("name", name) }.isNotEmpty()) {
             activity.toast("Product with the same name already exists!")
             return
         }

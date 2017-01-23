@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -8,9 +9,8 @@ import io.realm.annotations.PrimaryKey
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-// TODO: replace Long id with UUID
 open class Category(
-        @PrimaryKey open var id: String = "",
+        @PrimaryKey open var id: String = randomUuidString(),
         open var name: String = "",
         open var iconUrl: String = ""
 ) : RealmObject()
