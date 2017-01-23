@@ -10,4 +10,9 @@
     <string name="price_with_currency_fmt">%1$s %2$.2f</string>
     <string name="price_no_currency_fmt">%.2f</string>
 
+    <string-array name="price_quantity_qualifiers">
+        <item>Per Item</item>
+        <item>Per KG</item>
+    </string-array>
+
 </resources>

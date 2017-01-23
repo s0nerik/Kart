@@ -179,6 +179,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="4dp"
+                            android:visibility='@{vm.action != Action.CREATE_PRICE ? View.VISIBLE : View.GONE}'
                             app:bgColor='@{vm.shop != null ? @color/material_color_grey_800 : @color/colorAccent}'
                             app:glideConfig='@{"shop_category_icon"}'
                             app:onClick='@{() -> vm.selectShop()}'

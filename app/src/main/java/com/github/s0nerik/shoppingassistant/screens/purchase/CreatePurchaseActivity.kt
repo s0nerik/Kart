@@ -6,6 +6,7 @@ import android.databinding.*
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
@@ -14,6 +15,7 @@ import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.view.focusChanges
+import com.jakewharton.rxbinding.widget.itemSelections
 import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import com.trello.rxlifecycle.android.ActivityEvent
@@ -99,16 +101,31 @@ class CreateProductViewModel(
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
     init {
-        activity.etNewProductName
-                .textChanges()
-                .bindUntilEvent(activity, ActivityEvent.DESTROY)
-                .subscribe {
-                    val name = it.toString()
-                    realm.executeTransaction {
-                        pendingItem.name = name
+        with(activity) {
+            etNewProductName
+                    .textChanges()
+                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
+                    .subscribe {
+                        val name = it.toString()
+                        realm.executeTransaction {
+                            pendingItem.name = name
+                        }
+                        notifyPropertyChanged(BR.item)
                     }
-                    notifyPropertyChanged(BR.item)
-                }
+
+            spinnerQuantityQualifier.adapter = ArrayAdapter.createFromResource(activity, R.array.price_quantity_qualifiers, android.R.layout.simple_spinner_dropdown_item)
+            spinnerQuantityQualifier.itemSelections()
+                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
+                    .subscribe { i ->
+                        realm.executeTransaction {
+                            itemPriceChange.quantityQualifier = when (i) {
+                                0 -> PriceChange.QuantityQualifier.ITEM
+                                1 -> PriceChange.QuantityQualifier.KG
+                                else -> PriceChange.QuantityQualifier.ITEM
+                            }
+                        }
+                    }
+        }
     }
 
     //region Bindable properties
