@@ -12,7 +12,7 @@ import timber.log.Timber
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class App : Application() {
+open class App : Application() {
     companion object {
         private lateinit var ctx: Context
 
