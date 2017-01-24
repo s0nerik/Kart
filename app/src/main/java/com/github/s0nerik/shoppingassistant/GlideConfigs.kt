@@ -41,4 +41,29 @@ fun configureGlide() {
         request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
                 .error(R.drawable.selection)
     })
+
+    GlideBindingConfig.registerProvider("product_name_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.pencil)
+    })
+
+    GlideBindingConfig.registerProvider("create_purchase_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.ic_done_black_24dp)
+    })
+
+    GlideBindingConfig.registerProvider("cancel_purchase_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.ic_clear_black_24dp)
+    })
+
+    GlideBindingConfig.registerProvider("scan_barcode_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.barcode_scan)
+    })
+
+    GlideBindingConfig.registerProvider("product_favorite_icon", { iv, request ->
+        request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
+                .error(R.drawable.star_outline)
+    })
 }
