@@ -12,7 +12,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
     defaultConfig {
-        applicationId "com.github.s0nerik.shoppingassistant"
+        applicationId "com.github.s0nerik.kart"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1

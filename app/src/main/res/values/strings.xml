@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShoppingAssistant</string>
+    <string name="app_name">Kart</string>
 
     // RecyclerView's LayoutManagers
     <string name="rv_layout_manager_linear">android.support.v7.widget.LinearLayoutManager</string>
