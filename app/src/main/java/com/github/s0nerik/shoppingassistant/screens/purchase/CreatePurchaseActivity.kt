@@ -96,6 +96,8 @@ class CreateProductViewModel(
     private val itemPrice by lazy { Price() }
     private val itemPriceChange by lazy { PriceChange() }
 
+    private val purchase by lazy { Purchase() }
+
     private var pendingItem = Item()
 
     private var action: Action = Action.CREATE_PRODUCT
@@ -214,7 +216,7 @@ class CreateProductViewModel(
     private fun shrink(shouldSave: Boolean) {
         if (isExpanded.get()) {
             if (shouldSave)
-                pendingItem.create()
+                purchase.create()
 
             isExpanded.set(false)
         }
@@ -382,7 +384,7 @@ class CreateProductViewModel(
     }
     //endregion
 
-    fun createProduct() {
+    fun purchaseProduct() {
         val name = activity.etNewProductName.text.toString()
         if (name.isEmpty()) {
             activity.toast("Can't create a product without a name!")
@@ -400,6 +402,11 @@ class CreateProductViewModel(
             activity.toast("Shop must be selected!")
             return
         }
+
+        purchase.item = pendingItem
+        purchase.date = Date()
+        // TODO: add UI for selection the amount
+        purchase.amount = 1.toFloat()
 
         shrink(true)
     }
