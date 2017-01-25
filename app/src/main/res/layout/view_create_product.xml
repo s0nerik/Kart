@@ -44,7 +44,7 @@
                 app:glideConfig='@{"product_name_icon"}'
                 app:iconColor='@{@color/material_color_white}'
                 app:iconUrl='@{vm.priceIconUrl}'
-                app:onClick='@{() -> 0}'
+                app:onClick='@{() -> vm.editName()}'
                 tools:visibility="visible"
                 />
 

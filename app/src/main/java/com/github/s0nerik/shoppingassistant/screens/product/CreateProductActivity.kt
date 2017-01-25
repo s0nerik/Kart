@@ -5,6 +5,7 @@ import android.databinding.Bindable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
@@ -14,14 +15,17 @@ import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.safe
 import com.jakewharton.rxbinding.view.focusChanges
+import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.create
 import com.vicpin.krealmextensions.query
 import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.card_create_category.*
 import kotlinx.android.synthetic.main.card_create_price.*
+import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
 import java.util.*
@@ -56,16 +60,17 @@ class CreateProductViewModel(
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
     init {
-        with(activity) {
-//            etNewProductName
-//                    .textChanges()
-//                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
-//                    .subscribe {
-//                        val name = it.toString()
-//                        pendingItem.name = name
-//                        notifyPropertyChanged(BR.item)
-//                    }
-
+        activity.apply {
+            etProductName
+                    .textChanges()
+                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
+                    .subscribe {
+                        val name = it.toString()
+                        pendingItem.name = name
+                        notifyPropertyChanged(BR.item)
+                    }
+        }
+//        with(activity) {
 //            spinnerQuantityQualifier.adapter = ArrayAdapter.createFromResource(activity, R.array.price_quantity_qualifiers, android.R.layout.simple_spinner_dropdown_item)
 //            spinnerQuantityQualifier.itemSelections()
 //                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
@@ -76,7 +81,7 @@ class CreateProductViewModel(
 //                            else -> PriceChange.QuantityQualifier.ITEM
 //                        }
 //                    }
-        }
+//        }
     }
 
     //region Bindable properties
@@ -335,6 +340,14 @@ class CreateProductViewModel(
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
+
+    fun editName() {
+        activity.apply {
+            if (etProductName.requestFocus()) {
+                inputMethodManager.showSoftInput(etProductName, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+    }
 
     fun purchaseProduct() {
         val name = ""
