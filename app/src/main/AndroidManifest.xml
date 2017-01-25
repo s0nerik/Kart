@@ -17,6 +17,7 @@
         <activity
             android:name=".screens.main.MainActivity"
             android:theme="@style/AppTheme.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,11 +28,12 @@
         <activity
             android:name=".screens.purchase.CreatePurchaseActivity"
             android:theme="@style/AppTheme.CreatePurchaseActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
             />
         <activity
             android:name=".screens.product.CreateProductActivity"
             android:theme="@style/AppTheme.SemiTransparent"
+            android:windowSoftInputMode="adjustResize"
             />
     </application>
 
