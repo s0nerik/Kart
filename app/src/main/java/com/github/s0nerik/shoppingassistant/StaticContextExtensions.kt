@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant
 
+import android.support.annotation.DimenRes
 import android.support.annotation.StringRes
 
 /**
@@ -9,4 +10,16 @@ import android.support.annotation.StringRes
  */
 fun Any.getString(@StringRes resId: Int, vararg formatArgs: Any): String {
     return App.context.getString(resId, *formatArgs)
+}
+
+fun Any.getDimen(@DimenRes resId: Int): Float {
+    return App.context.resources.getDimension(resId)
+}
+
+fun Any.getDimenPixelSize(@DimenRes resId: Int): Int {
+    return App.context.resources.getDimensionPixelSize(resId)
+}
+
+fun Any.getDimenPixelOffset(@DimenRes resId: Int): Int {
+    return App.context.resources.getDimensionPixelOffset(resId)
 }

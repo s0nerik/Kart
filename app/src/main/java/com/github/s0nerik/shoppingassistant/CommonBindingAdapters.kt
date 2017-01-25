@@ -11,7 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.TextView
-
+import org.jetbrains.anko.dip
 
 
 /**
@@ -75,6 +75,38 @@ fun applyStatusBarPadding(view: View, apply: Boolean) {
 
     val statusBarHeight = getStatusBarHeight(view.context)
     view.setPadding(view.paddingLeft, view.paddingTop + statusBarHeight, view.paddingRight, view.paddingBottom)
+}
+
+@BindingAdapter("android:layout_marginTop")
+fun setLayoutMarginTop(view: View, margin: Int) {
+    (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
+        it.setMargins(it.leftMargin, view.dip(margin), it.rightMargin, it.bottomMargin)
+        view.layoutParams = it
+    }
+}
+
+@BindingAdapter("android:layout_marginBottom")
+fun setLayoutMarginBottom(view: View, margin: Int) {
+    (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
+        it.setMargins(it.leftMargin, it.topMargin, it.rightMargin, view.dip(margin))
+        view.layoutParams = it
+    }
+}
+
+@BindingAdapter("android:layout_marginLeft")
+fun setLayoutMarginLeft(view: View, margin: Int) {
+    (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
+        it.setMargins(view.dip(margin), it.topMargin, it.rightMargin, it.bottomMargin)
+        view.layoutParams = it
+    }
+}
+
+@BindingAdapter("android:layout_marginRight")
+fun setLayoutMarginRight(view: View, margin: Int) {
+    (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
+        it.setMargins(it.leftMargin, it.topMargin, view.dip(margin), it.bottomMargin)
+        view.layoutParams = it
+    }
 }
 
 private fun getStatusBarHeight(c: Context): Int {
