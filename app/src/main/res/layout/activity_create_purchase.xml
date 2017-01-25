@@ -32,14 +32,17 @@
                 android:animateLayoutChanges="true"
                 app:applyNavBarPadding='@{true}'
                 >
-                <include
-                    layout="@layout/card_create_product"
+                <Button
+                    android:id="@+id/btnCreateNewPurchase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    app:vm="@{vm.addProductViewModel}"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="-8dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:text="New purchase"
+                    android:onClick='@{() -> vm.createProduct()}'
+                    style="@style/Widget.AppCompat.Button.Colored"
                     />
                 <LinearLayout
                     android:id="@+id/nonSearchGroup"

@@ -7,10 +7,10 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel.Action"/>
+        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.Action"/>
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
             />
     </data>
 

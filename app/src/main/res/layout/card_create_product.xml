@@ -6,17 +6,17 @@
     >
     <data>
         <import type="android.view.View"/>
-        <import type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel.Action"/>
+        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.Action"/>
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.purchase.CreateProductViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
             />
     </data>
     <android.support.v7.widget.CardView
         android:id="@+id/cardNewProduct"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor='@{vm.isExpanded ? @color/material_color_white : @color/colorAccent}'
+        app:cardBackgroundColor='@{vm.isExpanded ? @android:color/transparent : @color/colorAccent}'
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,174 +46,12 @@
                 android:visibility='@{vm.isExpanded ? View.VISIBLE : View.GONE}'
                 >
 
-                <android.support.percent.PercentRelativeLayout
+                <include
+                    layout="@layout/view_create_product"
+                    android:layout_height="320dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    tools:visibility="visible"
-                    >
-
-                    <LinearLayout
-                        android:id="@+id/preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignTop="@+id/groupProductData"
-                        android:layout_alignBottom="@+id/groupProductData"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:gravity="center_horizontal|bottom"
-                        android:orientation="vertical"
-                        >
-                        <android.support.v7.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardUseCompatPadding="true"
-                            app:cardBackgroundColor="@color/material_color_grey_100"
-                            >
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                >
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:background="@color/material_color_black_06_percent"
-                                    android:paddingTop="8dp"
-                                    android:paddingBottom="8dp"
-                                    android:gravity="center"
-                                    android:text="Preview"
-                                    android:textAppearance="@style/MaterialTypography.Regular.Body2"
-                                    />
-                                <include
-                                    layout="@layout/item_purchase_item_horizontal"
-                                    app:item='@{vm.item}'
-                                    />
-                            </LinearLayout>
-                        </android.support.v7.widget.CardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/groupProductData"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:orientation="vertical"
-                        android:layout_toEndOf="@+id/preview"
-                        android:animateLayoutChanges="true"
-                        android:clipChildren="false"
-                        >
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/tilNewProductName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="-4dp"
-                            android:layout_marginRight="-4dp"
-                            >
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/etNewProductName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Name"
-                                android:textAppearance="@style/MaterialTypography.Dense.Body2"
-                                tools:text="Hello"
-                                />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <include
-                            android:id="@+id/btnSelectPrice"
-                            layout="@layout/view_btn_dropdown"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:visibility='@{vm.action == Action.CREATE_PRODUCT ? View.VISIBLE : View.GONE}'
-                            app:bgColor='@{vm.price != null ? @color/material_color_grey_800 : @color/colorAccent}'
-                            app:glideConfig='@{"product_price_icon"}'
-                            app:iconUrl='@{vm.priceIconUrl}'
-                            app:onClick='@{() -> vm.selectPrice()}'
-                            app:text='@{vm.price != null ? vm.price.currentValueString : "Price"}'
-                            app:textColor='@{@color/material_color_white}'
-                            tools:visibility="visible"
-                            />
-
-                        <include
-                            android:id="@+id/btnSelectCategory"
-                            layout="@layout/view_btn_dropdown"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility='@{vm.action == Action.CREATE_PRODUCT ? View.VISIBLE : View.GONE}'
-                            app:bgColor='@{vm.category != null ? @color/material_color_grey_800 : @color/colorAccent}'
-                            app:glideConfig='@{"product_category_icon"}'
-                            app:iconUrl='@{vm.categoryIconUrl}'
-                            app:onClick='@{() -> vm.selectCategory()}'
-                            app:text='@{vm.category != null ? vm.category.name : "Category"}'
-                            app:textColor='@{@color/material_color_white}'
-                            tools:visibility="visible"
-                            />
-
-                        <include
-                            layout="@layout/card_create_category"
-                            app:vm='@{vm}'
-                            tools:visibility="gone"
-                            />
-
-                        <include
-                            layout="@layout/card_create_price"
-                            app:vm='@{vm}'
-                            tools:visibility="gone"
-                            />
-
-                        <include
-                            layout="@layout/card_create_shop"
-                            app:vm='@{vm}'
-                            tools:visibility="gone"
-                            />
-
-                        <include
-                            android:id="@+id/btnSelectShop"
-                            layout="@layout/view_btn_dropdown"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="4dp"
-                            android:visibility='@{vm.action != Action.CREATE_PRICE ? View.VISIBLE : View.GONE}'
-                            app:bgColor='@{vm.shop != null ? @color/material_color_grey_800 : @color/colorAccent}'
-                            app:glideConfig='@{"shop_category_icon"}'
-                            app:onClick='@{() -> vm.selectShop()}'
-                            app:text='@{vm.shop != null ? vm.shop.name : "Shop"}'
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/groupProductData"
-                        android:orientation="horizontal"
-                        >
-                        <Button
-                            android:id="@+id/btnCancelNewProduct"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:onClick='@{() -> vm.shrink()}'
-                            android:text="Cancel"
-                            />
-
-                        <Button
-                            android:id="@+id/btnPurchaseNewProduct"
-                            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:onClick='@{() -> vm.purchaseProduct()}'
-                            android:text="Purchase"
-                            />
-                    </LinearLayout>
-                </android.support.percent.PercentRelativeLayout>
+                    app:vm='@{vm}'
+                    />
             </FrameLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -29,6 +29,10 @@
             android:theme="@style/AppTheme.CreatePurchaseActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
+        <activity
+            android:name=".screens.product.CreateProductActivity"
+            android:theme="@style/AppTheme.SemiTransparent"
+            />
     </application>
 
 </manifest>
