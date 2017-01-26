@@ -16,7 +16,7 @@
     </style>
 
     <style name="AppTheme.SemiTransparent" parent="AppTheme.Transparent">
-        <item name="android:windowBackground">@color/material_color_black_38_percent</item>
+        <item name="android:windowBackground">@color/bgSemiTransparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>

@@ -78,6 +78,14 @@
                     />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinnerQuantityQualifier"
+                android:layout_width="128dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/groupEditPrice"
+                android:layout_marginLeft="8dp"
+                />
+
             <ImageView
                 android:id="@+id/btnPriceOk"
                 android:layout_width="56dp"
@@ -90,13 +98,6 @@
                 />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/etProductName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            />
         <EditText
             android:id="@+id/etProductName"
             android:layout_width="0dp"

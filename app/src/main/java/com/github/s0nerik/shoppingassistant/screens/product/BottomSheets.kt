@@ -43,7 +43,10 @@ class SelectCategoryBottomSheet(
         LastAdapter.with(realm.where(Category::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCategoryBinding>(R.layout.item_category)
-                            .onClick { vm.setCategory(item as Category) }
+                            .onClick {
+                                vm.setCategory(item as Category)
+                                dismiss()
+                            }
                 }
                 .into(recycler)
     }
@@ -56,7 +59,10 @@ class SelectCurrencyBottomSheet(
         LastAdapter.with(realm.where(Currency::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
-                            .onClick { vm.pendingCurrency.set(item as Currency) }
+                            .onClick {
+                                vm.pendingCurrency.set(item as Currency)
+                                dismiss()
+                            }
                 }
                 .into(recycler)
     }
@@ -69,7 +75,10 @@ class SelectShopBottomSheet(
         LastAdapter.with(realm.where(Shop::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_shop)
-                            .onClick { vm.setShop(item as Shop) }
+                            .onClick {
+                                vm.setShop(item as Shop)
+                                dismiss()
+                            }
                 }
                 .into(recycler)
     }
