@@ -132,7 +132,7 @@
                 app:bgColor='@{@color/material_color_red_400}'
                 app:glideConfig='@{"cancel_purchase_icon"}'
                 app:marginRight='@{12}'
-                app:onClick='@{() -> vm.shrink()}'
+                app:onClick='@{() -> vm.close()}'
                 />
 
             <include

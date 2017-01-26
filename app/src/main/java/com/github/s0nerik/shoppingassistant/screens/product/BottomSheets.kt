@@ -12,13 +12,10 @@ import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.databinding.ItemCategoryBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
-import com.github.s0nerik.shoppingassistant.databinding.SheetSelectCategoryBinding
-import com.github.s0nerik.shoppingassistant.databinding.SheetSelectCurrencyBinding
+import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Currency
-import com.vicpin.krealmextensions.allItems
+import com.github.s0nerik.shoppingassistant.model.Shop
 import io.realm.Realm
 import kotlinx.android.synthetic.main.sheet_select_category.*
 
@@ -43,7 +40,7 @@ class SelectCategoryBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCategoryBinding>(vm, R.layout.sheet_select_category) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        LastAdapter.with(Category().allItems, BR.item)
+        LastAdapter.with(realm.where(Category::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCategoryBinding>(R.layout.item_category)
                             .onClick { vm.setCategory(item as Category) }
@@ -56,10 +53,23 @@ class SelectCurrencyBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCurrencyBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        LastAdapter.with(Currency().allItems, BR.item)
+        LastAdapter.with(realm.where(Currency::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick { vm.pendingCurrency.set(item as Currency) }
+                }
+                .into(recycler)
+    }
+}
+
+class SelectShopBottomSheet(
+        vm: CreateProductViewModel
+) : BaseBottomSheet<CreateProductViewModel, SheetSelectShopBinding>(vm, R.layout.sheet_select_shop) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        LastAdapter.with(realm.where(Shop::class.java).findAll(), BR.item)
+                .type {
+                    Type<ItemCurrencyBinding>(R.layout.item_shop)
+                            .onClick { vm.setShop(item as Shop) }
                 }
                 .into(recycler)
     }

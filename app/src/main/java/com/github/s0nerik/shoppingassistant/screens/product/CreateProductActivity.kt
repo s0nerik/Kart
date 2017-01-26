@@ -3,7 +3,6 @@ package com.github.s0nerik.shoppingassistant.screens.product
 //import kotlinx.android.synthetic.main.card_create_price.*
 import android.databinding.BaseObservable
 import android.databinding.Bindable
-import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
@@ -16,7 +15,6 @@ import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.view.focusChanges
 import com.jakewharton.rxbinding.widget.textChanges
-import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.create
@@ -26,7 +24,6 @@ import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.card_create_category.*
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
-import java.lang.ref.WeakReference
 import java.util.*
 
 /**
@@ -41,8 +38,6 @@ class CreateProductViewModel(
 ) : BaseObservable() {
     enum class Action { CREATE_PRODUCT, CREATE_PRICE, CREATE_CATEGORY, CREATE_SHOP }
 
-    val isExpanded = ObservableBoolean(false)
-
     val pendingCurrency = ObservableField<Currency?>(null)
 
     private val itemCategory by lazy { Category() }
@@ -55,15 +50,8 @@ class CreateProductViewModel(
     }
 
     private val purchase by lazy { Purchase() }
-
     private var pendingItem = Item()
-
     private var action: Action = Action.CREATE_PRODUCT
-
-    private lateinit var currentPopup: WeakReference<RelativePopupWindow>
-
-    val popup: RelativePopupWindow?
-        get() = currentPopup.get()
 
     init {
         activity.apply {
@@ -178,23 +166,15 @@ class CreateProductViewModel(
     fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
     //endregion
 
-    fun expand(){
-        if (!isExpanded.get()) {
-            setItem(Item())
-            isExpanded.set(true)
-        }
-    }
-    fun shrink() {
-        shrink(false)
+    fun close() {
+        close(false)
     }
 
-    private fun shrink(shouldSave: Boolean) {
-        if (isExpanded.get()) {
-            if (shouldSave)
-                purchase.create()
+    private fun close(shouldSave: Boolean) {
+        if (shouldSave)
+            purchase.create()
 
-            isExpanded.set(false)
-        }
+        activity.finish()
     }
 
     //region Price methods
@@ -271,26 +251,7 @@ class CreateProductViewModel(
 
     //region Shop methods
     fun selectShop() {
-//        val shops = realm.where(Shop::class.java).findAll()
-//
-//        val binding = DataBindingUtil.inflate<PopupSelectShopBinding>(activity.layoutInflater, R.layout.popup_select_shop, null, false)
-//        binding.vm = this
-//
-//        val popup = RelativePopupWindow(binding.root, activity.btnSelectShop.width, ViewGroup.LayoutParams.WRAP_CONTENT)
-//        popup.isOutsideTouchable = true
-//        popup.showOnAnchor(activity.btnSelectShop, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
-//
-//        currentPopup = WeakReference(popup)
-//
-//        LastAdapter.with(shops, BR.item)
-//                .type {
-//                    Type<ItemShopBinding>(R.layout.item_shop)
-//                            .onClick {
-//                                setShop(item as Shop)
-//                                currentPopup.safe { dismiss() }
-//                            }
-//                }
-//                .into(binding.recycler)
+        SelectShopBottomSheet(this).show(activity.supportFragmentManager, null)
     }
 
     fun createShop() {
@@ -328,8 +289,7 @@ class CreateProductViewModel(
     }
 
     fun purchaseProduct() {
-        val name = ""
-//        val name = activity.etNewProductName.text.toString()
+        val name = activity.etProductName.text.toString()
         if (name.isEmpty()) {
             activity.toast("Can't create a product without a name!")
             return
@@ -352,7 +312,7 @@ class CreateProductViewModel(
         // TODO: add UI for selection the amount
         purchase.amount = 1.toFloat()
 
-        shrink(true)
+        close(true)
     }
 }
 
@@ -360,13 +320,5 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = CreateProductViewModel(this, realm)
-    }
-
-    override fun onBackPressed() {
-        if (binding.vm.popup != null) {
-            binding.vm.popup?.dismiss()
-        } else {
-            super.onBackPressed()
-        }
     }
 }
