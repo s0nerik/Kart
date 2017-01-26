@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
+//import kotlinx.android.synthetic.main.card_create_price.*
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.databinding.ObservableBoolean
@@ -24,7 +25,6 @@ import com.vicpin.krealmextensions.query
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.card_create_category.*
-import kotlinx.android.synthetic.main.card_create_price.*
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
 import java.lang.ref.WeakReference
@@ -49,7 +49,11 @@ class CreateProductViewModel(
     private val itemCategory by lazy { Category() }
     private val itemShop by lazy { Shop() }
     private val itemPrice by lazy { Price() }
-    private val itemPriceChange by lazy { PriceChange() }
+    private val itemPriceChange by lazy {
+        val priceChange = PriceChange()
+        priceChange.date = Date()
+        priceChange
+    }
 
     private val purchase by lazy { Purchase() }
 
@@ -63,10 +67,24 @@ class CreateProductViewModel(
         activity.apply {
             etProductName
                     .textChanges()
+                    .map { it.toString() }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe {
-                        val name = it.toString()
-                        pendingItem.name = name
+                        pendingItem.name = it
+                        notifyPropertyChanged(BR.item)
+                    }
+            etNewPriceValue
+                    .textChanges()
+                    .map { it.toString() }
+                    .filter { !it.isNullOrBlank() }
+                    .map(String::toFloat)
+                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
+                    .subscribe {
+                        if (pendingItem.price == null) {
+                            pendingItem.price = itemPrice
+                            pendingItem.price?.valueChanges?.add(itemPriceChange)
+                        }
+                        itemPriceChange.value = it
                         notifyPropertyChanged(BR.item)
                     }
         }

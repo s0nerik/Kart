@@ -119,23 +119,27 @@
             android:layout_alignLeft="@+id/preview"
             android:layout_alignRight="@+id/preview"
             android:layout_below="@+id/preview"
-            android:layout_marginTop="-6dp"
-            android:gravity="center_horizontal"
+            android:layout_marginTop="-8dp"
+            android:gravity="center"
             android:orientation="horizontal"
             >
 
             <include
                 android:id="@+id/btnCancelPurchase"
                 layout="@layout/view_btn_icon"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
                 app:bgColor='@{@color/material_color_red_400}'
                 app:glideConfig='@{"cancel_purchase_icon"}'
-                app:marginRight='@{8}'
+                app:marginRight='@{12}'
                 app:onClick='@{() -> vm.shrink()}'
                 />
 
             <include
                 android:id="@+id/btnPurchaseNewProduct"
                 layout="@layout/view_btn_icon"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
                 app:bgColor='@{@color/material_color_green_400}'
                 app:glideConfig='@{"create_purchase_icon"}'
                 app:onClick='@{() -> vm.purchaseProduct()}'
