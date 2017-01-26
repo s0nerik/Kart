@@ -1,20 +1,19 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
 //import kotlinx.android.synthetic.main.card_create_price.*
-import android.databinding.BaseObservable
-import android.databinding.Bindable
-import android.databinding.ObservableBoolean
-import android.databinding.ObservableField
+import android.databinding.*
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import com.github.s0nerik.shoppingassistant.BR
-import com.github.s0nerik.shoppingassistant.R
+import com.github.nitrico.lastadapter.LastAdapter
+import com.github.nitrico.lastadapter.Type
+import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
-import com.github.s0nerik.shoppingassistant.getDrawableUri
+import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
+import com.github.s0nerik.shoppingassistant.databinding.PopupSelectCurrencyBinding
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
-import com.github.s0nerik.shoppingassistant.safe
 import com.jakewharton.rxbinding.view.focusChanges
 import com.jakewharton.rxbinding.widget.textChanges
 import com.labo.kaji.relativepopupwindow.RelativePopupWindow
@@ -63,6 +62,9 @@ class CreateProductViewModel(
 
     private lateinit var currentPopup: WeakReference<RelativePopupWindow>
 
+    val popup: RelativePopupWindow?
+        get() = currentPopup.get()
+
     init {
         activity.apply {
             etProductName
@@ -76,8 +78,7 @@ class CreateProductViewModel(
             etNewPriceValue
                     .textChanges()
                     .map { it.toString() }
-                    .filter { !it.isNullOrBlank() }
-                    .map(String::toFloat)
+                    .map { if (!it.isNullOrBlank()) it.toFloat() else null }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe {
                         if (pendingItem.price == null) {
@@ -202,54 +203,55 @@ class CreateProductViewModel(
     }
 
     fun selectCurrency() {
-//        val currencies = realm.where(Currency::class.java).findAll()
-//
-//        val binding = DataBindingUtil.inflate<PopupSelectCurrencyBinding>(activity.layoutInflater, R.layout.popup_select_currency, null, false)
-//        binding.vm = this
-//
-//        val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
-//        popup.isOutsideTouchable = true
-//        popup.showOnAnchor(activity.btnCurrency, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
-//
-//        currentPopup = WeakReference(popup)
-//
-//        LastAdapter.with(currencies, BR.item)
-//                .type {
-//                    Type<ItemCurrencyBinding>(R.layout.item_currency)
-//                            .onClick {
-//                                pendingCurrency.set(item as Currency)
-//                                currentPopup.safe { dismiss() }
-//                            }
-//                }
-//                .into(binding.recycler)
+        activity.hideKeyboard(activity.etNewPriceValue)
+
+        val currencies = realm.where(Currency::class.java).findAll()
+
+        val binding = DataBindingUtil.inflate<PopupSelectCurrencyBinding>(activity.layoutInflater, R.layout.popup_select_currency, null, false)
+        binding.vm = this
+
+        val popup = RelativePopupWindow(binding.root, activity.groupEditPrice.width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        popup.isOutsideTouchable = true
+        popup.showOnAnchor(activity.btnCurrency, RelativePopupWindow.VerticalPosition.ALIGN_BOTTOM, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+
+        currentPopup = WeakReference(popup)
+
+        LastAdapter.with(currencies, BR.item)
+                .type {
+                    Type<ItemCurrencyBinding>(R.layout.item_currency)
+                            .onClick {
+                                pendingCurrency.set(item as Currency)
+                                currentPopup.safe { dismiss() }
+                            }
+                }
+                .into(binding.recycler)
     }
 
     fun confirmPriceCreation() {
-        val priceText = ""
-//        val priceText = activity.etNewPriceValue.text.toString()
-//        if (priceText.isBlank()) {
-//            activity.toast("Price can't be blank!")
-//            return
-//        }
-//
-//        val priceValue: Float
-//        try {
-//            priceValue = priceText.toFloat()
-//        } catch (e: NumberFormatException) {
-//            activity.toast("Wrong price format!")
-//            return
-//        }
-//
-//        itemPriceChange.currency = pendingCurrency.get()
-//        itemPriceChange.date = Date()
-//        itemPriceChange.value = priceValue
-//
-//        itemPrice.valueChanges.clear()
-//        itemPrice.valueChanges.add(itemPriceChange)
-//        setPrice(itemPrice)
-//
-//        // TODO: create Price if doesn't exist
-//        setAction(Action.CREATE_PRODUCT)
+        val priceText = activity.etNewPriceValue.text.toString()
+        if (priceText.isBlank()) {
+            activity.toast("Price can't be blank!")
+            return
+        }
+
+        val priceValue: Float
+        try {
+            priceValue = priceText.toFloat()
+        } catch (e: NumberFormatException) {
+            activity.toast("Wrong price format!")
+            return
+        }
+
+        itemPriceChange.currency = pendingCurrency.get()
+        itemPriceChange.date = Date()
+        itemPriceChange.value = priceValue
+
+        itemPrice.valueChanges.clear()
+        itemPrice.valueChanges.add(itemPriceChange)
+        setPrice(itemPrice)
+
+        // TODO: create Price if doesn't exist
+        setAction(Action.CREATE_PRODUCT)
     }
 
     fun discardPriceCreation() {
@@ -400,5 +402,13 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = CreateProductViewModel(this, realm)
+    }
+
+    override fun onBackPressed() {
+        if (binding.vm.popup != null) {
+            binding.vm.popup?.dismiss()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

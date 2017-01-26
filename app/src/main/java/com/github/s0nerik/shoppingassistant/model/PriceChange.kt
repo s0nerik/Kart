@@ -12,7 +12,7 @@ import java.util.*
  */
 open class PriceChange(
         @PrimaryKey open var id: String = randomUuidString(),
-        open var value: Float = 0f,
+        open var value: Float? = null,
         open var currency: Currency? = null,
         open var date: Date? = null,
         open var quantityQualifierValue: String = PriceChange.QuantityQualifier.ITEM.name

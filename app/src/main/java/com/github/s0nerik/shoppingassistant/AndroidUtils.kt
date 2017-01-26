@@ -4,9 +4,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.support.annotation.NonNull
-
-
+import android.view.View
+import org.jetbrains.anko.inputMethodManager
 
 
 /**
@@ -20,11 +19,19 @@ import android.support.annotation.NonNull
  * @param context - context
  * @return - uri
  */
-fun Int.getDrawableUri(@NonNull context: Context): Uri {
+fun Int.getDrawableUri(context: Context): Uri {
     val imageUri = Uri.parse(
             "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.resources.getResourcePackageName(this)}/${context.resources.getResourceTypeName(this)}/${context.resources.getResourceEntryName(this)}"
     )
     return imageUri
+}
+
+fun Context.showKeyboard(view: View) {
+    inputMethodManager.showSoftInput(view, 0)
+}
+
+fun Context.hideKeyboard(view: View) {
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
 fun isEmulator(): Boolean {
