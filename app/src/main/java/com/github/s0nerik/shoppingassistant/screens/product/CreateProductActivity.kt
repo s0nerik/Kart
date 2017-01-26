@@ -261,31 +261,11 @@ class CreateProductViewModel(
 
     //region Category methods
     fun selectCategory() {
-//        val categories = realm.where(Category::class.java).findAll()
-//
-//        val binding = DataBindingUtil.inflate<PopupSelectProductCategoryBinding>(activity.layoutInflater, R.layout.popup_select_product_category, null, false)
-//        binding.vm = this
-//
-//        val popup = RelativePopupWindow(binding.root, activity.btnSelectCategory.width, ViewGroup.LayoutParams.WRAP_CONTENT)
-//        popup.isOutsideTouchable = true
-//        popup.showOnAnchor(activity.btnSelectCategory, RelativePopupWindow.VerticalPosition.ALIGN_TOP, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
-//
-//        currentPopup = WeakReference(popup)
-//
-//        LastAdapter.with(categories, BR.item)
-//                .type {
-//                    Type<ItemCategoryBinding>(R.layout.item_category)
-//                            .onClick {
-//                                setCategory(item as Category)
-//                                currentPopup.safe { dismiss() }
-//                            }
-//                }
-//                .into(binding.recycler)
+        SelectCategoryBottomSheet(this).show(activity.supportFragmentManager, null)
     }
 
     fun createCategory() {
         setAction(Action.CREATE_CATEGORY)
-        currentPopup.safe { dismiss() }
     }
 
     fun confirmCategoryCreation() {
@@ -336,7 +316,6 @@ class CreateProductViewModel(
 
     fun createShop() {
         setAction(Action.CREATE_SHOP)
-        currentPopup.safe { dismiss() }
     }
 
     fun confirmShopCreation() {
