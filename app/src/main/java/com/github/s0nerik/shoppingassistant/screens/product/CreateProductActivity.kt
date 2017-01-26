@@ -1,17 +1,17 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
 //import kotlinx.android.synthetic.main.card_create_price.*
-import android.databinding.*
+import android.databinding.BaseObservable
+import android.databinding.Bindable
+import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import com.github.nitrico.lastadapter.LastAdapter
-import com.github.nitrico.lastadapter.Type
-import com.github.s0nerik.shoppingassistant.*
+import com.github.s0nerik.shoppingassistant.BR
+import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
-import com.github.s0nerik.shoppingassistant.databinding.PopupSelectCurrencyBinding
+import com.github.s0nerik.shoppingassistant.getDrawableUri
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.view.focusChanges
@@ -203,28 +203,7 @@ class CreateProductViewModel(
     }
 
     fun selectCurrency() {
-        activity.hideKeyboard(activity.etNewPriceValue)
-
-        val currencies = realm.where(Currency::class.java).findAll()
-
-        val binding = DataBindingUtil.inflate<PopupSelectCurrencyBinding>(activity.layoutInflater, R.layout.popup_select_currency, null, false)
-        binding.vm = this
-
-        val popup = RelativePopupWindow(binding.root, activity.groupEditPrice.width, ViewGroup.LayoutParams.WRAP_CONTENT)
-        popup.isOutsideTouchable = true
-        popup.showOnAnchor(activity.btnCurrency, RelativePopupWindow.VerticalPosition.ALIGN_BOTTOM, RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
-
-        currentPopup = WeakReference(popup)
-
-        LastAdapter.with(currencies, BR.item)
-                .type {
-                    Type<ItemCurrencyBinding>(R.layout.item_currency)
-                            .onClick {
-                                pendingCurrency.set(item as Currency)
-                                currentPopup.safe { dismiss() }
-                            }
-                }
-                .into(binding.recycler)
+        SelectCurrencyBottomSheet(this).show(activity.supportFragmentManager, null)
     }
 
     fun confirmPriceCreation() {
