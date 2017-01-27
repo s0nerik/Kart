@@ -34,11 +34,11 @@ class CreatePurchaseViewModel(
 
     val filteredSearchResults = ObservableArrayList<Purchase>()
 
-    val favoritesSize: Int
-        get() = favorites.size
+    val favoritesEmpty: Boolean
+        get() = favorites.size <= 0
 
-    val frequentsSize: Int
-        get() = frequents.size
+    val frequentsEmpty: Boolean
+        get() = frequents.size <= 0
 
     init {
         activity.apply {
@@ -102,7 +102,6 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     private fun initSearchResults() {
         LastAdapter.with(binding.vm.filteredSearchResults, BR.item)
                 .map<ItemRealmProxy>(R.layout.item_purchase_item)
-//                .map<PurchaseRealmProxy>(R.layout.item_purchase)
                 .into(rvSearchResults)
 
         rvFrequents.isNestedScrollingEnabled = false
