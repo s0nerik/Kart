@@ -39,7 +39,7 @@
                 android:src="@drawable/pencil"
                 android:tint="@color/textColorPrimary"
                 />
-            <TextView
+            <EditText
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,8 +47,12 @@
                 android:layout_marginRight="8dp"
                 android:maxLines="2"
                 android:textSize="16sp"
-                android:text='@{item.readableName}'
+                android:text='@{item.readableNamePreview}'
+                android:inputType="textCapSentences"
                 android:textColor="@color/textColorPrimary"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:hint="Unnamed"
                 tools:text="Pancake"
                 />
         </LinearLayout>

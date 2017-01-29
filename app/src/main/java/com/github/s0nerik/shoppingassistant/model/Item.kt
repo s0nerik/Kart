@@ -15,6 +15,8 @@ open class Item(
         open var category: Category? = null,
         open var price: Price? = null
 ) : RealmObject() {
+    val readableNamePreview: String
+        get() = if (name.isNotBlank()) name else ""
     val readableName: String
         get() = if (name.isNotBlank()) name else "Unnamed"
     val readablePrice: String

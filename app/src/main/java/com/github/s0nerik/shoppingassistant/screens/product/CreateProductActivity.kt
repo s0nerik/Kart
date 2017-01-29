@@ -24,6 +24,8 @@ import com.vicpin.krealmextensions.query
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.card_create_category.*
+import kotlinx.android.synthetic.main.item_purchase_preview.view.*
+import kotlinx.android.synthetic.main.view_create_product.*
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
 import java.util.*
@@ -57,7 +59,7 @@ class CreateProductViewModel(
 
     init {
         activity.apply {
-            etProductName
+            preview.title
                     .textChanges()
                     .map { it.toString() }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
@@ -77,6 +79,7 @@ class CreateProductViewModel(
                         }
                         itemPriceChange.value = it
                         notifyPropertyChanged(BR.item)
+                        notifyPropertyChanged(BR.priceSet)
                     }
 
             spinnerQuantityQualifier.adapter = ArrayAdapter.createFromResource(activity, R.array.price_quantity_qualifiers, android.R.layout.simple_spinner_dropdown_item)
@@ -165,6 +168,9 @@ class CreateProductViewModel(
 
     @Bindable
     fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
+
+    @Bindable
+    fun isPriceSet(): Boolean = itemPriceChange.value != null
     //endregion
 
     fun close() {
@@ -283,14 +289,14 @@ class CreateProductViewModel(
 
     fun editName() {
         activity.apply {
-            if (etProductName.requestFocus()) {
-                inputMethodManager.showSoftInput(etProductName, InputMethodManager.SHOW_IMPLICIT)
+            if (preview.title.requestFocus()) {
+                inputMethodManager.showSoftInput(preview.title, InputMethodManager.SHOW_IMPLICIT)
             }
         }
     }
 
     fun purchaseProduct() {
-        val name = activity.etProductName.text.toString()
+        val name = activity.preview.title.text.toString()
         if (name.isEmpty()) {
             activity.toast("Can't create a product without a name!")
             return

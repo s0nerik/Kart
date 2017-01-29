@@ -40,7 +40,7 @@
             <include
                 android:id="@+id/btnSelectName"
                 layout="@layout/view_btn_icon"
-                app:bgColor='@{vm.price != null ? @color/material_color_grey_800 : @color/colorAccent}'
+                app:bgColor='@{!vm.item.name.isEmpty() ? @color/material_color_grey_800 : @color/colorAccent}'
                 app:glideConfig='@{"product_name_icon"}'
                 app:iconColor='@{@color/material_color_white}'
                 app:iconUrl='@{vm.priceIconUrl}'
@@ -51,7 +51,7 @@
             <include
                 android:id="@+id/btnSelectPrice"
                 layout="@layout/view_btn_icon"
-                app:bgColor='@{vm.price != null ? @color/material_color_grey_800 : @color/colorAccent}'
+                app:bgColor='@{vm.isPriceSet ? @color/material_color_grey_800 : @color/colorAccent}'
                 app:glideConfig='@{"product_price_icon"}'
                 app:iconColor='@{@color/material_color_white}'
                 app:iconUrl='@{vm.priceIconUrl}'
