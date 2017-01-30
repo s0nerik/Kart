@@ -23,8 +23,8 @@ import com.vicpin.krealmextensions.create
 import com.vicpin.krealmextensions.query
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_product.*
-import kotlinx.android.synthetic.main.card_create_category.*
 import kotlinx.android.synthetic.main.item_purchase_preview.view.*
+import kotlinx.android.synthetic.main.view_create_category.*
 import kotlinx.android.synthetic.main.view_create_product.*
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
@@ -40,7 +40,7 @@ class CreateProductViewModel(
         private val activity: CreateProductActivity,
         private val realm: Realm
 ) : BaseObservable() {
-    enum class Action { CREATE_PRODUCT, CREATE_PRICE, CREATE_CATEGORY, CREATE_SHOP }
+    enum class Action { CREATE_PRODUCT, CREATE_PRICE, SELECT_CATEGORY, CREATE_CATEGORY, SELECT_SHOP, CREATE_SHOP }
 
     val pendingCurrency = ObservableField<Currency?>(null)
 
@@ -134,6 +134,17 @@ class CreateProductViewModel(
     @Bindable
     fun getAction() = action
     fun setAction(a: Action) {
+        when(a) {
+            Action.SELECT_SHOP -> {
+                if (action != Action.CREATE_SHOP)
+                    SelectShopBottomSheet(this).show(activity.supportFragmentManager, null)
+            }
+            Action.SELECT_CATEGORY -> {
+                if (action != Action.CREATE_CATEGORY)
+                    SelectCategoryBottomSheet(this).show(activity.supportFragmentManager, null)
+            }
+        }
+
         action = a
         notifyPropertyChanged(BR.action)
         activity.apply {
@@ -227,11 +238,15 @@ class CreateProductViewModel(
 
     //region Category methods
     fun selectCategory() {
-        SelectCategoryBottomSheet(this).show(activity.supportFragmentManager, null)
+        setAction(Action.SELECT_CATEGORY)
     }
 
-    fun createCategory() {
-        setAction(Action.CREATE_CATEGORY)
+    fun toggleCategoryCreation() {
+        if (action == Action.SELECT_CATEGORY) {
+            setAction(Action.CREATE_CATEGORY)
+        } else {
+            setAction(Action.SELECT_CATEGORY)
+        }
     }
 
     fun confirmCategoryCreation() {
@@ -258,11 +273,15 @@ class CreateProductViewModel(
 
     //region Shop methods
     fun selectShop() {
-        SelectShopBottomSheet(this).show(activity.supportFragmentManager, null)
+        setAction(Action.SELECT_SHOP)
     }
 
-    fun createShop() {
-        setAction(Action.CREATE_SHOP)
+    fun toggleShopCreation() {
+        if (action == Action.SELECT_SHOP) {
+            setAction(Action.CREATE_SHOP)
+        } else {
+            setAction(Action.SELECT_SHOP)
+        }
     }
 
     fun confirmShopCreation() {

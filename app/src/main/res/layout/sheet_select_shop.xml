@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
+        <import type="android.view.View"/>
+        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.Action"/>
         <variable
             name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
@@ -21,7 +23,7 @@
             android:orientation="horizontal"
             android:background="@color/material_color_black_06_percent"
             android:foreground="?selectableItemBackground"
-            android:onClick='@{() -> vm.createShop()}'
+            android:onClick='@{() -> vm.toggleShopCreation()}'
             >
             <ImageView
                 android:layout_width="wrap_content"
@@ -29,7 +31,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_add_black_24dp"
+                android:src='@{vm.action == Action.SELECT_SHOP ? @drawable/ic_add_black_24dp : @drawable/ic_arrow_back}'
+                tools:src="@drawable/ic_add_black_24dp"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -44,8 +47,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility='@{vm.action == Action.SELECT_SHOP ? View.VISIBLE : View.GONE}'
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_shop"
+            tools:visibility="gone"
+            />
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility='@{vm.action == Action.CREATE_SHOP ? View.VISIBLE : View.GONE}'
+            layout="@layout/view_create_shop"
             />
     </LinearLayout>
 </layout>
