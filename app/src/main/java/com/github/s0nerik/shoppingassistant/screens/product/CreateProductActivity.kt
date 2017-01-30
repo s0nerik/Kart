@@ -1,10 +1,10 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
-//import kotlinx.android.synthetic.main.card_create_price.*
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.databinding.ObservableField
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialogFragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.github.s0nerik.shoppingassistant.BR
@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.item_purchase_preview.view.*
 import kotlinx.android.synthetic.main.view_create_category.*
 import kotlinx.android.synthetic.main.view_create_product.*
+import kotlinx.android.synthetic.main.view_create_shop.*
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
 import java.util.*
@@ -44,8 +45,8 @@ class CreateProductViewModel(
 
     val pendingCurrency = ObservableField<Currency?>(null)
 
-    private val itemCategory by lazy { Category() }
-    private val itemShop by lazy { Shop() }
+    private var itemCategory = Category()
+    private var itemShop = Shop()
     private val itemPrice by lazy { Price() }
     private val itemPriceChange by lazy {
         val priceChange = PriceChange()
@@ -56,6 +57,8 @@ class CreateProductViewModel(
     private val purchase by lazy { Purchase() }
     private var pendingItem = Item()
     private var action: Action = Action.CREATE_PRODUCT
+
+    private var bottomSheet: BottomSheetDialogFragment? = null
 
     init {
         activity.apply {
@@ -136,13 +139,20 @@ class CreateProductViewModel(
     fun setAction(a: Action) {
         when(a) {
             Action.SELECT_SHOP -> {
-                if (action != Action.CREATE_SHOP)
-                    SelectShopBottomSheet(this).show(activity.supportFragmentManager, null)
+                if (action != Action.CREATE_SHOP) {
+                    val sheet = SelectShopBottomSheet(this)
+                    sheet.show(activity.supportFragmentManager, null)
+                    bottomSheet = sheet
+                }
             }
             Action.SELECT_CATEGORY -> {
-                if (action != Action.CREATE_CATEGORY)
-                    SelectCategoryBottomSheet(this).show(activity.supportFragmentManager, null)
+                if (action != Action.CREATE_CATEGORY) {
+                    val sheet = SelectCategoryBottomSheet(this)
+                    sheet.show(activity.supportFragmentManager, null)
+                    bottomSheet = sheet
+                }
             }
+            Action.CREATE_PRODUCT -> bottomSheet?.dismiss()
         }
 
         action = a
@@ -250,23 +260,23 @@ class CreateProductViewModel(
     }
 
     fun confirmCategoryCreation() {
-//        val name = activity.etNewCategoryName.text.toString()
-//        if (name.isEmpty()) {
-//            activity.toast("Category name can't be empty!")
-//            return
-//        }
-//        if (realm.where(Category::class.java).equalTo("name", name).findFirst() != null) {
-//            activity.toast("Category with the same name already exists!")
-//            return
-//        }
-//
-//        itemCategory.name = activity.etNewCategoryName.text.toString()
-//        setCategory(itemCategory)
-//
-//        setAction(Action.CREATE_PRODUCT)
-    }
+        val name = bottomSheet!!.etNewCategoryName.text.toString()
+        if (name.isEmpty()) {
+            activity.toast("Category name can't be empty!")
+            return
+        }
+        if (realm.where(Category::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("Category with the same name already exists!")
+            return
+        }
 
-    fun discardCategoryCreation() {
+        itemCategory.name = name
+        realm.executeTransaction {
+            itemCategory = realm.copyToRealm(itemCategory)
+        }
+
+        setCategory(itemCategory)
+
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
@@ -285,23 +295,23 @@ class CreateProductViewModel(
     }
 
     fun confirmShopCreation() {
-//        val name = activity.etNewShopName.text.toString()
-//        if (name.isEmpty()) {
-//            activity.toast("Shop name can't be empty!")
-//            return
-//        }
-//        if (realm.where(Shop::class.java).equalTo("name", name).findFirst() != null) {
-//            activity.toast("Shop with the same name already exists!")
-//            return
-//        }
-//
-//        itemShop.name = name
-//        setShop(itemShop)
-//
-//        setAction(Action.CREATE_PRODUCT)
-    }
+        val name = bottomSheet!!.etNewShopName.text.toString()
+        if (name.isEmpty()) {
+            activity.toast("Shop name can't be empty!")
+            return
+        }
+        if (realm.where(Shop::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("Shop with the same name already exists!")
+            return
+        }
 
-    fun discardShopCreation() {
+        itemShop.name = name
+        realm.executeTransaction {
+            itemShop = realm.copyToRealm(itemShop)
+        }
+
+        setShop(itemShop)
+
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
