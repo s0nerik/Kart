@@ -64,6 +64,6 @@ fun configureGlide() {
 
     GlideBindingConfig.registerProvider("product_favorite_icon", { iv, request ->
         request.bitmapTransform(ColorFilterTransformation(iv.context, if (iv.imageTintList != null) iv.imageTintList.defaultColor else Color.BLACK))
-                .error(R.drawable.fav_no)
+                .error(R.drawable.product_fav_no)
     })
 }

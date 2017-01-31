@@ -12,7 +12,6 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
 import com.github.s0nerik.shoppingassistant.getDrawablePath
-import com.github.s0nerik.shoppingassistant.getDrawableUri
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.view.focusChanges
@@ -193,7 +192,7 @@ class CreateProductViewModel(
 
     @Bindable
     fun getFavoriteIconUrl(): String =
-            if (pendingItem.isFavorite) R.drawable.fav_yes.getDrawablePath(activity) else R.drawable.fav_no.getDrawablePath(activity)
+            if (pendingItem.isFavorite) R.drawable.product_fav_yes.getDrawablePath(activity) else R.drawable.product_fav_no.getDrawablePath(activity)
 
     @Bindable
     fun isFavorite(): Boolean = pendingItem.isFavorite

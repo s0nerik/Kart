@@ -21,7 +21,7 @@
             android:tint="@color/textColorPrimaryLight"
             app:glideImageSrc='@{item.iconUrl}'
             app:glideConfig='@{"purchase_icon"}'
-            tools:src="@drawable/cat_food"
+            tools:src="@drawable/product_cat_food"
             />
         <TextView
             android:id="@+id/title"

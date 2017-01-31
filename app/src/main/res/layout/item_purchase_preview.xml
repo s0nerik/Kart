@@ -25,7 +25,7 @@
             android:layout_gravity="center_horizontal"
             app:glideImageSrc='@{item.iconUrl}'
             app:glideConfig='@{"purchase_icon"}'
-            tools:src="@drawable/cat_food"
+            tools:src="@drawable/product_cat_food"
             />
         <LinearLayout
             android:layout_width="wrap_content"

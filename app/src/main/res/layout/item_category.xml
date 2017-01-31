@@ -21,7 +21,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/cat_food"
+            android:src="@drawable/product_cat_food"
             android:tint="@color/material_color_black"
             app:glideImageSrc='@{item.iconUrl}'
             app:glideConfig='@{"category_icon"}'

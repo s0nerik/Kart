@@ -39,7 +39,7 @@
             android:tint="@{iconColor != null ? iconColor : @color/material_color_white, default=@color/material_color_white}"
             app:glideImageSrc='@{iconUrl != null ? iconUrl : ""}'
             app:glideConfig='@{glideConfig != null ? glideConfig : "purchase_icon"}'
-            tools:src="@drawable/cat_food"
+            tools:src="@drawable/product_cat_food"
             />
     </android.support.v7.widget.CardView>
 </layout>
