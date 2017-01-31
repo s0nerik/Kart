@@ -11,6 +11,7 @@ import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
+import com.github.s0nerik.shoppingassistant.getDrawablePath
 import com.github.s0nerik.shoppingassistant.getDrawableUri
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
@@ -191,6 +192,13 @@ class CreateProductViewModel(
     fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
 
     @Bindable
+    fun getFavoriteIconUrl(): String =
+            if (pendingItem.isFavorite) R.drawable.fav_yes.getDrawablePath(activity) else R.drawable.fav_no.getDrawablePath(activity)
+
+    @Bindable
+    fun isFavorite(): Boolean = pendingItem.isFavorite
+
+    @Bindable
     fun isPriceSet(): Boolean = itemPriceChange.value != null
     //endregion
 
@@ -238,10 +246,6 @@ class CreateProductViewModel(
         setPrice(itemPrice)
 
         // TODO: create Price if doesn't exist
-        setAction(Action.CREATE_PRODUCT)
-    }
-
-    fun discardPriceCreation() {
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
@@ -322,6 +326,12 @@ class CreateProductViewModel(
                 inputMethodManager.showSoftInput(preview.title, InputMethodManager.SHOW_IMPLICIT)
             }
         }
+    }
+
+    fun toggleFavorite() {
+        pendingItem.isFavorite = !pendingItem.isFavorite
+        notifyPropertyChanged(BR.favorite)
+        notifyPropertyChanged(BR.favoriteIconUrl)
     }
 
     fun purchaseProduct() {

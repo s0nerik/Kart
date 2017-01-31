@@ -26,6 +26,10 @@ fun Int.getDrawableUri(context: Context): Uri {
     return imageUri
 }
 
+fun Int.getDrawablePath(context: Context): String {
+    return getDrawableUri(context).toString()
+}
+
 fun Context.showKeyboard(view: View) {
     inputMethodManager.showSoftInput(view, 0)
 }

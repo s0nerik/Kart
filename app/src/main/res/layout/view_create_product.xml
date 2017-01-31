@@ -108,7 +108,9 @@
                 android:id="@+id/btnFavorite"
                 layout="@layout/view_btn_icon"
                 app:glideConfig='@{"product_favorite_icon"}'
+                app:iconUrl='@{vm.favoriteIconUrl}'
                 app:marginTop='@{8}'
+                app:onClick='@{() -> vm.toggleFavorite()}'
                 tools:visibility="visible"
                 />
         </LinearLayout>

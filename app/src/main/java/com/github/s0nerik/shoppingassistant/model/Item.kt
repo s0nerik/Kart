@@ -13,7 +13,8 @@ open class Item(
         @PrimaryKey open var id: String = randomUuidString(),
         open var name: String = "",
         open var category: Category? = null,
-        open var price: Price? = null
+        open var price: Price? = null,
+        open var isFavorite: Boolean = false
 ) : RealmObject() {
     val readableNamePreview: String
         get() = if (name.isNotBlank()) name else ""
