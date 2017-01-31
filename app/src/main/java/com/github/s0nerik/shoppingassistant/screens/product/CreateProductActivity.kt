@@ -186,10 +186,10 @@ class CreateProductViewModel(
     fun getCategoryIconUrl(): String = pendingItem.category?.iconUrl.orEmpty()
 
     @Bindable
-    fun getShopIconUrl(): String = R.drawable.store.getDrawableUri(activity).toString()
+    fun getShopIconUrl(): String = R.drawable.store.getDrawablePath(activity)
 
     @Bindable
-    fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawableUri(activity).toString()
+    fun getPriceIconUrl(): String = R.drawable.checkbox_blank_circle.getDrawablePath(activity)
 
     @Bindable
     fun getFavoriteIconUrl(): String =

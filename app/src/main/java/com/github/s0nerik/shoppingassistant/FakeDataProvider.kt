@@ -25,12 +25,12 @@ fun createDummyPurchases(ctx: Context, realm: Realm) {
         //region Categories
         val food = it.createObject(Category::class)
         food.name = "Food"
-        food.iconUrl = R.drawable.cat_food.getDrawableUri(ctx).toString()
+        food.iconUrl = R.drawable.cat_food.getDrawablePath(ctx)
 
         val clothes = it.createObject(Category::class)
         clothes.name = "Clothes"
 //            clothes.iconUrl = "https://api.icons8.com/download/c5c8b5ba35e008ea471e9a53c5fa74c03ef6e78c/iOS7/PNG/256/Very_Basic/search-256.png"
-        clothes.iconUrl = R.drawable.cat_clothes.getDrawableUri(ctx).toString()
+        clothes.iconUrl = R.drawable.cat_clothes.getDrawablePath(ctx)
         //endregion
 
         //region Shops
