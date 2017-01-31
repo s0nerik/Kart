@@ -18,6 +18,8 @@
         <variable name="glideConfig" type="String" />
 
         <variable name="selected" type="Boolean" />
+        <variable name="selectedColor" type="Integer" />
+        <variable name="unselectedColor" type="Integer" />
 
         <variable name="onClick" type="android.view.View.OnClickListener" />
     </data>
@@ -31,7 +33,7 @@
         android:layout_marginRight='@{marginRight ?? 0}'
         android:foreground="?selectableItemBackground"
         android:onClick='@{onClick}'
-        app:cardBackgroundColor="@{util.getBgColor(bgColor, selected), default=@color/colorAccent}"
+        app:cardBackgroundColor="@{util.getBgColor(bgColor, selected, selectedColor, unselectedColor), default=@color/colorAccent}"
         app:cardElevation="2dp"
         >
         <ImageView

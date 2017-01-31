@@ -17,12 +17,18 @@ fun getMargin(b: Boolean?): Int {
     }
 }
 
-fun getBgColor(bgColor: Int?, selected: Boolean?): Int {
+fun getBgColor(bgColor: Int?, selected: Boolean?, selectedColor: Int?, unselectedColor: Int?): Int {
     if (bgColor != null)
         return bgColor
     else
         if (selected == true)
-            return Any().getColor(R.color.material_color_grey_800)
+            if (selectedColor == null)
+                return Any().getColor(R.color.material_color_blue_grey_800)
+            else
+                return selectedColor
         else
-            return Any().getColor(R.color.colorAccent)
+            if (unselectedColor == null)
+                return Any().getColor(R.color.colorAccent)
+            else
+                return unselectedColor
 }
