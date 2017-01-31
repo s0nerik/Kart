@@ -40,7 +40,7 @@
             <include
                 android:id="@+id/btnSelectName"
                 layout="@layout/view_btn_icon"
-                app:bgColor='@{!vm.item.name.isEmpty() ? @color/material_color_grey_800 : @color/colorAccent}'
+                app:selected='@{!vm.item.name.isEmpty()}'
                 app:glideConfig='@{"product_name_icon"}'
                 app:iconColor='@{@color/material_color_white}'
                 app:iconUrl='@{vm.priceIconUrl}'
@@ -51,7 +51,7 @@
             <include
                 android:id="@+id/btnSelectPrice"
                 layout="@layout/view_btn_icon"
-                app:bgColor='@{vm.isPriceSet ? @color/material_color_grey_800 : @color/colorAccent}'
+                app:selected='@{vm.isPriceSet}'
                 app:glideConfig='@{"product_price_icon"}'
                 app:iconColor='@{@color/material_color_white}'
                 app:iconUrl='@{vm.priceIconUrl}'
@@ -63,7 +63,7 @@
             <include
                 android:id="@+id/btnSelectCategory"
                 layout="@layout/view_btn_icon"
-                app:bgColor='@{vm.category != null ? @color/material_color_grey_800 : @color/colorAccent}'
+                app:selected='@{vm.category != null}'
                 app:glideConfig='@{"product_category_icon"}'
                 app:iconColor='@{@color/material_color_white}'
                 app:iconUrl='@{vm.categoryIconUrl}'
@@ -75,7 +75,7 @@
             <include
                 android:id="@+id/btnSelectShop"
                 layout="@layout/view_btn_icon"
-                app:bgColor='@{vm.shop != null ? @color/material_color_grey_800 : @color/colorAccent}'
+                app:selected='@{vm.shop != null}'
                 app:glideConfig='@{"shop_category_icon"}'
                 app:marginTop='@{8}'
                 app:onClick='@{() -> vm.selectShop()}'
@@ -109,6 +109,7 @@
                 layout="@layout/view_btn_icon"
                 app:glideConfig='@{"product_favorite_icon"}'
                 app:iconUrl='@{vm.favoriteIconUrl}'
+                app:selected='@{vm.isFavorite}'
                 app:marginTop='@{8}'
                 app:onClick='@{() -> vm.toggleFavorite()}'
                 tools:visibility="visible"

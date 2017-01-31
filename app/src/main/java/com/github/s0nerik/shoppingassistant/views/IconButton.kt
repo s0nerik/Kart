@@ -1,6 +1,7 @@
 package com.github.s0nerik.shoppingassistant.views
 
 import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.getColor
 import com.github.s0nerik.shoppingassistant.getDimenPixelOffset
 
 /**
@@ -14,4 +15,14 @@ fun getMargin(b: Boolean?): Int {
     } else {
         return Any().getDimenPixelOffset(R.dimen.btn_icon_default_margin)
     }
+}
+
+fun getBgColor(bgColor: Int?, selected: Boolean?): Int {
+    if (bgColor != null)
+        return bgColor
+    else
+        if (selected == true)
+            return Any().getColor(R.color.material_color_grey_800)
+        else
+            return Any().getColor(R.color.colorAccent)
 }

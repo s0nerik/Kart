@@ -1,7 +1,9 @@
 package com.github.s0nerik.shoppingassistant
 
+import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
 import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
 
 /**
  * Created by Alex on 1/21/2017.
@@ -10,6 +12,10 @@ import android.support.annotation.StringRes
  */
 fun Any.getString(@StringRes resId: Int, vararg formatArgs: Any): String {
     return App.context.getString(resId, *formatArgs)
+}
+
+fun Any.getColor(@ColorRes resId: Int): Int {
+    return ContextCompat.getColor(App.context, resId)
 }
 
 fun Any.getDimen(@DimenRes resId: Int): Float {
