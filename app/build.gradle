@@ -106,7 +106,7 @@ dependencies {
     compile 'com.chibatching:kotpref:1.6.0'
     compile "com.github.debop:koda-time:1.0.0"
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
-    compile 'com.github.vicpinm:krealmextensions:1.0.2'
+    compile 'com.github.vicpinm:krealmextensions:1.0.6'
     debugCompile 'com.facebook.stetho:stetho:1.4.2'
     debugCompile 'com.uphyca:stetho_realm:2.0.0'
 
