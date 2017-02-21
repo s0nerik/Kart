@@ -5,6 +5,7 @@ import android.databinding.Bindable
 import android.databinding.ObservableField
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.github.s0nerik.shoppingassistant.BR
@@ -21,6 +22,7 @@ import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.create
 import com.vicpin.krealmextensions.query
+import com.vicpin.krealmextensions.saveManaged
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.item_purchase_preview.view.*
@@ -274,11 +276,8 @@ class CreateProductViewModel(
         }
 
         itemCategory.name = name
-        realm.executeTransaction {
-            itemCategory = realm.copyToRealm(itemCategory)
-        }
-
-        setCategory(itemCategory)
+        val cat = itemCategory.saveManaged(realm)
+        setCategory(cat)
 
         setAction(Action.CREATE_PRODUCT)
     }

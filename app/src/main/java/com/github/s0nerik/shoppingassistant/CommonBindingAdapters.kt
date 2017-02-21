@@ -1,17 +1,24 @@
 package com.github.s0nerik.shoppingassistant
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Configuration
 import android.databinding.BindingAdapter
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.support.annotation.ColorRes
 import android.support.annotation.MenuRes
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.CardView
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.TextView
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.dip
+import java.lang.ref.WeakReference
+import java.util.*
 
 
 /**
@@ -39,6 +46,30 @@ fun setMenu(toolbar: Toolbar, @MenuRes menuId: Int, @ColorRes tintColorId: Int?)
             }
         }
     }
+}
+
+val animatedBackgrounds = WeakHashMap<CardView, WeakReference<ValueAnimator>>()
+
+@BindingAdapter("animateBackgroundColor")
+fun setAnimateBackgroundColor(card: CardView, animate: Boolean) {
+    val evaluator = ArgbEvaluator()
+    val animator = ValueAnimator()
+    animator.setIntValues(card.backgroundColor, Color.parseColor("#22000000"))
+    animator.setEvaluator(evaluator)
+    animator.duration = 250
+    animator.repeatCount = ValueAnimator.INFINITE
+    animator.repeatMode = ValueAnimator.REVERSE
+    animator.addUpdateListener { animation ->
+        card.backgroundColor = animation.animatedValue as Int
+    }
+    animator.start()
+
+    if (animate) {
+        animatedBackgrounds[card]?.safe {
+
+        }
+    }
+    card.backgroundColor
 }
 
 @BindingAdapter("applyNavBarMargin")
