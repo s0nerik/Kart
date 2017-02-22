@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="orange_50">#ffeee0</color>
+    <color name="orange_100">#ffd4b3</color>
+    <color name="orange_200">#ffb880</color>
+    <color name="orange_300">#ff9b4d</color>
+    <color name="orange_400">#ff8526</color>
+    <color name="orange_500">#ff7000</color>
+    <color name="orange_600">#ff6800</color>
+    <color name="orange_700">#ff5d00</color>
+    <color name="orange_800">#ff5300</color>
+    <color name="orange_900">#ff4100</color>
+    <color name="orange_A100">#ffffff</color>
+    <color name="orange_A200">#fff5f2</color>
+    <color name="orange_A400">#ffccbf</color>
+    <color name="orange_A700">#ffb7a6</color>
+</resources>

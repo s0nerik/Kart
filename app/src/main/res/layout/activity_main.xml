@@ -26,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrimary"
+            app:applyNavBarPadding='@{true}'
             app:itemIconTint="@color/bottom_nav_item_tint"
             app:itemTextColor="@color/bottom_nav_item_tint"
             app:menu="@menu/main"
@@ -41,20 +42,28 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:applyStatusBarPadding='@{true}'
                 app:menu="@{R.menu.main_toolbar}"
-                app:menuTint="@{R.color.textColorPrimary}"
+                app:menuTint="@{R.color.material_color_white}"
                 >
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/cart"
+                        android:tint="@color/material_color_white"
+                        />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Kart"
                         android:textSize="24sp"
-                        android:textColor="@color/textColorPrimary"
+                        android:textColor="@color/material_color_white"
                         app:font='@{"Norican-Regular"}'
                         />
                     <TextView
@@ -62,8 +71,8 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="4dp"
                         android:text="1.0"
-                        android:textSize="16sp"
-                        android:textColor="@color/textColorPrimary"
+                        android:textSize="14sp"
+                        android:textColor="@color/material_color_white"
                         android:gravity="top"
                         app:font='@{"Norican-Regular"}'
                         />

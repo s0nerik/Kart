@@ -33,14 +33,14 @@
                 app:applyNavBarPadding='@{true}'
                 >
                 <Button
-                    android:id="@+id/btnCreateNewPurchase"
+                    android:id="@+id/btnCreateNewProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="-8dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
-                    android:text="New purchase"
+                    android:text="New product"
                     android:onClick='@{() -> vm.createProduct()}'
                     style="@style/Widget.AppCompat.Button.Colored"
                     />
@@ -59,6 +59,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:animateLayoutChanges="true"
                             >
                             <TextView
                                 android:text="Favorite products"
@@ -69,7 +70,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:visibility='@{vm.favoritesEmpty ? View.GONE : View.VISIBLE}'
+                                android:visibility='@{vm.favorites.size() == 0 ? View.GONE : View.VISIBLE}'
                                 app:layoutManager="@string/rv_layout_manager_linear"
                                 tools:listitem="@layout/item_purchase_horizontal"
                                 />
@@ -79,7 +80,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:paddingTop="16dp"
-                                android:visibility='@{vm.favoritesEmpty ? View.VISIBLE : View.GONE}'
+                                android:visibility='@{vm.favorites.size() == 0 ? View.VISIBLE : View.GONE}'
                                 >
                                 <ImageView
                                     android:layout_width="56dp"
@@ -107,6 +108,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:animateLayoutChanges="true"
                             >
                             <TextView
                                 android:text="Frequent products"
@@ -117,7 +119,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:visibility='@{vm.frequentsEmpty ? View.GONE : View.VISIBLE}'
+                                android:visibility='@{vm.frequents.size() == 0 ? View.GONE : View.VISIBLE}'
                                 app:layoutManager="@string/rv_layout_manager_linear"
                                 tools:listitem="@layout/item_purchase"
                                 />
@@ -127,7 +129,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center"
                                 android:paddingTop="16dp"
-                                android:visibility='@{vm.frequentsEmpty ? View.VISIBLE : View.GONE}'
+                                android:visibility='@{vm.frequents.size() == 0 ? View.VISIBLE : View.GONE}'
                                 >
                                 <ImageView
                                     android:layout_width="56dp"

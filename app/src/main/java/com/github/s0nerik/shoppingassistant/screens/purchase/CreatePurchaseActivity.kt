@@ -9,10 +9,12 @@ import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import com.github.nitrico.lastadapter.LastAdapter
+import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
-import com.github.s0nerik.shoppingassistant.model.Item
+import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
+import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
 import com.github.s0nerik.shoppingassistant.screens.product.EXTRA_ID
@@ -92,29 +94,30 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initFavorites() {
         LastAdapter.with(binding.vm.favorites, BR.item)
+                .type { Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal) }
                 .map<ItemRealmProxy>(R.layout.item_purchase_item_horizontal)
                 .into(rvFavorites)
 
         rvFavorites.isNestedScrollingEnabled = false
-        rvFavorites.setHasFixedSize(true)
+//        rvFavorites.setHasFixedSize(true)
     }
 
     private fun initFrequents() {
         LastAdapter.with(binding.vm.frequents, BR.item)
-                .map<ItemRealmProxy>(R.layout.item_purchase_item)
+                .type { Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item) }
                 .into(rvFrequents)
 
         rvFrequents.isNestedScrollingEnabled = false
-        rvFrequents.setHasFixedSize(true)
+//        rvFrequents.setHasFixedSize(true)
     }
 
     private fun initSearchResults() {
         LastAdapter.with(binding.vm.filteredSearchResults, BR.item)
-                .map<ItemRealmProxy>(R.layout.item_purchase_item)
+                .type { Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item) }
                 .into(rvSearchResults)
 
         rvFrequents.isNestedScrollingEnabled = false
-        rvFrequents.setHasFixedSize(true)
+//        rvFrequents.setHasFixedSize(true)
     }
 
     fun createProduct() {
@@ -122,9 +125,11 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 .startIntent(Intent(this, CreateProductActivity::class.java))
                 .filter { it.resultCode() == Activity.RESULT_OK }
                 .subscribe { result ->
-                    binding.vm.frequents.add(
-                            Item().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!
-                    )
+                    with (Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!) {
+                        binding.vm.frequents.add(item!!)
+                        if (item!!.isFavorite)
+                            binding.vm.favorites.add(item)
+                    }
                 }
     }
 
