@@ -1,11 +1,12 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.databinding.ObservableField
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.github.s0nerik.shoppingassistant.BR
@@ -38,6 +39,8 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+
+const val EXTRA_ID = "id"
 
 class CreateProductViewModel(
         private val activity: CreateProductActivity,
@@ -208,8 +211,12 @@ class CreateProductViewModel(
     }
 
     private fun close(shouldSave: Boolean) {
-        if (shouldSave)
+        if (shouldSave) {
             purchase.create()
+            activity.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_ID, purchase.id))
+        } else {
+            activity.setResult(Activity.RESULT_CANCELED)
+        }
 
         activity.finish()
     }

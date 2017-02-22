@@ -29,6 +29,12 @@ class DashboardViewModel(val fragment: DashboardFragment) {
 }
 
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
+    val purchases
+        get() = purchases(realm)
+
+    val recentPurchases
+        get() = recentPurchases(realm)
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = DashboardViewModel(this)
@@ -38,7 +44,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initRecents() {
-        LastAdapter.with(recentPurchases(realm), BR.item)
+        LastAdapter.with(recentPurchases, BR.item)
                 .map<PurchaseRealmProxy>(R.layout.item_purchase)
                 .into(recentsRecycler)
 
@@ -49,7 +55,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initDistributionChart() {
-        val entries = purchases(realm).groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
+        val entries = purchases.groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
 
         val dataSet = PieDataSet(entries, null)
         dataSet.apply {

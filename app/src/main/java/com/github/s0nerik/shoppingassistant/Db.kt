@@ -6,7 +6,8 @@ import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.Realm
 import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.Sort
+import rx.Observable
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -41,33 +42,50 @@ fun createCurrenciesIfNeeded(realm: Realm) {
     }
 }
 
-fun purchases(realm: Realm): RealmResults<Purchase> {
+fun purchases(realm: Realm): List<Purchase> {
     return realm.where(Purchase::class.java).findAll()
 }
 
-// TODO: implement this by creating a new purchase for a favorite product
-fun favoritePurchases(realm: Realm): RealmResults<Purchase> {
-    return purchases(realm)
+fun purchasesObservable(realm: Realm): Observable<out List<Purchase>> {
+    return realm.where(Purchase::class.java).findAll().asObservable()
 }
 
-// TODO: implement this by creating a new purchase for a frequently bought product
-fun frequentPurchases(realm: Realm): RealmResults<Purchase> {
-    return purchases(realm)
+fun favoriteItems(realm: Realm): List<Item> {
+    return realm.where(Item::class.java).equalTo("isFavorite", true).findAll()
 }
 
-// TODO: implement this by creating a new purchase for a favorite product
-fun favoriteItems(realm: Realm): RealmResults<Item> {
-    return realm.where(Item::class.java).findAll()
+fun favoriteItemsObservable(realm: Realm): Observable<out List<Item>> {
+    return realm.where(Item::class.java).equalTo("isFavorite", true).findAll().asObservable()
 }
 
-// TODO: implement this by creating a new purchase for a frequently bought product
-fun frequentItems(realm: Realm): RealmResults<Item> {
-    return realm.where(Item::class.java).findAll()
+fun frequentItems(realm: Realm): List<Item> {
+    val purchases = realm.where(Purchase::class.java).findAll()
+
+    return purchases
+            .map { it.item!! }
+            .distinct()
+            .sortedByDescending { purchases.where().equalTo("item.id", it.id).count() }
+            .take(10)
 }
 
-// TODO: implement this by creating a new purchase for a recently bought product
-fun recentPurchases(realm: Realm): RealmResults<Purchase> {
-    return realm.where(Purchase::class.java).findAll()
+fun frequentItemsObservable(realm: Realm): Observable<out List<Item>> {
+    return realm.where(Purchase::class.java)
+            .findAll()
+            .asObservable()
+            .map { items ->
+                items.map { it.item!! }
+                        .distinct()
+                        .sortedByDescending { items.where().equalTo("item.id", it.id).count() }
+                        .take(10)
+            }
+}
+
+fun recentPurchases(realm: Realm): List<Purchase> {
+    return realm.where(Purchase::class.java).findAllSorted("date", Sort.DESCENDING)
+}
+
+fun recentPurchasesObservable(realm: Realm): Observable<out List<Purchase>> {
+    return realm.where(Purchase::class.java).findAllSorted("date", Sort.DESCENDING).asObservable()
 }
 
 fun <E : RealmModel> Realm.createObject(clazz: KClass<E>): E {

@@ -2,6 +2,8 @@ package com.github.s0nerik.shoppingassistant.screens.purchase
 
 import android.app.Activity
 import android.content.Intent
+import android.databinding.BaseObservable
+import android.databinding.Bindable
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
@@ -10,35 +12,38 @@ import com.github.nitrico.lastadapter.LastAdapter
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
+import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
+import com.github.s0nerik.shoppingassistant.screens.product.EXTRA_ID
 import com.jakewharton.rxbinding.widget.textChanges
 import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
+import com.vicpin.krealmextensions.queryFirst
 import io.realm.ItemRealmProxy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
-import org.jetbrains.anko.startActivity
+import rx_activity_result.RxActivityResult
 
 class CreatePurchaseViewModel(
         private val activity: CreatePurchaseActivity,
         private val realm: Realm
-) {
+) : BaseObservable() {
     val VOICE_SEARCH_REQ_CODE = 672
 
     val isSearching = ObservableBoolean(false)
 
-    val frequents by lazy { frequentItems(realm) }
-    val favorites by lazy { favoriteItems(realm) }
-    private val purchases by lazy { purchases(realm) }
+    val frequents by lazy { observableListOf(frequentItems(realm)) }
+    val favorites by lazy { observableListOf(favoriteItems(realm)) }
+    private val purchases by lazy { observableListOf(purchases(realm)) }
 
     val filteredSearchResults = ObservableArrayList<Purchase>()
 
-    val favoritesEmpty: Boolean
-        get() = favorites.size <= 0
+    @Bindable
+    fun isFavoritesEmpty(): Boolean = favorites.isEmpty()
 
-    val frequentsEmpty: Boolean
-        get() = frequents.size <= 0
+    @Bindable
+    fun isFrequentsEmpty(): Boolean = frequents.isEmpty()
 
     init {
         activity.apply {
@@ -67,7 +72,7 @@ class CreatePurchaseViewModel(
     }
 
     fun createProduct() {
-        activity.startActivity<CreateProductActivity>()
+        activity.createProduct()
     }
 }
 
@@ -76,6 +81,10 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = CreatePurchaseViewModel(this, realm)
+        initData()
+    }
+
+    private fun initData() {
         initFavorites()
         initFrequents()
         initSearchResults()
@@ -106,6 +115,17 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
         rvFrequents.isNestedScrollingEnabled = false
         rvFrequents.setHasFixedSize(true)
+    }
+
+    fun createProduct() {
+        RxActivityResult.on(this)
+                .startIntent(Intent(this, CreateProductActivity::class.java))
+                .filter { it.resultCode() == Activity.RESULT_OK }
+                .subscribe { result ->
+                    binding.vm.frequents.add(
+                            Item().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!
+                    )
+                }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

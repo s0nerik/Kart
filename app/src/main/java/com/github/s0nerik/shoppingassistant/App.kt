@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import rx_activity_result.RxActivityResult
 import timber.log.Timber
 
 /**
@@ -23,6 +24,8 @@ open class App : Application() {
     override fun onCreate() {
         super.onCreate()
         ctx = this
+
+        RxActivityResult.register(this)
 
         Realm.init(this)
         Realm.setDefaultConfiguration(
