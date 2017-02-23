@@ -86,7 +86,7 @@
                             android:layout_marginBottom="16dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="16dp"
-                            android:text="Recent purchases"
+                            android:text="Recent items"
                             android:textAppearance="@style/MaterialTypography.Regular.Body2"
                             />
 

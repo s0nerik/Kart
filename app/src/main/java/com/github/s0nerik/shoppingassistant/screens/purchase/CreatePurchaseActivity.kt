@@ -3,7 +3,6 @@ package com.github.s0nerik.shoppingassistant.screens.purchase
 import android.app.Activity
 import android.content.Intent
 import android.databinding.BaseObservable
-import android.databinding.Bindable
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
@@ -15,6 +14,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
+import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
 import com.github.s0nerik.shoppingassistant.screens.product.EXTRA_ID
@@ -22,7 +22,6 @@ import com.jakewharton.rxbinding.widget.textChanges
 import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.queryFirst
-import io.realm.ItemRealmProxy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
 import rx_activity_result.RxActivityResult
@@ -37,15 +36,9 @@ class CreatePurchaseViewModel(
 
     val frequents by lazy { observableListOf(frequentItems(realm)) }
     val favorites by lazy { observableListOf(favoriteItems(realm)) }
-    private val purchases by lazy { observableListOf(purchases(realm)) }
+    val items by lazy { observableListOf(items(realm)) }
 
-    val filteredSearchResults = ObservableArrayList<Purchase>()
-
-    @Bindable
-    fun isFavoritesEmpty(): Boolean = favorites.isEmpty()
-
-    @Bindable
-    fun isFrequentsEmpty(): Boolean = frequents.isEmpty()
+    val filteredSearchResults = ObservableArrayList<Item>()
 
     init {
         activity.apply {
@@ -55,7 +48,7 @@ class CreatePurchaseViewModel(
                         isSearching.set(s.isNotEmpty())
 
                         filteredSearchResults.clear()
-                        filteredSearchResults += purchases.filter { it.readableName.contains(s, true) }
+                        filteredSearchResults += items.filter { it.readableName.contains(s, true) }
                     }
         }
     }
@@ -95,11 +88,10 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     private fun initFavorites() {
         LastAdapter.with(binding.vm.favorites, BR.item)
                 .type { Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal) }
-                .map<ItemRealmProxy>(R.layout.item_purchase_item_horizontal)
                 .into(rvFavorites)
 
         rvFavorites.isNestedScrollingEnabled = false
-//        rvFavorites.setHasFixedSize(true)
+        rvFavorites.setHasFixedSize(true)
     }
 
     private fun initFrequents() {
@@ -108,7 +100,6 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 .into(rvFrequents)
 
         rvFrequents.isNestedScrollingEnabled = false
-//        rvFrequents.setHasFixedSize(true)
     }
 
     private fun initSearchResults() {
@@ -116,8 +107,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 .type { Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item) }
                 .into(rvSearchResults)
 
-        rvFrequents.isNestedScrollingEnabled = false
-//        rvFrequents.setHasFixedSize(true)
+        rvSearchResults.isNestedScrollingEnabled = false
     }
 
     fun createProduct() {
@@ -127,6 +117,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 .subscribe { result ->
                     with (Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!) {
                         binding.vm.frequents.add(item!!)
+                        binding.vm.items.add(item!!)
                         if (item!!.isFavorite)
                             binding.vm.favorites.add(item)
                     }

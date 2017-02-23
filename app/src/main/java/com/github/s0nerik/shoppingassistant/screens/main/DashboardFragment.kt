@@ -8,11 +8,12 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.nitrico.lastadapter.LastAdapter
+import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
+import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
-import io.realm.PurchaseRealmProxy
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.startActivity
@@ -45,7 +46,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     private fun initRecents() {
         LastAdapter.with(recentPurchases, BR.item)
-                .map<PurchaseRealmProxy>(R.layout.item_purchase)
+                .type { Type<ItemPurchaseBinding>(R.layout.item_purchase) }
                 .into(recentsRecycler)
 
         recentsRecycler.isNestedScrollingEnabled = false

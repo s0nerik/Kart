@@ -50,6 +50,14 @@ fun purchasesObservable(realm: Realm): Observable<out List<Purchase>> {
     return realm.where(Purchase::class.java).findAll().asObservable()
 }
 
+fun items(realm: Realm): List<Item> {
+    return realm.where(Item::class.java).findAll()
+}
+
+fun itemsObservable(realm: Realm): Observable<out List<Item>> {
+    return realm.where(Item::class.java).findAll().asObservable()
+}
+
 fun favoriteItems(realm: Realm): List<Item> {
     return realm.where(Item::class.java).equalTo("isFavorite", true).findAll()
 }
