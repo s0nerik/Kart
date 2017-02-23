@@ -79,9 +79,8 @@ dependencies {
     compile 'com.github.nitrico.lastadapter:lastadapter:2.0.0'
     compile 'blue.aodev:material-values:1.1.1'
     compile 'com.labo.kaji:relativepopupwindow:0.2.1'
-    compile 'me.grantland:autofittextview:0.2.+'
-//    compile 'com.nex3z:notification-badge:0.2.0'
-    compile "berlin.volders:badger:+"
+    compile 'me.grantland:autofittextview:0.2.1'
+    compile "berlin.volders:badger:0.1"
 
     // Image loading
     compile 'com.github.bumptech.glide:glide:3.7.0'
