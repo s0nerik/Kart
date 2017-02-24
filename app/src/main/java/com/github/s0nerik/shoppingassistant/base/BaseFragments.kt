@@ -12,15 +12,22 @@ import io.realm.Realm
 abstract class BaseFragment(
         protected val layoutId: Int
 ) : RxFragment() {
-    protected val realm: Realm by lazy { Realm.getDefaultInstance() }
+    private lateinit var innerRealm: Realm
+    protected val realm
+        get() = innerRealm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(layoutId, container, false)
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        innerRealm = Realm.getDefaultInstance()
+    }
+
     override fun onDestroy() {
-        realm.close()
+        innerRealm.close()
         super.onDestroy()
     }
 }
@@ -29,9 +36,12 @@ abstract class BaseBoundFragment<out T : ViewDataBinding>(
         protected val layoutId: Int
 ) : RxFragment() {
     private lateinit var innerBinding: T
-    protected val binding: T by lazy { innerBinding }
+    protected val binding
+        get() = innerBinding
 
-    protected val realm: Realm by lazy { Realm.getDefaultInstance() }
+    private lateinit var innerRealm: Realm
+    protected val realm
+        get() = innerRealm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(layoutId, container, false)
@@ -39,8 +49,13 @@ abstract class BaseBoundFragment<out T : ViewDataBinding>(
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        innerRealm = Realm.getDefaultInstance()
+    }
+
     override fun onDestroy() {
-        realm.close()
+        innerRealm.close()
         super.onDestroy()
     }
 }

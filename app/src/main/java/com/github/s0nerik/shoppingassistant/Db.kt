@@ -1,9 +1,11 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
+import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
@@ -41,6 +43,15 @@ fun createCurrenciesIfNeeded(realm: Realm) {
         }
     }
 }
+
+val currentCart: Cart = Cart()
+    get() {
+        val savedCart = Cart().queryFirst { it.equalTo("id", field.id) }
+        if (savedCart != null) {
+            field = Cart()
+        }
+        return field
+    }
 
 fun purchases(realm: Realm): List<Purchase> {
     return realm.where(Purchase::class.java).findAll()

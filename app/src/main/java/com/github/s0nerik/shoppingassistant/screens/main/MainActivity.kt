@@ -12,19 +12,22 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivityViewModel(private val activity: MainActivity) {
+    private val dashboardFragment by lazy { DashboardFragment() }
+    private val historyFragment by lazy { HistoryFragment() }
+    private val cartFragment by lazy { CartFragment() }
+
     init {
-        activity.bottomNavigation.setOnNavigationItemSelectedListener { onNavigationItemSelected(it) }
-        // TODO: uncomment when updated to Kotlin 1.1
-//        activity.bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected)
+        activity.bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected)
     }
 
     fun onNavigationItemSelected(item: MenuItem): Boolean {
         activity.supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container, when(item.itemId) {
-                    R.id.dashboard -> DashboardFragment()
-                    R.id.history -> HistoryFragment()
-                    else -> DashboardFragment()
+                    R.id.dashboard -> dashboardFragment
+                    R.id.history -> historyFragment
+                    R.id.cart -> cartFragment
+                    else -> dashboardFragment
                 })
                 .commit()
         return true
