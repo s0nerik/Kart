@@ -1,6 +1,8 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
+import com.github.debop.kodatimes.ago
+import com.github.debop.kodatimes.days
 import com.github.debop.kodatimes.minutes
 import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.model.Currency
@@ -17,30 +19,6 @@ import java.util.*
 
 fun createDummyPurchases(ctx: Context, realm: Realm) {
     realm.executeTransaction {
-        //region Currencies
-        val usd = it.where(Currency::class.java).equalTo("code", "USD").findFirst()
-        val uah = it.where(Currency::class.java).equalTo("code", "UAH").findFirst()
-        //endregion
-
-        //region Categories
-        val food = it.createObject(Category::class)
-        food.name = "Food"
-        food.iconUrl = R.drawable.product_cat_food.getDrawablePath(ctx)
-
-        val clothes = it.createObject(Category::class)
-        clothes.name = "Clothes"
-//            clothes.iconUrl = "https://api.icons8.com/download/c5c8b5ba35e008ea471e9a53c5fa74c03ef6e78c/iOS7/PNG/256/Very_Basic/search-256.png"
-        clothes.iconUrl = R.drawable.product_cat_clothes.getDrawablePath(ctx)
-        //endregion
-
-        //region Shops
-        val silpo = it.createObject(Shop::class)
-        silpo.name = "Сильпо"
-
-        val atb = it.createObject(Shop::class)
-        atb.name = "АТБ"
-        //endregion
-
         val providePrice: (Long, Shop, DateTime, Float, Currency) -> Price = { id, shop, date, value, currency ->
             val priceChange = it.createObject(PriceChange::class)
             priceChange.date = (date - 1.minutes().minutes).toDate()
@@ -72,16 +50,39 @@ fun createDummyPurchases(ctx: Context, realm: Realm) {
         val foodsNames = arrayOf("Картошка", "Мясо", "Молоко", "Рыба", "Помидоры")
         val clothesNames = arrayOf("Штаны", "Свитер", "Пальто", "Шарф", "Рубашка")
 
-//        (0..9).forEach { i ->
-//            providePurchase(
-//                    i.toLong(),
-//                    if (i % 2 == 0) atb else silpo,
-//                    Random().nextInt(10).days().ago(),
-//                    if (i % 2 == 0) foodsNames[i / 2] else clothesNames[i / 2],
-//                    if (i % 2 == 0) food else clothes,
-//                    Random().nextFloat() * 500,
-//                    if (i % 2 == 0) usd else uah
-//            )
-//        }
+        (0..9).forEach { i ->
+            providePurchase(
+                    i.toLong(),
+                    it.where(Shop::class.java).findAll()[i % 2],
+                    Random().nextInt(10).days().ago(),
+                    if (i % 2 == 0) foodsNames[i / 2] else clothesNames[i / 2],
+                    it.where(Category::class.java).findAll()[i % 2],
+                    Random().nextFloat() * 500,
+                    it.where(Currency::class.java).findAll()[i % 2]
+            )
+        }
+    }
+}
+
+fun createDummyCategories(ctx: Context, realm: Realm) {
+    realm.executeTransaction {
+        val food = it.createObject(Category::class)
+        food.name = "Food"
+        food.iconUrl = R.drawable.product_cat_food.getDrawablePath(ctx)
+
+        val clothes = it.createObject(Category::class)
+        clothes.name = "Clothes"
+//            clothes.iconUrl = "https://api.icons8.com/download/c5c8b5ba35e008ea471e9a53c5fa74c03ef6e78c/iOS7/PNG/256/Very_Basic/search-256.png"
+        clothes.iconUrl = R.drawable.product_cat_clothes.getDrawablePath(ctx)
+    }
+}
+
+fun createDummyShops(ctx: Context, realm: Realm) {
+    realm.executeTransaction {
+        val silpo = it.createObject(Shop::class)
+        silpo.name = "Сильпо"
+
+        val atb = it.createObject(Shop::class)
+        atb.name = "АТБ"
     }
 }

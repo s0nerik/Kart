@@ -19,13 +19,18 @@ import kotlin.reflect.KClass
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-fun initDatabase(ctx: Context, isDebug: Boolean) {
+fun initDatabase(ctx: Context, isDebug: Boolean = false, removeOldData: Boolean = false, dummyShops: Boolean = false, dummyCategories: Boolean = false, dummyPurchases: Boolean = false) {
     Realm.getDefaultInstance().use {
-        if (isDebug)
+        if (isDebug && removeOldData)
             it.executeTransaction(Realm::deleteAll)
 
         createCurrenciesIfNeeded(it)
-        createDummyPurchases(ctx, it)
+
+        if (isDebug) {
+            if (dummyShops) createDummyShops(ctx, it)
+            if (dummyCategories) createDummyCategories(ctx, it)
+            if (dummyPurchases && dummyShops && dummyCategories) createDummyPurchases(ctx, it)
+        }
     }
 }
 

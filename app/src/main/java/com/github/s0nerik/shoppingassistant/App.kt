@@ -33,7 +33,7 @@ open class App : Application() {
                         .deleteRealmIfMigrationNeeded()
                         .build()
         )
-        initDatabase(this, true)
+        initDatabase(this, true, true, true, true, true)
         configureGlide()
         configureTimber()
     }

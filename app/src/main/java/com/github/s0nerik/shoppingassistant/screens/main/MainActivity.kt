@@ -12,9 +12,9 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivityViewModel(private val activity: MainActivity) {
-    private val dashboardFragment by lazy { DashboardFragment() }
-    private val historyFragment by lazy { HistoryFragment() }
-    private val cartFragment by lazy { CartFragment() }
+    val dashboardFragment by lazy { DashboardFragment() }
+    val historyFragment by lazy { HistoryFragment() }
+    val cartFragment by lazy { CartFragment() }
 
     init {
         activity.bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected)
@@ -40,7 +40,7 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
         binding.vm = MainActivityViewModel(this)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, DashboardFragment())
+                .replace(R.id.container, binding.vm.dashboardFragment)
                 .commit()
     }
 
