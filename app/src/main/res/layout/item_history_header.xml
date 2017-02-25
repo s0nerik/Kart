@@ -10,12 +10,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
         android:textAppearance="@style/MaterialTypography.Regular.Body2"
         android:textColor="@color/textColorPrimary"
         android:text='@{item.readableDate, default=December_12}'
-        android:background="#fff"
-        android:elevation="1dp"
+        android:elevation="0dp"
         />
 </layout>

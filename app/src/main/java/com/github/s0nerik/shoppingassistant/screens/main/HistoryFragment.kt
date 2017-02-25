@@ -27,7 +27,10 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initHistory()
+    }
 
+    private fun initHistory() {
         loadHistoryItems()
 
         LastAdapter.with(historyItems, BR.item)
@@ -39,6 +42,9 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
                     }
                 }
                 .into(recycler)
+
+        recycler.isNestedScrollingEnabled = false
+        recycler.setHasFixedSize(true)
     }
 
     private fun loadHistoryItems() {
