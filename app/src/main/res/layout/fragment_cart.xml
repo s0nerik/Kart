@@ -15,15 +15,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#fff"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_purchase"
+            />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/plus"
+            android:tint="@color/material_color_white"
+            app:fabSize="normal"
             />
     </RelativeLayout>
 </layout>

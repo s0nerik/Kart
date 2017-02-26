@@ -4,6 +4,7 @@
         <!--<item name="android:navigationBarColor">@color/colorPrimaryDarkShaded</item>-->
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowBackground">@color/material_color_grey_100</item>
     </style>
 
     <style name="AppTheme.CreatePurchaseActivity" parent="AppTheme.SemiTransparent">
