@@ -67,7 +67,9 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
             ).toAnimation().setInterpolator(AccelerateDecelerateInterpolator()).setDuration(500).start()
 
             ExpectAnim().expect(recentsCard).toBe(outOfScreen(Gravity.BOTTOM), alpha(0f)).toAnimation().setNow()
+
             await(Observable.timer(350, TimeUnit.MILLISECONDS))
+
             ExpectAnim().expect(recentsCard).toBe(
                     atItsOriginalPosition(),
                     alpha(1f)

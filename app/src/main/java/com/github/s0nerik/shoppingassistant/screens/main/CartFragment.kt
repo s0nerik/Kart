@@ -11,7 +11,9 @@ import com.github.s0nerik.shoppingassistant.currentCart
 import com.github.s0nerik.shoppingassistant.databinding.FragmentCartBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.appearScaleIn
+import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import kotlinx.android.synthetic.main.fragment_cart.*
+import org.jetbrains.anko.support.v4.startActivity
 
 /**
  * Created by Alex on 12/25/2016.
@@ -20,6 +22,10 @@ import kotlinx.android.synthetic.main.fragment_cart.*
  */
 class CartViewModel(val f: CartFragment) {
     val cart = currentCart
+
+    fun createNewPurchase() {
+        f.startActivity<CreatePurchaseActivity>()
+    }
 }
 
 class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_cart) {

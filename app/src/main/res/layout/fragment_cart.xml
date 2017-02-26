@@ -35,6 +35,7 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/plus"
             android:tint="@color/material_color_white"
+            android:onClick="@{() -> vm.createNewPurchase()}"
             app:fabSize="normal"
             />
     </RelativeLayout>

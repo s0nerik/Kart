@@ -76,14 +76,21 @@ class CreatePurchaseViewModel(
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
 
     private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
-            .onClick { currentCart.add(Purchase(item = binding.item, date = Date())) }
+            .onClick {
+                currentCart.add(Purchase(item = binding.item, date = Date()))
+                finish()
+            }
     private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
-            .onClick { currentCart.add(Purchase(item = binding.item, date = Date())) }
+            .onClick {
+                currentCart.add(Purchase(item = binding.item, date = Date()))
+                finish()
+            }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = CreatePurchaseViewModel(this, realm)
         initData()
+        scrollView.applyWrongNestedScrollWorkaround()
     }
 
     private fun initData() {
