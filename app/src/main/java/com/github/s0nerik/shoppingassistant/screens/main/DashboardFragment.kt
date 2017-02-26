@@ -13,6 +13,7 @@ import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
+import com.github.s0nerik.shoppingassistant.ext.appearScaleIn
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
@@ -42,6 +43,11 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
         initRecents()
         initDistributionChart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fab.appearScaleIn()
     }
 
     private fun initRecents() {
