@@ -15,6 +15,7 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.TextView
+import com.github.s0nerik.shoppingassistant.ext.safe
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.dip
 import java.lang.ref.WeakReference

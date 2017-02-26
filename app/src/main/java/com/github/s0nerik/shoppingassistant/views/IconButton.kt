@@ -1,8 +1,8 @@
 package com.github.s0nerik.shoppingassistant.views
 
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.getColor
-import com.github.s0nerik.shoppingassistant.getDimenPixelOffset
+import com.github.s0nerik.shoppingassistant.ext.getColor
+import com.github.s0nerik.shoppingassistant.ext.getDimenPixelOffset
 
 /**
  * Created by Alex on 1/25/2017.

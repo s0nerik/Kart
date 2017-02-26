@@ -1,4 +1,4 @@
-package com.github.s0nerik.shoppingassistant
+package com.github.s0nerik.shoppingassistant.ext
 
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList

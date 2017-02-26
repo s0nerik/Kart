@@ -1,9 +1,10 @@
-package com.github.s0nerik.shoppingassistant
+package com.github.s0nerik.shoppingassistant.ext
 
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
+import com.github.s0nerik.shoppingassistant.App
 
 /**
  * Created by Alex on 1/21/2017.

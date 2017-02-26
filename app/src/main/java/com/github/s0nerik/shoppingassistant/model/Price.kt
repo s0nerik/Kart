@@ -1,7 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.getString
+import com.github.s0nerik.shoppingassistant.ext.getString
 import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmList
 import io.realm.RealmObject

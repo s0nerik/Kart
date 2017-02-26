@@ -14,6 +14,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
+import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
@@ -25,6 +26,7 @@ import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
 import rx_activity_result.RxActivityResult
+import java.util.*
 
 class CreatePurchaseViewModel(
         private val activity: CreatePurchaseActivity,
@@ -73,6 +75,11 @@ class CreatePurchaseViewModel(
 
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
 
+    private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
+            .onClick { currentCart.add(Purchase(item = binding.item, date = Date())) }
+    private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
+            .onClick { currentCart.add(Purchase(item = binding.item, date = Date())) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = CreatePurchaseViewModel(this, realm)
@@ -87,7 +94,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initFavorites() {
         LastAdapter.with(binding.vm.favorites, BR.item)
-                .type { Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal) }
+                .type { horizontalItemAdapterType }
                 .into(rvFavorites)
 
         rvFavorites.isNestedScrollingEnabled = false
@@ -96,7 +103,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initFrequents() {
         LastAdapter.with(binding.vm.frequents, BR.item)
-                .type { Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item) }
+                .type { itemAdapterType }
                 .into(rvFrequents)
 
         rvFrequents.isNestedScrollingEnabled = false
@@ -104,7 +111,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private fun initSearchResults() {
         LastAdapter.with(binding.vm.filteredSearchResults, BR.item)
-                .type { Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item) }
+                .type { itemAdapterType }
                 .into(rvSearchResults)
 
         rvSearchResults.isNestedScrollingEnabled = false
@@ -120,6 +127,8 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                         binding.vm.items.add(item!!)
                         if (item!!.isFavorite)
                             binding.vm.favorites.add(item)
+
+                        currentCart.add(this)
                     }
                 }
     }

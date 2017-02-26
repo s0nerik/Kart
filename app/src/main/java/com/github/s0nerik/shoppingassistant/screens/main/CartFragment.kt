@@ -10,6 +10,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.currentCart
 import com.github.s0nerik.shoppingassistant.databinding.FragmentCartBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
+import com.github.s0nerik.shoppingassistant.ext.appearScaleIn
 import kotlinx.android.synthetic.main.fragment_cart.*
 
 /**
@@ -32,11 +33,16 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
     }
 
     private fun initCart() {
-        LastAdapter.with(vm.cart.purchases, BR.item)
+        LastAdapter.with(vm.cart.purchasesObservableList, BR.item)
                 .type { Type<ItemPurchaseBinding>(R.layout.item_purchase) }
                 .into(recycler)
 
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fab.appearScaleIn()
     }
 }
