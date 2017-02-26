@@ -2,7 +2,13 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.view.Gravity
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import co.metalab.asyncawait.async
+import co.metalab.asyncawait.await
+import com.github.florent37.expectanim.ExpectAnim
+import com.github.florent37.expectanim.core.Expectations.*
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -18,6 +24,8 @@ import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActiv
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.startActivity
+import rx.Observable
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Alex on 12/25/2016.
@@ -47,7 +55,28 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     override fun onResume() {
         super.onResume()
-        fab.appearScaleIn()
+        animateAppear()
+    }
+
+    private fun animateAppear() {
+        async {
+            ExpectAnim().expect(statsCard).toBe(outOfScreen(Gravity.BOTTOM), alpha(0f)).toAnimation().setNow()
+            ExpectAnim().expect(statsCard).toBe(
+                    atItsOriginalPosition(),
+                    alpha(1f)
+            ).toAnimation().setInterpolator(AccelerateDecelerateInterpolator()).setDuration(500).start()
+
+            ExpectAnim().expect(recentsCard).toBe(outOfScreen(Gravity.BOTTOM), alpha(0f)).toAnimation().setNow()
+            await(Observable.timer(350, TimeUnit.MILLISECONDS))
+            ExpectAnim().expect(recentsCard).toBe(
+                    atItsOriginalPosition(),
+                    alpha(1f)
+            ).toAnimation().setInterpolator(AccelerateDecelerateInterpolator()).setDuration(500).start()
+
+            await(Observable.timer(200, TimeUnit.MILLISECONDS))
+
+            fab.appearScaleIn()
+        }
     }
 
     private fun initRecents() {
