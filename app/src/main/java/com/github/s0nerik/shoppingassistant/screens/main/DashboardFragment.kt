@@ -80,11 +80,13 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
             val statsSet = TransitionSet()
                     .addTransition(Slide(Gravity.BOTTOM))
+                    .addTransition(Fade())
                     .addTarget(statsCard)
                     .setDuration(200)
 
             val recentsSet = TransitionSet()
                     .addTransition(Slide(Gravity.BOTTOM))
+                    .addTransition(Fade())
                     .addTarget(recentsCard)
                     .setDuration(200)
                     .setStartDelay(100)

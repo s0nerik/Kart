@@ -14,7 +14,7 @@ fun <T> WeakReference<T>.safe(action: T.() -> Unit) {
     this.get()?.action()
 }
 
-fun <T> observableListOf(collection: Collection<T>): ObservableList<T> {
+fun <T> observableListOf(collection: Collection<T> = emptyList()): ObservableList<T> {
     val list = ObservableArrayList<T>()
     list.addAll(collection)
     return list
