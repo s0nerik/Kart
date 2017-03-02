@@ -10,7 +10,6 @@ import android.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
 import co.metalab.asyncawait.async
-import co.metalab.asyncawait.await
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -22,14 +21,11 @@ import com.github.s0nerik.shoppingassistant.anim.Scale
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
-import com.github.s0nerik.shoppingassistant.ext.onMainThread
+import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
-import com.jakewharton.rxbinding.view.preDraws
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.startActivity
-import rx.android.schedulers.AndroidSchedulers
-import rx.functions.Func0
 
 /**
  * Created by Alex on 12/25/2016.
@@ -68,7 +64,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
             recentsCard.visibility = View.INVISIBLE
             fab.visibility = View.INVISIBLE
 
-            await(view!!.preDraws(Func0 { true }).onMainThread())
+            awaitPreDraw(root)
 
             scrollView.applyWrongNestedScrollWorkaround()
 

@@ -9,7 +9,6 @@ import android.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
 import co.metalab.asyncawait.async
-import co.metalab.asyncawait.await
 import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
@@ -20,14 +19,12 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
-import com.github.s0nerik.shoppingassistant.ext.onMainThread
+import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.jakewharton.rxbinding.view.preDraws
 import io.realm.PurchaseRealmProxy
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
-import rx.functions.Func0
 
 /**
  * Created by Alex on 12/27/2016.
@@ -75,7 +72,9 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     private fun animateAppear() {
         async {
             recycler.visibility = View.INVISIBLE
-            await(root.preDraws(Func0 { true }).onMainThread())
+
+            awaitPreDraw(root)
+
             val set = TransitionSet()
                     .addTransition(Slide(Gravity.BOTTOM))
                     .addTransition(Fade())
