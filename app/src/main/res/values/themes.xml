@@ -8,6 +8,6 @@
     </style>
 
     <style name="AppTheme.CreatePurchaseActivity" parent="AppTheme.SemiTransparent">
-
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 </resources>
