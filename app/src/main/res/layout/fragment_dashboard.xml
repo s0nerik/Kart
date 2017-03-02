@@ -11,6 +11,7 @@
             />
     </data>
     <RelativeLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -112,6 +113,8 @@
             android:src="@drawable/cart_plus"
             android:tint="@color/material_color_white"
             android:onClick='@{() -> vm.onCreateNewPurchase()}'
+            android:visibility="invisible"
+            tools:visibility="visible"
             app:fabSize="normal"
             />
     </RelativeLayout>

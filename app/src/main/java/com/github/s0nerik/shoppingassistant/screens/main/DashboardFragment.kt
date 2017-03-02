@@ -2,13 +2,15 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.animation.FastOutSlowInInterpolator
+import android.transition.Fade
+import android.transition.Slide
+import android.transition.TransitionManager
+import android.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import co.metalab.asyncawait.async
 import co.metalab.asyncawait.await
-import com.github.florent37.expectanim.ExpectAnim
-import com.github.florent37.expectanim.core.Expectations.*
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -16,16 +18,17 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
+import com.github.s0nerik.shoppingassistant.anim.Scale
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
-import com.github.s0nerik.shoppingassistant.ext.appearScaleIn
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
+import com.jakewharton.rxbinding.view.preDraws
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.startActivity
-import rx.Observable
-import java.util.concurrent.TimeUnit
+import rx.android.schedulers.AndroidSchedulers
+import rx.functions.Func0
 
 /**
  * Created by Alex on 12/25/2016.
@@ -60,24 +63,42 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     private fun animateAppear() {
         async {
-            ExpectAnim().expect(statsCard).toBe(outOfScreen(Gravity.BOTTOM), alpha(0f)).toAnimation().setNow()
-            ExpectAnim().expect(statsCard).toBe(
-                    atItsOriginalPosition(),
-                    alpha(1f)
-            ).toAnimation().setInterpolator(AccelerateDecelerateInterpolator()).setDuration(500).start()
+            statsCard.visibility = View.INVISIBLE
+            recentsCard.visibility = View.INVISIBLE
+            fab.visibility = View.INVISIBLE
 
-            ExpectAnim().expect(recentsCard).toBe(outOfScreen(Gravity.BOTTOM), alpha(0f)).toAnimation().setNow()
+            await(view!!.preDraws(Func0 { true }).subscribeOn(AndroidSchedulers.mainThread()))
 
-            await(Observable.timer(350, TimeUnit.MILLISECONDS))
+            scrollView.applyWrongNestedScrollWorkaround()
 
-            ExpectAnim().expect(recentsCard).toBe(
-                    atItsOriginalPosition(),
-                    alpha(1f)
-            ).toAnimation().setInterpolator(AccelerateDecelerateInterpolator()).setDuration(500).start()
+            val fabSet = TransitionSet()
+                    .addTransition(Scale(0.7f))
+                    .addTransition(Fade())
+                    .addTarget(fab)
+                    .setDuration(200)
+                    .setStartDelay(300)
 
-            await(Observable.timer(200, TimeUnit.MILLISECONDS))
+            val statsSet = TransitionSet()
+                    .addTransition(Slide(Gravity.BOTTOM))
+                    .addTarget(statsCard)
+                    .setDuration(200)
 
-            fab.appearScaleIn()
+            val recentsSet = TransitionSet()
+                    .addTransition(Slide(Gravity.BOTTOM))
+                    .addTarget(recentsCard)
+                    .setDuration(200)
+                    .setStartDelay(100)
+
+            val finalSet = TransitionSet()
+                    .addTransition(fabSet)
+                    .addTransition(statsSet)
+                    .addTransition(recentsSet)
+                    .setInterpolator(FastOutSlowInInterpolator())
+
+            TransitionManager.beginDelayedTransition(root, finalSet)
+            fab.visibility = View.VISIBLE
+            statsCard.visibility = View.VISIBLE
+            recentsCard.visibility = View.VISIBLE
         }
     }
 
