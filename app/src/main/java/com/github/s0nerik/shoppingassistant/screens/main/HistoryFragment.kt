@@ -20,13 +20,13 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
+import com.github.s0nerik.shoppingassistant.ext.onMainThread
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.jakewharton.rxbinding.view.preDraws
 import io.realm.PurchaseRealmProxy
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
-import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Func0
 
 /**
@@ -75,7 +75,7 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     private fun animateAppear() {
         async {
             recycler.visibility = View.INVISIBLE
-            await(root.preDraws(Func0 { true }).subscribeOn(AndroidSchedulers.mainThread()))
+            await(root.preDraws(Func0 { true }).onMainThread())
             val set = TransitionSet()
                     .addTransition(Slide(Gravity.BOTTOM))
                     .addTransition(Fade())

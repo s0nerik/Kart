@@ -22,6 +22,7 @@ import com.github.s0nerik.shoppingassistant.anim.Scale
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
+import com.github.s0nerik.shoppingassistant.ext.onMainThread
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import com.jakewharton.rxbinding.view.preDraws
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -67,7 +68,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
             recentsCard.visibility = View.INVISIBLE
             fab.visibility = View.INVISIBLE
 
-            await(view!!.preDraws(Func0 { true }).subscribeOn(AndroidSchedulers.mainThread()))
+            await(view!!.preDraws(Func0 { true }).onMainThread())
 
             scrollView.applyWrongNestedScrollWorkaround()
 

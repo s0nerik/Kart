@@ -1,6 +1,7 @@
 package com.github.s0nerik.shoppingassistant.ext
 
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
 
 /**
  * Created by Alex on 2/21/2017.
@@ -13,3 +14,7 @@ val <T> Observable<T>.lastEmission: T
 
 val <T> Observable<T>.firstEmission: T
     get() = toBlocking().first()
+
+fun <T> Observable<T>.onMainThread(): Observable<T> {
+    return subscribeOn(AndroidSchedulers.mainThread())
+}
