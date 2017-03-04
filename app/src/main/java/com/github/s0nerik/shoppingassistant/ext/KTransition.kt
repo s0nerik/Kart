@@ -4,6 +4,7 @@ import android.animation.TimeInterpolator
 import android.support.annotation.IdRes
 import android.transition.Transition
 import android.transition.TransitionSet
+import android.view.View
 
 /**
  * Created by Alex on 3/2/2017.
@@ -30,39 +31,27 @@ class KTransition private constructor(
         }
 
     companion object {
-        fun new(init: Builder.() -> Unit): Transition = Builder(init).build().transition
+        fun new(transition: Transition, init: Builder.() -> Unit): Transition = Builder(transition, init).build().transition
     }
 
-    class Builder private constructor() {
+    class Builder private constructor(val transition: Transition) {
 
-        constructor(init: Builder.() -> Unit) : this() {
+        constructor(transition: Transition, init: Builder.() -> Unit) : this(transition) {
             init()
         }
 
         val viewIds = mutableListOf<Int>()
-        var viewId: Int = 0
-            set(value) {
-                viewIds.clear()
-                viewIds += value
-            }
-        lateinit var transition: Transition
         var duration: Long? = null
         var delay: Long? = null
         var interpolator: TimeInterpolator? = null
 
-//        fun viewIds(init: Builder.() -> List<Int>) = apply {
-//            viewIds.clear()
-//            viewIds += init()
-//        }
-//        fun viewId(init: Builder.() -> Int) = apply {
-//            viewIds.clear()
-//            viewIds += init()
-//        }
-//
-//        fun transition(init: Builder.() -> Transition) = apply { transition = init() }
-//        fun duration(init: Builder.() -> Long) = apply { duration = init() }
-//        fun delay(init: Builder.() -> Long) = apply { delay = init() }
-//        fun interpolator(init: Builder.() -> TimeInterpolator) = apply { interpolator = init() }
+        fun views(vararg ids: Int) {
+            ids.forEach { viewIds += it }
+        }
+
+        fun views(vararg views: View) {
+            views.forEach { viewIds += it.id }
+        }
 
         fun build() = KTransition(this)
     }
@@ -108,16 +97,29 @@ class KTransitionSet private constructor(
         }
 
         val viewIds = mutableListOf<Int>()
-        var viewId: Int = 0
-            set(value) {
-                viewIds.clear()
-                viewIds += value
-            }
         val transitions = mutableListOf<Transition>()
         var duration: Long? = null
         var delay: Long? = null
         var interpolator: TimeInterpolator? = null
         var ordering: Ordering? = null
+
+        fun view(id: Int) = views(id)
+        fun views(vararg ids: Int) {
+            ids.forEach { viewIds += it }
+        }
+
+        fun view(view: View) = views(view)
+        fun views(vararg views: View) {
+            views.forEach { viewIds += it.id }
+        }
+
+        fun transition(transition: Transition, init: KTransition.Builder.() -> Unit = {}) {
+            transitions += KTransition.new(transition, init)
+        }
+
+        fun transitions(vararg t: Transition) {
+            transitions += t
+        }
 
         fun build() = KTransitionSet(this)
     }

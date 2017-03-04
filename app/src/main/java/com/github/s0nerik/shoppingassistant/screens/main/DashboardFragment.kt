@@ -18,7 +18,6 @@ import com.github.s0nerik.shoppingassistant.anim.Scale
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
-import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -44,28 +43,28 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
         get() = recentPurchases(realm)
 
     init {
-        val statsFadeIn = KTransitionSet.new { viewId = R.id.statsCard; duration = 200
-            transitions += KTransition.new { transition = Slide(Gravity.BOTTOM) }
-            transitions += KTransition.new { transition = Fade(Fade.IN) }
+        val statsFadeIn = KTransitionSet.new { view(R.id.statsCard); duration = 200
+            transition(Slide(Gravity.BOTTOM))
+            transition(Fade(Fade.IN))
         }
 
-        val recentsFadeIn = KTransitionSet.new { viewId = R.id.recentsCard; duration = 200; delay = 100
-            transitions += KTransition.new { transition = Slide(Gravity.BOTTOM) }
-            transitions += KTransition.new { transition = Fade(Fade.IN) }
+        val recentsFadeIn = KTransitionSet.new { view(R.id.recentsCard); duration = 200; delay = 100
+            transition(Slide(Gravity.BOTTOM))
+            transition(Fade(Fade.IN))
         }
 
-        val fabFadeIn = KTransitionSet.new { viewId = R.id.fab; duration = 200; delay = 300
-            transitions += KTransition.new { transition = Scale(0.7f) }
-            transitions += KTransition.new { transition = Fade(Fade.IN) }
+        val fabFadeIn = KTransitionSet.new { view(R.id.fab); duration = 200; delay = 300
+            transition(Scale(0.7f))
+            transition(Fade(Fade.IN))
         }
 
         val enterSet = KTransitionSet.new { interpolator = FastOutSlowInInterpolator()
-            transitions += arrayOf(statsFadeIn, recentsFadeIn, fabFadeIn)
+            transitions(statsFadeIn, recentsFadeIn, fabFadeIn)
         }
 
         val finalEnterSet = KTransitionSet.new { ordering = KTransitionSet.Ordering.SEQUENTIAL
-            transitions += KTransition.new { transition = Fade(Fade.OUT); duration = 0; viewIds += arrayOf(R.id.fab, R.id.recentsCard, R.id.statsCard) }
-            transitions += enterSet
+            transition(Fade(Fade.OUT)) { duration = 0; views(R.id.fab, R.id.recentsCard, R.id.statsCard) }
+            transitions(enterSet)
         }
 
         enterTransition = finalEnterSet
