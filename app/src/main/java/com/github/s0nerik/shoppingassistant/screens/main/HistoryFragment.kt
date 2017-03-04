@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
-import android.transition.TransitionManager
-import android.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
-import co.metalab.asyncawait.async
 import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
@@ -19,7 +16,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
-import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
+import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.PurchaseRealmProxy
@@ -33,6 +30,26 @@ import kotlinx.android.synthetic.main.fragment_history.*
  */
 class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragment_history) {
     private val historyItems = observableListOf<Any>()
+
+    init {
+        enterTransition = KTransitionSet.new {
+            ordering(KTransitionSet.Ordering.SEQUENTIAL)
+            transition(Fade(Fade.OUT)) { duration(0) }
+            transitionSet {
+                ordering(KTransitionSet.Ordering.TOGETHER)
+                duration(200)
+                interpolator(FastOutSlowInInterpolator())
+                transition(Slide(Gravity.BOTTOM))
+                transition(Fade(Fade.IN))
+            }
+        }
+
+        exitTransition = KTransitionSet.new {
+            duration(200)
+            interpolator(FastOutSlowInInterpolator())
+            transition(Fade(Fade.OUT))
+        }
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +70,7 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     override fun onResume() {
         super.onResume()
         initHistory()
-        animateAppear()
+//        animateAppear()
     }
 
     private fun initHistory() {
@@ -69,20 +86,20 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
         }
     }
 
-    private fun animateAppear() {
-        async {
-            recycler.visibility = View.INVISIBLE
-
-            awaitPreDraw(root)
-
-            val set = TransitionSet()
-                    .addTransition(Slide(Gravity.BOTTOM))
-                    .addTransition(Fade())
-                    .setInterpolator(FastOutSlowInInterpolator())
-                    .setDuration(200)
-
-            TransitionManager.beginDelayedTransition(root, set)
-            recycler.visibility = View.VISIBLE
-        }
-    }
+//    private fun animateAppear() {
+//        async {
+//            recycler.visibility = View.INVISIBLE
+//
+//            awaitPreDraw(root)
+//
+//            val set = TransitionSet()
+//                    .addTransition(Slide(Gravity.BOTTOM))
+//                    .addTransition(Fade())
+//                    .setInterpolator(FastOutSlowInInterpolator())
+//                    .setDuration(200)
+//
+//            TransitionManager.beginDelayedTransition(root, set)
+//            recycler.visibility = View.VISIBLE
+//        }
+//    }
 }
