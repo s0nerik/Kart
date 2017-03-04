@@ -2,7 +2,6 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
 import android.view.Gravity
@@ -43,28 +42,35 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
         get() = recentPurchases(realm)
 
     init {
-        val statsFadeIn = KTransitionSet.new { view(R.id.statsCard); duration = 200
-            transition(Slide(Gravity.BOTTOM))
-            transition(Fade(Fade.IN))
-        }
-
-        val recentsFadeIn = KTransitionSet.new { view(R.id.recentsCard); duration = 200; delay = 100
-            transition(Slide(Gravity.BOTTOM))
-            transition(Fade(Fade.IN))
-        }
-
-        val fabFadeIn = KTransitionSet.new { view(R.id.fab); duration = 200; delay = 300
-            transition(Scale(0.7f))
-            transition(Fade(Fade.IN))
-        }
-
-        val enterSet = KTransitionSet.new { interpolator = FastOutSlowInInterpolator()
-            transitions(statsFadeIn, recentsFadeIn, fabFadeIn)
-        }
-
-        val finalEnterSet = KTransitionSet.new { ordering = KTransitionSet.Ordering.SEQUENTIAL
-            transition(Fade(Fade.OUT)) { duration = 0; views(R.id.fab, R.id.recentsCard, R.id.statsCard) }
-            transitions(enterSet)
+        val finalEnterSet = KTransitionSet.new {
+            ordering(KTransitionSet.Ordering.SEQUENTIAL)
+            transition(Fade(Fade.OUT)) {
+                duration(0)
+                views(R.id.fab, R.id.recentsCard, R.id.statsCard)
+            }
+            transitionSet {
+                ordering(KTransitionSet.Ordering.TOGETHER)
+                transitionSet {
+                    view(R.id.statsCard)
+                    duration(200)
+                    transition(Slide(Gravity.BOTTOM))
+                    transition(Fade(Fade.IN))
+                }
+                transitionSet {
+                    view(R.id.recentsCard)
+                    duration(200)
+                    delay(100)
+                    transition(Slide(Gravity.BOTTOM))
+                    transition(Fade(Fade.IN))
+                }
+                transitionSet {
+                    view(R.id.fab)
+                    duration(200)
+                    delay(300)
+                    transition(Scale(0.7f))
+                    transition(Fade(Fade.IN))
+                }
+            }
         }
 
         enterTransition = finalEnterSet

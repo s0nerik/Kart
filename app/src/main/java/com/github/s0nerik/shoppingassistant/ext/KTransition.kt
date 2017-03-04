@@ -1,7 +1,6 @@
 package com.github.s0nerik.shoppingassistant.ext
 
 import android.animation.TimeInterpolator
-import android.support.annotation.IdRes
 import android.transition.Transition
 import android.transition.TransitionSet
 import android.view.View
@@ -11,18 +10,20 @@ import android.view.View
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class KTransition private constructor(
-        @IdRes val viewIds: List<Int>,
-        val innerTransition: Transition,
-        val duration: Long?,
-        val delay: Long?,
-        val interpolator: TimeInterpolator?
-) {
-    private constructor(builder: Builder) : this(builder.viewIds, builder.transition, builder.duration, builder.delay, builder.interpolator)
 
-    private val transition: Transition
+@DslMarker
+annotation class TransitionMarker
+
+@TransitionMarker
+abstract class KBaseTransition<out T : Transition>(
+        protected val viewIds: MutableSet<Int> = mutableSetOf(),
+        protected var duration: Long? = null,
+        protected var delay: Long? = null,
+        protected var interpolator: TimeInterpolator? = null
+) {
+    protected val transition: T
         get () {
-            val t = innerTransition.clone()
+            val t = provideTransition()
             duration?.let { t.duration = it }
             delay?.let { t.startDelay = it }
             interpolator?.let { t.interpolator = it }
@@ -30,97 +31,88 @@ class KTransition private constructor(
             return t
         }
 
-    companion object {
-        fun new(transition: Transition, init: Builder.() -> Unit): Transition = Builder(transition, init).build().transition
+    fun duration(d: Long) {
+        duration = d
     }
 
-    class Builder private constructor(val transition: Transition) {
+    fun delay(d: Long) {
+        delay = d
+    }
 
-        constructor(transition: Transition, init: Builder.() -> Unit) : this(transition) {
-            init()
-        }
+    fun interpolator(i: TimeInterpolator) {
+        interpolator = i
+    }
 
-        val viewIds = mutableListOf<Int>()
-        var duration: Long? = null
-        var delay: Long? = null
-        var interpolator: TimeInterpolator? = null
+    fun view(id: Int) = views(id)
+    fun views(vararg ids: Int) {
+        ids.forEach { viewIds += it }
+    }
 
-        fun views(vararg ids: Int) {
-            ids.forEach { viewIds += it }
-        }
+    fun view(view: View) = views(view)
+    fun views(vararg views: View) {
+        views.forEach { viewIds += it.id }
+    }
 
-        fun views(vararg views: View) {
-            views.forEach { viewIds += it.id }
-        }
+    protected abstract fun provideTransition(): T
+}
 
-        fun build() = KTransition(this)
+class KTransition private constructor(
+        val innerTransition: Transition,
+        builder: KTransition.() -> Unit
+) : KBaseTransition<Transition>() {
+
+    init {
+        @Suppress("UNUSED_EXPRESSION")
+        builder()
+    }
+
+    override fun provideTransition() = innerTransition.clone()
+
+    companion object {
+        fun new(transition: Transition, init: KTransition.() -> Unit = {}): Transition = KTransition(transition, init).transition
     }
 }
 
-class KTransitionSet private constructor(
-        @IdRes val viewIds: List<Int>,
-        val innerTransitions: List<Transition>,
-        val duration: Long?,
-        val delay: Long?,
-        val interpolator: TimeInterpolator?,
-        val ordering: Ordering?
-) {
+class KTransitionSet private constructor() : KBaseTransition<TransitionSet>() {
     enum class Ordering { SEQUENTIAL, TOGETHER }
 
-    private constructor(builder: Builder) : this(builder.viewIds, builder.transitions, builder.duration, builder.delay, builder.interpolator, builder.ordering)
-
-    private val transition: TransitionSet
-        get () {
-            val t = TransitionSet()
-            innerTransitions.forEach { t.addTransition(it) }
-            duration?.let { t.duration = it }
-            delay?.let { t.startDelay = it }
-            interpolator?.let { t.interpolator = it }
-            viewIds.forEach { t.addTarget(it) }
-            ordering?.let {
-                t.ordering = when (it) {
-                    KTransitionSet.Ordering.SEQUENTIAL -> TransitionSet.ORDERING_SEQUENTIAL
-                    KTransitionSet.Ordering.TOGETHER -> TransitionSet.ORDERING_TOGETHER
-                }
-            }
-            return t
-        }
-
-    companion object {
-        fun new(init: Builder.() -> Unit): TransitionSet = Builder(init).build().transition
+    private constructor(builder: KTransitionSet.() -> Unit) : this() {
+        @Suppress("UNUSED_EXPRESSION")
+        builder()
     }
 
-    class Builder private constructor() {
+    private val innerTransitions = mutableSetOf<Transition>()
+    private var ordering: Ordering? = null
 
-        constructor(init: Builder.() -> Unit) : this() {
-            init()
+    fun ordering(o: Ordering) {
+        ordering = o
+    }
+
+    fun transition(transition: Transition, init: KTransition.() -> Unit = {}) {
+        innerTransitions += KTransition.new(transition, init)
+    }
+
+    fun transitions(vararg transitions: Transition) {
+        innerTransitions += transitions
+    }
+
+    fun transitionSet(init: KTransitionSet.() -> Unit) {
+        innerTransitions += KTransitionSet.new(init)
+    }
+
+    override fun provideTransition(): TransitionSet {
+        val t = TransitionSet()
+        innerTransitions.forEach { t.addTransition(it) }
+        ordering?.let {
+            t.ordering = when (it) {
+                KTransitionSet.Ordering.SEQUENTIAL -> TransitionSet.ORDERING_SEQUENTIAL
+                KTransitionSet.Ordering.TOGETHER -> TransitionSet.ORDERING_TOGETHER
+            }
         }
+        return t
+    }
 
-        val viewIds = mutableListOf<Int>()
-        val transitions = mutableListOf<Transition>()
-        var duration: Long? = null
-        var delay: Long? = null
-        var interpolator: TimeInterpolator? = null
-        var ordering: Ordering? = null
-
-        fun view(id: Int) = views(id)
-        fun views(vararg ids: Int) {
-            ids.forEach { viewIds += it }
-        }
-
-        fun view(view: View) = views(view)
-        fun views(vararg views: View) {
-            views.forEach { viewIds += it.id }
-        }
-
-        fun transition(transition: Transition, init: KTransition.Builder.() -> Unit = {}) {
-            transitions += KTransition.new(transition, init)
-        }
-
-        fun transitions(vararg t: Transition) {
-            transitions += t
-        }
-
-        fun build() = KTransitionSet(this)
+    companion object {
+        fun new(init: KTransitionSet.() -> Unit): TransitionSet = KTransitionSet(init).transition
     }
 }
