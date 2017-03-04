@@ -5,11 +5,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
-import android.transition.TransitionManager
-import android.transition.TransitionSet
 import android.view.Gravity
 import android.view.View
-import co.metalab.asyncawait.async
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -21,7 +18,8 @@ import com.github.s0nerik.shoppingassistant.anim.Scale
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
-import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
+import com.github.s0nerik.shoppingassistant.ext.KTransition
+import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
@@ -45,60 +43,40 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     val recentPurchases
         get() = recentPurchases(realm)
 
+    init {
+        val statsFadeIn = KTransitionSet.new { viewId = R.id.statsCard; duration = 200
+            transitions += KTransition.new { transition = Slide(Gravity.BOTTOM) }
+            transitions += KTransition.new { transition = Fade(Fade.IN) }
+        }
+
+        val recentsFadeIn = KTransitionSet.new { viewId = R.id.recentsCard; duration = 200; delay = 100
+            transitions += KTransition.new { transition = Slide(Gravity.BOTTOM) }
+            transitions += KTransition.new { transition = Fade(Fade.IN) }
+        }
+
+        val fabFadeIn = KTransitionSet.new { viewId = R.id.fab; duration = 200; delay = 300
+            transitions += KTransition.new { transition = Scale(0.7f) }
+            transitions += KTransition.new { transition = Fade(Fade.IN) }
+        }
+
+        val enterSet = KTransitionSet.new { interpolator = FastOutSlowInInterpolator()
+            transitions += arrayOf(statsFadeIn, recentsFadeIn, fabFadeIn)
+        }
+
+        val finalEnterSet = KTransitionSet.new { ordering = KTransitionSet.Ordering.SEQUENTIAL
+            transitions += KTransition.new { transition = Fade(Fade.OUT); duration = 0; viewIds += arrayOf(R.id.fab, R.id.recentsCard, R.id.statsCard) }
+            transitions += enterSet
+        }
+
+        enterTransition = finalEnterSet
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = DashboardViewModel(this)
 
         initRecents()
         initDistributionChart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        animateAppear()
-    }
-
-    private fun animateAppear() {
-        async {
-            statsCard.visibility = View.INVISIBLE
-            recentsCard.visibility = View.INVISIBLE
-            fab.visibility = View.INVISIBLE
-
-            awaitPreDraw(root)
-
-            scrollView.applyWrongNestedScrollWorkaround()
-
-            val fabSet = TransitionSet()
-                    .addTransition(Scale(0.7f))
-                    .addTransition(Fade())
-                    .addTarget(fab)
-                    .setDuration(200)
-                    .setStartDelay(300)
-
-            val statsSet = TransitionSet()
-                    .addTransition(Slide(Gravity.BOTTOM))
-                    .addTransition(Fade())
-                    .addTarget(statsCard)
-                    .setDuration(200)
-
-            val recentsSet = TransitionSet()
-                    .addTransition(Slide(Gravity.BOTTOM))
-                    .addTransition(Fade())
-                    .addTarget(recentsCard)
-                    .setDuration(200)
-                    .setStartDelay(100)
-
-            val finalSet = TransitionSet()
-                    .addTransition(fabSet)
-                    .addTransition(statsSet)
-                    .addTransition(recentsSet)
-                    .setInterpolator(FastOutSlowInInterpolator())
-
-            TransitionManager.beginDelayedTransition(root, finalSet)
-            fab.visibility = View.VISIBLE
-            statsCard.visibility = View.VISIBLE
-            recentsCard.visibility = View.VISIBLE
-        }
     }
 
     private fun initRecents() {

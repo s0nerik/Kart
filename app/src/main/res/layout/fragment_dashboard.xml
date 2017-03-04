@@ -113,8 +113,6 @@
             android:src="@drawable/cart_plus"
             android:tint="@color/material_color_white"
             android:onClick='@{() -> vm.onCreateNewPurchase()}'
-            android:visibility="invisible"
-            tools:visibility="visible"
             app:fabSize="normal"
             />
     </RelativeLayout>
