@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
 import android.view.Gravity
@@ -42,8 +43,9 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
         get() = recentPurchases(realm)
 
     init {
-        val finalEnterSet = KTransitionSet.new {
+        enterTransition = KTransitionSet.new {
             ordering(KTransitionSet.Ordering.SEQUENTIAL)
+            interpolator(FastOutSlowInInterpolator())
             transition(Fade(Fade.OUT)) {
                 duration(0)
                 views(R.id.fab, R.id.recentsCard, R.id.statsCard)
@@ -73,7 +75,10 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
             }
         }
 
-        enterTransition = finalEnterSet
+        exitTransition = KTransitionSet.new {
+            interpolator(FastOutSlowInInterpolator())
+            transition(Fade(Fade.OUT)) { duration(200) }
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
