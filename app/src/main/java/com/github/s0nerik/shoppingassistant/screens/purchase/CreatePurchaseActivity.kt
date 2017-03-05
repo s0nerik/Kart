@@ -7,7 +7,6 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.v4.view.animation.FastOutLinearInInterpolator
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
@@ -168,27 +167,10 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     override fun finish() {
         TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
-            transition(Fade(Fade.OUT)) {
-                view(bg)
-                duration(200)
-                delay(300)
-                interpolator(FastOutLinearInInterpolator())
-            }
-
             transitionSet {
-                view(searchCard)
+                views(frequentsCard)
                 duration(200)
-                delay(300)
-                interpolator(FastOutLinearInInterpolator())
-                transition(Fade(Fade.OUT))
-                transition(Slide(Gravity.BOTTOM))
-            }
-
-            transitionSet {
-                view(btnCreateNewProduct)
-                duration(200)
-                delay(200)
-                interpolator(FastOutLinearInInterpolator())
+                interpolator(FastOutSlowInInterpolator())
                 transition(Fade(Fade.OUT))
                 transition(Slide(Gravity.BOTTOM))
             }
@@ -197,28 +179,45 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 views(favoritesCard)
                 duration(200)
                 delay(100)
-                interpolator(FastOutLinearInInterpolator())
+                interpolator(FastOutSlowInInterpolator())
                 transition(Fade(Fade.OUT))
                 transition(Slide(Gravity.BOTTOM))
             }
 
             transitionSet {
-                views(frequentsCard)
+                view(btnCreateNewProduct)
                 duration(200)
-                interpolator(FastOutLinearInInterpolator())
+                delay(200)
+                interpolator(FastOutSlowInInterpolator())
                 transition(Fade(Fade.OUT))
                 transition(Slide(Gravity.BOTTOM))
+            }
+
+            transitionSet {
+                view(searchCard)
+                duration(200)
+                delay(300)
+                interpolator(FastOutSlowInInterpolator())
+                transition(Fade(Fade.OUT))
+                transition(Slide(Gravity.BOTTOM))
+            }
+
+            transition(Fade(Fade.OUT)) {
+                view(bg)
+                duration(200)
+                delay(300)
+                interpolator(FastOutSlowInInterpolator())
             }
 
             onEnd { super.finish() }
             onCancel { super.finish() }
         })
 
-        bg.visibility = View.INVISIBLE
+        frequentsCard.visibility = View.INVISIBLE
+        favoritesCard.visibility = View.INVISIBLE
         searchCard.visibility = View.INVISIBLE
         btnCreateNewProduct.visibility = View.INVISIBLE
-        favoritesCard.visibility = View.INVISIBLE
-        frequentsCard.visibility = View.INVISIBLE
+        bg.visibility = View.INVISIBLE
     }
 
     private fun initData() {
