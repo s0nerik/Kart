@@ -14,6 +14,20 @@ import android.view.View
 @DslMarker
 annotation class TransitionMarker
 
+private class KTransitionListener(
+        var onTransitionEndInternal: (Transition) -> Unit = {},
+        var onTransitionResumeInternal: (Transition) -> Unit = {},
+        var onTransitionPauseInternal: (Transition) -> Unit = {},
+        var onTransitionCancelInternal: (Transition) -> Unit = {},
+        var onTransitionStartInternal: (Transition) -> Unit = {}
+): Transition.TransitionListener {
+    override fun onTransitionEnd(transition: Transition) = onTransitionEndInternal(transition)
+    override fun onTransitionResume(transition: Transition) = onTransitionResumeInternal(transition)
+    override fun onTransitionPause(transition: Transition) = onTransitionPauseInternal(transition)
+    override fun onTransitionCancel(transition: Transition) = onTransitionCancelInternal(transition)
+    override fun onTransitionStart(transition: Transition) = onTransitionStartInternal(transition)
+}
+
 @TransitionMarker
 abstract class KBaseTransition<out T : Transition>(
         protected val viewIds: MutableSet<Int> = mutableSetOf(),
@@ -21,6 +35,9 @@ abstract class KBaseTransition<out T : Transition>(
         protected var delay: Long? = null,
         protected var interpolator: TimeInterpolator? = null
 ) {
+    private var innerListener: KTransitionListener? = null
+    private val lazyListener by lazy { innerListener = KTransitionListener(); innerListener!! }
+
     protected val transition: T
         get () {
             val t = provideTransition()
@@ -28,8 +45,29 @@ abstract class KBaseTransition<out T : Transition>(
             delay?.let { t.startDelay = it }
             interpolator?.let { t.interpolator = it }
             viewIds.forEach { t.addTarget(it) }
+            innerListener?.let { t.addListener(innerListener) }
             return t
         }
+
+    fun onEnd(callback: (Transition) -> Unit) {
+        lazyListener.onTransitionEndInternal = callback
+    }
+
+    fun onResume(callback: (Transition) -> Unit) {
+        lazyListener.onTransitionResumeInternal = callback
+    }
+
+    fun onPause(callback: (Transition) -> Unit) {
+        lazyListener.onTransitionPauseInternal = callback
+    }
+
+    fun onCancel(callback: (Transition) -> Unit) {
+        lazyListener.onTransitionCancelInternal = callback
+    }
+
+    fun onStart(callback: (Transition) -> Unit) {
+        lazyListener.onTransitionStartInternal = callback
+    }
 
     fun duration(d: Long) {
         duration = d
