@@ -7,6 +7,14 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.support.v4.view.animation.FastOutLinearInInterpolator
+import android.support.v4.view.animation.FastOutSlowInInterpolator
+import android.transition.Fade
+import android.transition.Slide
+import android.transition.TransitionManager
+import android.view.Gravity
+import android.view.View
+import co.metalab.asyncawait.async
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
@@ -14,6 +22,8 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
+import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
+import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
@@ -90,7 +100,125 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
         super.onCreate(savedInstanceState)
         binding.vm = CreatePurchaseViewModel(this, realm)
         initData()
-        scrollView.applyWrongNestedScrollWorkaround()
+        animateAppear()
+    }
+
+    private fun animateAppear() {
+        async {
+            bg.visibility = View.INVISIBLE
+            searchCard.visibility = View.INVISIBLE
+            btnCreateNewProduct.visibility = View.INVISIBLE
+            favoritesCard.visibility = View.INVISIBLE
+            frequentsCard.visibility = View.INVISIBLE
+
+            awaitPreDraw(root)
+
+            scrollView.applyWrongNestedScrollWorkaround()
+
+            TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
+                transition(Fade(Fade.IN)) {
+                    view(bg)
+                    duration(200)
+                    interpolator(FastOutSlowInInterpolator())
+                }
+
+                transitionSet {
+                    view(searchCard)
+                    duration(200)
+                    interpolator(FastOutSlowInInterpolator())
+                    transition(Fade(Fade.IN))
+                    transition(Slide(Gravity.BOTTOM))
+                }
+
+                transitionSet {
+                    view(btnCreateNewProduct)
+                    duration(200)
+                    delay(100)
+                    interpolator(FastOutSlowInInterpolator())
+                    transition(Fade(Fade.IN))
+                    transition(Slide(Gravity.BOTTOM))
+                }
+
+                transitionSet {
+                    views(favoritesCard)
+                    duration(200)
+                    delay(200)
+                    interpolator(FastOutSlowInInterpolator())
+                    transition(Fade(Fade.IN))
+                    transition(Slide(Gravity.BOTTOM))
+                }
+
+                transitionSet {
+                    views(frequentsCard)
+                    duration(200)
+                    delay(300)
+                    interpolator(FastOutSlowInInterpolator())
+                    transition(Fade(Fade.IN))
+                    transition(Slide(Gravity.BOTTOM))
+                }
+            })
+
+            bg.visibility = View.VISIBLE
+            searchCard.visibility = View.VISIBLE
+            btnCreateNewProduct.visibility = View.VISIBLE
+            favoritesCard.visibility = View.VISIBLE
+            frequentsCard.visibility = View.VISIBLE
+        }
+    }
+
+    override fun finish() {
+        TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
+            transition(Fade(Fade.OUT)) {
+                view(bg)
+                duration(200)
+                delay(300)
+                interpolator(FastOutLinearInInterpolator())
+            }
+
+            transitionSet {
+                view(searchCard)
+                duration(200)
+                delay(300)
+                interpolator(FastOutLinearInInterpolator())
+                transition(Fade(Fade.OUT))
+                transition(Slide(Gravity.BOTTOM))
+            }
+
+            transitionSet {
+                view(btnCreateNewProduct)
+                duration(200)
+                delay(200)
+                interpolator(FastOutLinearInInterpolator())
+                transition(Fade(Fade.OUT))
+                transition(Slide(Gravity.BOTTOM))
+            }
+
+            transitionSet {
+                views(favoritesCard)
+                duration(200)
+                delay(100)
+                interpolator(FastOutLinearInInterpolator())
+                transition(Fade(Fade.OUT))
+                transition(Slide(Gravity.BOTTOM))
+            }
+
+            transitionSet {
+                views(frequentsCard)
+                duration(200)
+                interpolator(FastOutLinearInInterpolator())
+                transition(Fade(Fade.OUT))
+                transition(Slide(Gravity.BOTTOM))
+            }
+
+            onEnd { super.finish() }
+            onCancel { super.finish() }
+        })
+
+        bg.visibility = View.INVISIBLE
+        searchCard.visibility = View.INVISIBLE
+        btnCreateNewProduct.visibility = View.INVISIBLE
+        favoritesCard.visibility = View.INVISIBLE
+        frequentsCard.visibility = View.INVISIBLE
     }
 
     private fun initData() {
