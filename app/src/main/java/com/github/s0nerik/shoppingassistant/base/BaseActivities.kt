@@ -33,7 +33,13 @@ abstract class BaseBoundActivity<out T : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        overridePendingTransition(0, 0)
         innerBinding = DataBindingUtil.setContentView(this, layoutId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0, 0)
     }
 
     override fun onDestroy() {
