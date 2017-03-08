@@ -33,7 +33,7 @@
             />
         <activity
             android:name=".screens.product.CreateProductActivity"
-            android:theme="@style/AppTheme.SemiTransparent"
+            android:theme="@style/AppTheme.CreateProductActivity"
             android:windowSoftInputMode="adjustResize"
             />
     </application>

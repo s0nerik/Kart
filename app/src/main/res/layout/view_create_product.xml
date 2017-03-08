@@ -101,6 +101,7 @@
                 layout="@layout/view_btn_icon"
                 app:glideConfig='@{"scan_barcode_icon"}'
                 app:iconUrl='@{vm.priceIconUrl}'
+                android:visibility="gone"
                 tools:visibility="visible"
                 />
 
