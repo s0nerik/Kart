@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.views
 
+import android.graphics.Color
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getColor
 import com.github.s0nerik.shoppingassistant.ext.getDimenPixelOffset
@@ -31,4 +32,8 @@ fun getBgColor(bgColor: Int?, selected: Boolean?, selectedColor: Int?, unselecte
                 return Any().getColor(R.color.colorAccent)
             else
                 return unselectedColor
+}
+
+fun getColorSafe(color: Int?): Int {
+    return color ?: Color.WHITE
 }

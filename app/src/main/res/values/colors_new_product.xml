@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="newProductButtonUnselected">@color/material_color_grey_500</color>
+    <color name="newProductButtonSelected">@color/material_color_grey_500</color>
+    <color name="newProductSideIconColor">#afff</color>
+</resources>
