@@ -254,7 +254,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     fun createProduct() {
         RxActivityResult.on(this)
-                .startIntent(Intent(this, CreateProductActivity::class.java))
+                .startIntent(CreateProductActivity.intent(this, etSearch.text.toString()))
                 .filter { it.resultCode() == Activity.RESULT_OK }
                 .subscribe { result ->
                     with (Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!) {

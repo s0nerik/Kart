@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.databinding.BaseObservable
 import android.databinding.Bindable
@@ -77,10 +78,8 @@ class CreateProductViewModel(
                     .textChanges()
                     .map { it.toString() }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
-                    .subscribe {
-                        pendingItem.name = it
-                        notifyPropertyChanged(BR.item)
-                    }
+                    .subscribe { setName(it) }
+
             etNewPriceValue
                     .textChanges()
                     .map { it.toString() }
@@ -211,6 +210,12 @@ class CreateProductViewModel(
     @Bindable
     fun isPriceSet(): Boolean = itemPriceChange.value != null
     //endregion
+
+    fun setName(name: String) {
+        pendingItem.name = name
+        notifyPropertyChanged(BR.item)
+        with(activity.preview.title) { setSelection(text.length) }
+    }
 
     fun close() {
         close(false)
@@ -374,9 +379,21 @@ class CreateProductViewModel(
 }
 
 class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.layout.activity_create_product) {
+    companion object {
+        fun intent(ctx: Context, productName: String? = null): Intent {
+            val intent = Intent(ctx, CreateProductActivity::class.java)
+            intent.putExtra("name", productName)
+            return intent
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = CreateProductViewModel(this, realm)
+
+        val extraName = intent.getStringExtra("name")
+        extraName?.let { binding.vm.setName(it.capitalize()) }
+
         animateAppear()
     }
 
