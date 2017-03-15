@@ -49,15 +49,6 @@ fun createCurrenciesIfNeeded(realm: Realm) {
     }
 }
 
-val currentCart: Cart = Cart()
-    get() {
-        val savedCart = Cart().queryFirst { it.equalTo("id", field.id) }
-        if (savedCart != null) {
-            field = Cart()
-        }
-        return field
-    }
-
 fun purchases(realm: Realm): List<Purchase> {
     return realm.where(Purchase::class.java).findAll()
 }

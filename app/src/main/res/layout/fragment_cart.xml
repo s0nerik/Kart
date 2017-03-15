@@ -13,6 +13,7 @@
     </data>
 
     <RelativeLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
@@ -21,6 +22,7 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/bottomButtons"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
             app:layoutManager="@string/rv_layout_manager_linear"
@@ -31,12 +33,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/recycler"
             android:src="@drawable/plus"
             android:tint="@color/material_color_white"
             android:onClick="@{() -> vm.createNewPurchase()}"
             app:fabSize="normal"
             />
+        <LinearLayout
+            android:id="@+id/bottomButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:background="@color/material_color_grey_50"
+            android:elevation="8dp"
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Clear"
+                android:onClick="@{() -> vm.clearCart()}"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/material_color_black_26_percent"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"
+                android:onClick="@{() -> vm.saveCart()}"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

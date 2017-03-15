@@ -24,6 +24,7 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizont
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
+import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
@@ -86,12 +87,12 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
             .onClick {
-                currentCart.add(Purchase(item = binding.item, date = Date()))
+                Cart.add(Purchase(item = binding.item, date = Date()))
                 finish()
             }
     private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
             .onClick {
-                currentCart.add(Purchase(item = binding.item, date = Date()))
+                Cart.add(Purchase(item = binding.item, date = Date()))
                 finish()
             }
 
@@ -262,7 +263,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                         if (item!!.isFavorite)
                             binding.vm.favorites.add(item)
 
-                        currentCart.add(this)
+                        Cart.add(this)
                     }
                 }
     }

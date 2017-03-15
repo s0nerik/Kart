@@ -2,9 +2,9 @@ package com.github.s0nerik.shoppingassistant.model
 
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.randomUuidString
+import com.vicpin.krealmextensions.save
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import java.util.*
 
@@ -18,14 +18,24 @@ open class Cart(
         open var date: Date = Date(),
         open var purchases: RealmList<Purchase> = RealmList()
 ) : RealmObject() {
-    @Ignore
-    private val lazyPurchases = lazy { observableListOf(purchases) }
-
-    val purchasesObservableList
-        get() = lazyPurchases.value
-
-    fun add(purchase: Purchase) {
-        purchases.add(purchase)
-        purchasesObservableList.add(purchase)
+    companion object {
+        val purchases = observableListOf<Purchase>()
+        fun add(purchase: Purchase) {
+            purchases.add(purchase)
+        }
+        fun remove(purchase: Purchase) {
+            purchases.remove(purchase)
+        }
+        fun save() {
+            val cart = Cart()
+            cart.purchases.addAll(purchases)
+            cart.save()
+        }
+        fun clear() {
+            purchases.clear()
+        }
+        fun isEmpty(): Boolean {
+            return purchases.size == 0
+        }
     }
 }

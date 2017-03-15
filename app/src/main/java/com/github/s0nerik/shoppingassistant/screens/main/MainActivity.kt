@@ -9,8 +9,8 @@ import berlin.volders.badger.Badger
 import berlin.volders.badger.CountBadge
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
-import com.github.s0nerik.shoppingassistant.currentCart
 import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
+import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -58,11 +58,11 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
                 .commit()
 
         badge = Badger.sett(binding.bottomNavigation.menu.getItem(2), CountBadge.Factory(this, BadgeShape.circle(0.5f, Gravity.RIGHT.or(Gravity.TOP))))
-        currentCart.purchasesObservableList.addOnListChangedCallback(cartChangeListener)
+        Cart.purchases.addOnListChangedCallback(cartChangeListener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        currentCart.purchasesObservableList.removeOnListChangedCallback(cartChangeListener)
+        Cart.purchases.removeOnListChangedCallback(cartChangeListener)
     }
 }
