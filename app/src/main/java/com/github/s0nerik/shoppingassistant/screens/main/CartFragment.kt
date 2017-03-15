@@ -56,9 +56,10 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                             transition(Slide())
                             transition(Fade())
                         }
-                        transition(AutoTransition().excludeTarget(bottomButtons, true))
+                        transition(AutoTransition()) { exclude(bottomButtons) }
                     })
                     bottomButtons.visibility = View.GONE
+                    emptyCart.visibility = View.VISIBLE
                 }
             } else {
                 if (bottomButtons.visibility != View.VISIBLE) {
@@ -68,9 +69,10 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                             transition(Slide())
                             transition(Fade())
                         }
-                        transition(AutoTransition().excludeTarget(bottomButtons, true))
+                        transition(AutoTransition()) { exclude(bottomButtons) }
                     })
                     bottomButtons.visibility = View.VISIBLE
+                    emptyCart.visibility = View.GONE
                 }
             }
         }
@@ -90,7 +92,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
         super.onAttach(context)
         enterTransition = KTransitionSet.new {
             ordering(KTransitionSet.Ordering.SEQUENTIAL)
-            transition(Fade(Fade.OUT)) { duration(0); views(R.id.fab, R.id.recycler, R.id.bottomButtons) }
+            transition(Fade(Fade.OUT)) { duration(0); views(R.id.fab, R.id.recycler, R.id.emptyCart, R.id.bottomButtons) }
             transitionSet {
                 ordering(KTransitionSet.Ordering.TOGETHER)
                 transitionSet {
@@ -100,7 +102,9 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                     transition(Slide(Gravity.BOTTOM))
                     transition(Fade(Fade.IN))
                 }
-                if (!Cart.isEmpty()) {
+                if (Cart.isEmpty()) {
+                    transition(Fade(Fade.IN)) { view(R.id.emptyCart); duration(200) }
+                } else {
                     transitionSet {
                         view(R.id.bottomButtons)
                         duration(200)
@@ -127,8 +131,10 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
         super.onViewCreated(view, savedInstanceState)
         binding.vm = CartViewModel(this)
 
-        if (Cart.isEmpty())
+        if (Cart.isEmpty()) {
             bottomButtons.visibility = View.GONE
+            emptyCart.visibility = View.VISIBLE
+        }
 
         initCart()
     }
