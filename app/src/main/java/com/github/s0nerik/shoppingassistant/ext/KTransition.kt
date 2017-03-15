@@ -31,7 +31,9 @@ private class KTransitionListener(
 @TransitionMarker
 abstract class KBaseTransition<out T : Transition>(
         protected val viewIds: MutableSet<Int> = mutableSetOf(),
+        protected val views: MutableSet<View> = mutableSetOf(),
         protected val excludedViewIds: MutableSet<Int> = mutableSetOf(),
+        protected val excludedViews: MutableSet<View> = mutableSetOf(),
         protected var duration: Long? = null,
         protected var delay: Long? = null,
         protected var interpolator: TimeInterpolator? = null
@@ -46,7 +48,9 @@ abstract class KBaseTransition<out T : Transition>(
             delay?.let { t.startDelay = it }
             interpolator?.let { t.interpolator = it }
             viewIds.forEach { t.addTarget(it) }
+            views.forEach { t.addTarget(it) }
             excludedViewIds.forEach { t.excludeTarget(it, true) }
+            excludedViews.forEach { t.excludeTarget(it, true) }
             innerListener?.let { t.addListener(innerListener) }
             return t
         }
@@ -90,7 +94,7 @@ abstract class KBaseTransition<out T : Transition>(
 
     fun view(view: View) = views(view)
     fun views(vararg views: View) {
-        views.forEach { viewIds += it.id }
+        views.forEach { this.views += it }
     }
 
     fun exclude(vararg ids: Int) {
@@ -98,7 +102,7 @@ abstract class KBaseTransition<out T : Transition>(
     }
 
     fun exclude(vararg views: View) {
-        views.forEach { excludedViewIds += it.id }
+        views.forEach { excludedViews += it }
     }
 
     protected abstract fun provideTransition(): T

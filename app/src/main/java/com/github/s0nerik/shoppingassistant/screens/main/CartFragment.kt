@@ -134,6 +134,8 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
         if (Cart.isEmpty()) {
             bottomButtons.visibility = View.GONE
             emptyCart.visibility = View.VISIBLE
+        } else {
+            emptyCart.visibility = View.GONE
         }
 
         initCart()
