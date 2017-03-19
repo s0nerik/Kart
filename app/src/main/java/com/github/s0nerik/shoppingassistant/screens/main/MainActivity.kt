@@ -41,12 +41,16 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
     private lateinit var badge: CountBadge
 
     // TODO: clear all listeners of the list in cart when cart gets saved.
-    private val cartChangeListener = object: ObservableList.OnListChangedCallback<ObservableList<Purchase>>() {
-        override fun onItemRangeMoved(p0: ObservableList<Purchase>, p1: Int, p2: Int, p3: Int) = badge.setCount(p0.size)
-        override fun onItemRangeChanged(p0: ObservableList<Purchase>, p1: Int, p2: Int) = badge.setCount(p0.size)
-        override fun onChanged(p0: ObservableList<Purchase>) = badge.setCount(p0.size)
-        override fun onItemRangeInserted(p0: ObservableList<Purchase>, p1: Int, p2: Int) = badge.setCount(p0.size)
-        override fun onItemRangeRemoved(p0: ObservableList<Purchase>, p1: Int, p2: Int) = badge.setCount(p0.size)
+    private val cartChangeListener = object : ObservableList.OnListChangedCallback<ObservableList<Purchase>>() {
+        override fun onItemRangeMoved(p0: ObservableList<Purchase>, p1: Int, p2: Int, p3: Int) = onCartChanged(p0)
+        override fun onItemRangeChanged(p0: ObservableList<Purchase>, p1: Int, p2: Int) = onCartChanged(p0)
+        override fun onChanged(p0: ObservableList<Purchase>) = onCartChanged(p0)
+        override fun onItemRangeInserted(p0: ObservableList<Purchase>, p1: Int, p2: Int) = onCartChanged(p0)
+        override fun onItemRangeRemoved(p0: ObservableList<Purchase>, p1: Int, p2: Int) = onCartChanged(p0)
+    }
+
+    private fun onCartChanged(cart: List<Purchase>) {
+        badge.count = cart.size
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
