@@ -1,7 +1,8 @@
 package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.PagerAdapter
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
@@ -39,8 +40,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     val recentPurchases
         get() = recentPurchases(realm)
 
-    val statsAdapter: FragmentStatePagerAdapter by lazy {
-        object : FragmentStatePagerAdapter(childFragmentManager) {
+    val statsAdapter: PagerAdapter
+        get() = object : FragmentPagerAdapter(childFragmentManager) {
             val fragments = listOf(
                     StatsDistributionFragment(),
                     StatsExpensesFragment()
@@ -52,7 +53,6 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
             override fun getCount() = fragments.size
             override fun getPageTitle(position: Int) = names[position]
         }
-    }
 
     init {
         enterTransition = KTransitionSet.new {
