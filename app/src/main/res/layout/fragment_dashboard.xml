@@ -52,17 +52,18 @@
                             android:textAppearance="@style/MaterialTypography.Regular.Body2"
                             />
 
-                        <RelativeLayout
+                        <xyz.santeri.wvp.WrappingViewPager
+                            android:id="@+id/statsPager"
                             android:layout_width="match_parent"
-                            android:layout_height="220dp"
-                            >
-                            <com.github.mikephil.charting.charts.PieChart
-                                android:id="@+id/distributionChart"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginBottom="8dp"
-                                />
-                        </RelativeLayout>
+                            android:layout_height="wrap_content"
+                            tools:layout_height="220dp"
+                            />
+                        <android.support.design.widget.TabLayout
+                            android:id="@+id/statsPagerTabs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:tabGravity="fill"
+                            />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
