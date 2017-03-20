@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         >
-        <com.github.mikephil.charting.charts.LineChart
+        <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
             app:layout_widthPercent="100%"
             app:layout_aspectRatio="200%"

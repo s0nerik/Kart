@@ -13,15 +13,17 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+typealias PricePair = Pair<Float?, Currency?>
+
 open class Price(
         @PrimaryKey open var id: String = randomUuidString(),
         open var shop: Shop? = null,
         open var valueChanges: RealmList<PriceChange> = RealmList()
 ) : RealmObject() {
     val currentValueString: String
-        get() = getPrice(Date(), true)
+        get() = getPriceString(Date(), true)
 
-    private fun getPriceForDate(date: Date, amount: Float = 1f): Pair<Float?, Currency?> {
+    fun getPriceForDate(date: Date, amount: Float = 1f): PricePair {
         var price: Float? = null
         var currency: Currency? = null
         if (valueChanges.size > 0) {
@@ -36,7 +38,7 @@ open class Price(
         return Pair(price?.times(amount), currency)
     }
 
-    fun getPrice(date: Date, withCurrency: Boolean, amount: Float = 1f): String {
+    fun getPriceString(date: Date, withCurrency: Boolean, amount: Float = 1f): String {
         val price = getPriceForDate(date, amount)
         if (price.first == null) {
             return getString(R.string.price_unknown)

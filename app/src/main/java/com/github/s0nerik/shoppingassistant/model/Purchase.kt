@@ -19,11 +19,17 @@ open class Purchase(
     val readableName: String
         get() = if (amount > 1) "${amount}x ${item!!.readableName}" else item!!.readableName
     val readablePrice: String
-        get() = item!!.price!!.getPrice(date!!, true, amount)
+        get() = item!!.price!!.getPriceString(date!!, true, amount)
     val readableCategory: String
         get() = item!!.readableCategory
     val readableShop: String
         get() = item!!.readableShop
     val iconUrl: String
         get() = item!!.iconUrl
+    val price: PricePair
+        get() = item!!.price!!.getPriceForDate(date!!, amount)
+
+    // TODO: provide a way of conversion between the currencies
+    val priceLocal: Float
+        get() = price.first ?: 0f
 }
