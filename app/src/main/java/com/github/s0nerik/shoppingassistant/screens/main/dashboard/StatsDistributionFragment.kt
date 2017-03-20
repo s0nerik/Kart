@@ -5,9 +5,14 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.nitrico.lastadapter.LastAdapter
+import com.github.nitrico.lastadapter.Type
+import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsDistributionBinding
+import com.github.s0nerik.shoppingassistant.databinding.ItemStatsDistributionBinding
+import com.github.s0nerik.shoppingassistant.ext.getColor
 import com.github.s0nerik.shoppingassistant.purchases
 import kotlinx.android.synthetic.main.fragment_stats_distribution.*
 import org.jetbrains.anko.support.v4.act
@@ -28,18 +33,25 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
     }
 
     private fun initDistributionChart() {
+        val colors = intArrayOf(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent)
+
         val entries = purchases.groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
+        val legendItems = entries.mapIndexed { i, entry -> DistributionLegendItem(getColor(colors[i % colors.size]), entry.label) }
+
+        LastAdapter.with(legendItems, BR.item)
+                .type { Type<ItemStatsDistributionBinding>(R.layout.item_stats_distribution) }
+                .into(rvLegend)
 
         val dataSet = PieDataSet(entries, null)
         dataSet.apply {
-            setColors(intArrayOf(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent), act)
+            setColors(colors, act)
             sliceSpace = 4f
             valueTextColor = ContextCompat.getColor(act, R.color.material_color_white)
             valueFormatter = PercentFormatter(DecimalFormat("##"))
             valueTextSize = 14f
         }
 
-        distributionChart.apply {
+        chart.apply {
             data = PieData(dataSet)
             description = null
             holeRadius = 10f
@@ -50,3 +62,5 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
         }
     }
 }
+
+class DistributionLegendItem(val color: Int, val name: String)

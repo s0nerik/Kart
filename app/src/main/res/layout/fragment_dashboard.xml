@@ -51,13 +51,16 @@
                             android:text="Stats"
                             android:textAppearance="@style/MaterialTypography.Regular.Body2"
                             />
-
-                        <xyz.santeri.wvp.WrappingViewPager
-                            android:id="@+id/statsPager"
+                        <android.support.percent.PercentFrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:layout_height="220dp"
-                            />
+                            >
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/statsPager"
+                                app:layout_widthPercent="100%"
+                                app:layout_aspectRatio="200%"
+                                />
+                        </android.support.percent.PercentFrameLayout>
                         <android.support.design.widget.TabLayout
                             android:id="@+id/statsPagerTabs"
                             android:layout_width="match_parent"

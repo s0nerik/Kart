@@ -1,6 +1,7 @@
 package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.os.Bundle
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.transition.Slide
@@ -22,7 +23,6 @@ import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpenses
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.startActivity
-import xyz.santeri.wvp.WrappingFragmentStatePagerAdapter
 
 /**
  * Created by Alex on 12/25/2016.
@@ -38,6 +38,21 @@ class DashboardViewModel(val fragment: DashboardFragment) {
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
     val recentPurchases
         get() = recentPurchases(realm)
+
+    val statsAdapter: FragmentStatePagerAdapter by lazy {
+        object : FragmentStatePagerAdapter(childFragmentManager) {
+            val fragments = listOf(
+                    StatsDistributionFragment(),
+                    StatsExpensesFragment()
+            )
+
+            val names = listOf("Purchases distribution", "Expenses")
+
+            override fun getItem(position: Int) = fragments[position]
+            override fun getCount() = fragments.size
+            override fun getPageTitle(position: Int) = names[position]
+        }
+    }
 
     init {
         enterTransition = KTransitionSet.new {
@@ -98,18 +113,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initStats() {
-        statsPager.adapter = object : WrappingFragmentStatePagerAdapter(childFragmentManager){
-            val fragments = listOf(
-                    StatsDistributionFragment(),
-                    StatsExpensesFragment()
-            )
-
-            val names = listOf("Purchases distribution", "Expenses")
-
-            override fun getItem(position: Int) = fragments[position]
-            override fun getCount() = fragments.size
-            override fun getPageTitle(position: Int) = names[position]
-        }
+        statsPager.adapter = statsAdapter
         statsPagerTabs.setupWithViewPager(statsPager)
     }
 }
