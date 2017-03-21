@@ -4,7 +4,7 @@ import android.support.v4.content.ContextCompat
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
@@ -14,9 +14,9 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsDistributio
 import com.github.s0nerik.shoppingassistant.databinding.ItemStatsDistributionBinding
 import com.github.s0nerik.shoppingassistant.ext.getColor
 import com.github.s0nerik.shoppingassistant.purchases
+import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.fragment_stats_distribution.*
 import org.jetbrains.anko.support.v4.act
-import java.text.DecimalFormat
 
 /**
  * Created by Alex on 3/19/2017.
@@ -33,10 +33,23 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
     }
 
     private fun initDistributionChart() {
-        val colors = intArrayOf(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent)
+        val colors = intArrayOf(
+                R.color.material_color_red_500,
+                R.color.material_color_pink_500,
+                R.color.material_color_purple_500,
+                R.color.material_color_deep_purple_500,
+                R.color.material_color_indigo_500,
+                R.color.material_color_blue_500,
+                R.color.material_color_teal_500,
+                R.color.material_color_green_500,
+                R.color.material_color_orange_500,
+                R.color.material_color_deep_orange_500
+        )
 
-        val entries = purchases.groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
+        val entries = purchases.groupBy { it.item?.category }.map { PieEntry(it.value.size.toFloat(), it.key?.name) }.sortedByDescending { it.value }.subList(0, 10)
         val legendItems = entries.mapIndexed { i, entry -> DistributionLegendItem(getColor(colors[i % colors.size]), entry.label) }
+
+        rvLegend.layoutManager = FlexboxLayoutManager()
 
         LastAdapter.with(legendItems, BR.item)
                 .type { Type<ItemStatsDistributionBinding>(R.layout.item_stats_distribution) }
@@ -47,18 +60,22 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
             setColors(colors, act)
             sliceSpace = 4f
             valueTextColor = ContextCompat.getColor(act, R.color.material_color_white)
-            valueFormatter = PercentFormatter(DecimalFormat("##"))
+            valueFormatter = IValueFormatter { value, entry, dataSetIndex, viewPortHandler ->
+                if (value >= 7f) "%.0f".format(value)+" %" else ""
+            }
             valueTextSize = 14f
         }
 
         chart.apply {
             data = PieData(dataSet)
             description = null
-            holeRadius = 10f
-            transparentCircleRadius = 20f
+            holeRadius = 50f
+            transparentCircleRadius = 55f
             setDrawEntryLabels(false)
             setUsePercentValues(true)
             legend.isEnabled = false
+
+            highlightValue(0f, 0)
         }
     }
 }

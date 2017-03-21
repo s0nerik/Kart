@@ -17,15 +17,18 @@
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="5"
             />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvLegend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="5"
+            android:paddingLeft="4dp"
+            android:clipToPadding="false"
             android:orientation="vertical"
-            app:layoutManager="@string/rv_layout_manager_linear"
+            android:requiresFadingEdge="vertical"
+            android:overScrollMode="ifContentScrolls"
             tools:listitem="@layout/item_stats_distribution"
             />
     </LinearLayout>

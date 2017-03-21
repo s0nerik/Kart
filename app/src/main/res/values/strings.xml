@@ -4,6 +4,7 @@
     // RecyclerView's LayoutManagers
     <string name="rv_layout_manager_linear">android.support.v7.widget.LinearLayoutManager</string>
     <string name="rv_layout_manager_grid">android.support.v7.widget.GridLayoutManager</string>
+    <string name="rv_layout_manager_flexbox">com.google.android.flexbox.FlexboxLayoutManager</string>
 
     // Price formats
     <string name="price_unknown">Unknown price</string>
