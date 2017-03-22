@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.screens.purchase
 
+import android.animation.AnimatorSet
 import android.app.Activity
 import android.content.Intent
 import android.databinding.BaseObservable
@@ -13,7 +14,8 @@ import android.transition.Slide
 import android.transition.TransitionManager
 import android.view.Gravity
 import android.view.View
-import co.metalab.asyncawait.async
+import android.view.WindowManager
+import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
@@ -22,7 +24,6 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBi
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
-import com.github.s0nerik.shoppingassistant.ext.awaitPreDraw
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
@@ -35,6 +36,7 @@ import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_purchase.*
+import org.jetbrains.anko.dip
 import rx_activity_result.RxActivityResult
 import java.util.*
 
@@ -98,72 +100,41 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         binding.vm = CreatePurchaseViewModel(this, realm)
         initData()
         animateAppear()
     }
 
     private fun animateAppear() {
-        async {
-            bg.visibility = View.INVISIBLE
-            searchCard.visibility = View.INVISIBLE
-            btnCreateNewProduct.visibility = View.INVISIBLE
-            favoritesCard.visibility = View.INVISIBLE
-            frequentsCard.visibility = View.INVISIBLE
+        scrollView.applyWrongNestedScrollWorkaround()
 
-            awaitPreDraw(root)
-
-            scrollView.applyWrongNestedScrollWorkaround()
-
-            TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
-                transition(Fade(Fade.IN)) {
-                    view(bg)
-                    duration(200)
-                    interpolator(FastOutSlowInInterpolator())
-                }
-
-                transitionSet {
-                    view(searchCard)
-                    duration(200)
-                    interpolator(FastOutSlowInInterpolator())
-                    transition(Fade(Fade.IN))
-                    transition(Slide(Gravity.BOTTOM))
-                }
-
-                transitionSet {
-                    view(btnCreateNewProduct)
-                    duration(200)
-                    delay(100)
-                    interpolator(FastOutSlowInInterpolator())
-                    transition(Fade(Fade.IN))
-                    transition(Slide(Gravity.BOTTOM))
-                }
-
-                transitionSet {
-                    views(favoritesCard)
-                    duration(200)
-                    delay(200)
-                    interpolator(FastOutSlowInInterpolator())
-                    transition(Fade(Fade.IN))
-                    transition(Slide(Gravity.BOTTOM))
-                }
-
-                transitionSet {
-                    views(frequentsCard)
-                    duration(200)
-                    delay(300)
-                    interpolator(FastOutSlowInInterpolator())
-                    transition(Fade(Fade.IN))
-                    transition(Slide(Gravity.BOTTOM))
-                }
-            })
-
-            bg.visibility = View.VISIBLE
-            searchCard.visibility = View.VISIBLE
-            btnCreateNewProduct.visibility = View.VISIBLE
-            favoritesCard.visibility = View.VISIBLE
-            frequentsCard.visibility = View.VISIBLE
+        val views = listOf(bg, searchCard, btnCreateNewProduct, favoritesCard, frequentsCard)
+        views.subList(1, views.size).forEach {
+            it.translationY = dip(80).toFloat()
+            it.alpha = 0f
         }
+
+        val durations = arrayOf(500, 200, 200, 200, 200)
+        val delays = if (binding.vm.favorites.isNotEmpty()) {
+            arrayOf(0, 0, 200, 400, 600)
+        } else {
+            arrayOf(0, 0, 200, 400, 400)
+        }
+
+        val anim = AnimatorSet()
+        anim.playTogether(
+                views.mapIndexed { i, view ->
+                    ViewPropertyObjectAnimator.animate(view)
+                            .alpha(1f)
+                            .translationY(0f)
+                            .setDuration(durations[i].toLong())
+                            .setStartDelay(delays[i].toLong())
+                            .setInterpolator(FastOutSlowInInterpolator())
+                            .get()
+                }
+        )
+        anim.start()
     }
 
     override fun finish() {
