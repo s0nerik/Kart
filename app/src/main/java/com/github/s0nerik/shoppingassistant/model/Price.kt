@@ -23,6 +23,19 @@ open class Price(
     val currentValueString: String
         get() = getPriceString(Date(), true)
 
+    fun getPriceChangeForDate(date: Date): PriceChange? {
+        if (valueChanges.size == 1) {
+            return valueChanges[0]
+        } else if (valueChanges.size > 0) {
+            valueChanges.sortedBy { it.date }.forEach {
+                if (date < it.date!!) {
+                    return it
+                }
+            }
+        }
+        return null
+    }
+
     fun getPriceForDate(date: Date, amount: Float = 1f): PricePair {
         var price: Float? = null
         var currency: Currency? = null

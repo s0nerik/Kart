@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
+        <import type="android.view.View" />
         <variable name="item" type="com.github.s0nerik.shoppingassistant.model.Purchase" />
     </data>
     <RelativeLayout
@@ -23,6 +24,27 @@
             app:glideConfig='@{"purchase_icon"}'
             tools:src="@drawable/product_cat_food"
             />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon"
+            android:layout_alignRight="@+id/icon"
+            android:layout_marginRight="-8dp"
+            android:layout_marginBottom="-4dp"
+            android:background="@drawable/bg_item_purchase_amount"
+            android:visibility='@{item.readableAmount.empty ? View.GONE : View.VISIBLE}'
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text='@{item.readableAmount}'
+                android:textSize="12sp"
+                android:includeFontPadding="false"
+                android:fontFamily="sans-serif"
+                tools:text='2'
+                />
+        </FrameLayout>
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
