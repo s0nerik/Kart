@@ -414,8 +414,10 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
                 .start()
 
         preview.alpha = 0f
+        preview.translationY = dip(48).toFloat()
         preview.animate()
                 .alpha(1f)
+                .translationY(0f)
                 .setDuration(previewAppearDuration)
                 .setStartDelay(previewAppearDelay)
                 .setInterpolator(FastOutSlowInInterpolator())
@@ -501,6 +503,7 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
         animators += ViewPropertyObjectAnimator
                 .animate(preview)
                 .alpha(0f)
+                .translationY(dip(48).toFloat())
                 .setDuration(500L)
                 .setInterpolator(FastOutSlowInInterpolator())
                 .setStartDelay(getDelay(rightButtons.size + bottomButtons.size + leftButtons.size))
@@ -516,13 +519,8 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
 
         val set = AnimatorSet()
         set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                super@CreateProductActivity.finish()
-            }
-
-            override fun onAnimationCancel(animation: Animator?) {
-                super@CreateProductActivity.finish()
-            }
+            override fun onAnimationEnd(animation: Animator?) = super@CreateProductActivity.finish()
+            override fun onAnimationCancel(animation: Animator?) = super@CreateProductActivity.finish()
         })
         set.playTogether(animators)
         set.start()
