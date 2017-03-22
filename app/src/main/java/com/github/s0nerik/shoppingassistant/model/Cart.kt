@@ -30,6 +30,7 @@ open class Cart(
             val cart = Cart()
             cart.purchases.addAll(purchases)
             cart.save()
+            purchases.clear()
         }
         fun clear() {
             purchases.clear()
