@@ -1,5 +1,7 @@
 package com.github.s0nerik.shoppingassistant.screens.purchase
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.app.Activity
 import android.content.Intent
@@ -9,12 +11,8 @@ import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.support.v4.view.animation.FastOutSlowInInterpolator
-import android.transition.Fade
-import android.transition.Slide
-import android.transition.TransitionManager
-import android.view.Gravity
-import android.view.View
 import android.view.WindowManager
+import android.view.animation.DecelerateInterpolator
 import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
@@ -23,7 +21,6 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
-import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
@@ -103,16 +100,20 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         binding.vm = CreatePurchaseViewModel(this, realm)
         initData()
-        animateAppear()
+        animate(true)
     }
 
-    private fun animateAppear() {
-        scrollView.applyWrongNestedScrollWorkaround()
+    private fun animate(appear: Boolean) {
+        var views = listOf(bg, searchCard, btnCreateNewProduct, favoritesCard, frequentsCard)
 
-        val views = listOf(bg, searchCard, btnCreateNewProduct, favoritesCard, frequentsCard)
-        views.subList(1, views.size).forEach {
-            it.translationY = dip(80).toFloat()
-            it.alpha = 0f
+        if (appear) {
+            scrollView.applyWrongNestedScrollWorkaround()
+            views.subList(1, views.size).forEach {
+                it.translationY = dip(80).toFloat()
+                it.alpha = 0f
+            }
+        } else {
+            views = views.reversed()
         }
 
         val durations = arrayOf(500, 200, 200, 200, 200)
@@ -122,74 +123,83 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
             arrayOf(0, 0, 200, 400, 400)
         }
 
+        val interpolator = if (appear) FastOutSlowInInterpolator() else DecelerateInterpolator(2f)
+
         val anim = AnimatorSet()
         anim.playTogether(
                 views.mapIndexed { i, view ->
                     ViewPropertyObjectAnimator.animate(view)
-                            .alpha(1f)
-                            .translationY(0f)
+                            .alpha(if (appear) 1f else 0f)
+                            .translationY(if (appear) 0f else dip(80).toFloat())
                             .setDuration(durations[i].toLong())
                             .setStartDelay(delays[i].toLong())
-                            .setInterpolator(FastOutSlowInInterpolator())
+                            .setInterpolator(interpolator)
                             .get()
                 }
         )
+        if (!appear) {
+            anim.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationCancel(animation: Animator?) = super@CreatePurchaseActivity.finish()
+                override fun onAnimationEnd(animation: Animator?) = super@CreatePurchaseActivity.finish()
+            })
+        }
         anim.start()
     }
 
     override fun finish() {
-        TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
-            transitionSet {
-                views(frequentsCard)
-                duration(200)
-                interpolator(FastOutSlowInInterpolator())
-                transition(Fade(Fade.OUT))
-                transition(Slide(Gravity.BOTTOM))
-            }
-
-            transitionSet {
-                views(favoritesCard)
-                duration(200)
-                delay(100)
-                interpolator(FastOutSlowInInterpolator())
-                transition(Fade(Fade.OUT))
-                transition(Slide(Gravity.BOTTOM))
-            }
-
-            transitionSet {
-                view(btnCreateNewProduct)
-                duration(200)
-                delay(200)
-                interpolator(FastOutSlowInInterpolator())
-                transition(Fade(Fade.OUT))
-                transition(Slide(Gravity.BOTTOM))
-            }
-
-            transitionSet {
-                view(searchCard)
-                duration(200)
-                delay(300)
-                interpolator(FastOutSlowInInterpolator())
-                transition(Fade(Fade.OUT))
-                transition(Slide(Gravity.BOTTOM))
-            }
-
-            transition(Fade(Fade.OUT)) {
-                view(bg)
-                duration(200)
-                delay(300)
-                interpolator(FastOutSlowInInterpolator())
-            }
-
-            onEnd { super.finish() }
-            onCancel { super.finish() }
-        })
-
-        frequentsCard.visibility = View.INVISIBLE
-        favoritesCard.visibility = View.INVISIBLE
-        searchCard.visibility = View.INVISIBLE
-        btnCreateNewProduct.visibility = View.INVISIBLE
-        bg.visibility = View.INVISIBLE
+        animate(false)
+//        TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
+//            transitionSet {
+//                views(frequentsCard)
+//                duration(200)
+//                interpolator(FastOutSlowInInterpolator())
+//                transition(Fade(Fade.OUT))
+//                transition(Slide(Gravity.BOTTOM))
+//            }
+//
+//            transitionSet {
+//                views(favoritesCard)
+//                duration(200)
+//                delay(100)
+//                interpolator(FastOutSlowInInterpolator())
+//                transition(Fade(Fade.OUT))
+//                transition(Slide(Gravity.BOTTOM))
+//            }
+//
+//            transitionSet {
+//                view(btnCreateNewProduct)
+//                duration(200)
+//                delay(200)
+//                interpolator(FastOutSlowInInterpolator())
+//                transition(Fade(Fade.OUT))
+//                transition(Slide(Gravity.BOTTOM))
+//            }
+//
+//            transitionSet {
+//                view(searchCard)
+//                duration(200)
+//                delay(300)
+//                interpolator(FastOutSlowInInterpolator())
+//                transition(Fade(Fade.OUT))
+//                transition(Slide(Gravity.BOTTOM))
+//            }
+//
+//            transition(Fade(Fade.OUT)) {
+//                view(bg)
+//                duration(200)
+//                delay(300)
+//                interpolator(FastOutSlowInInterpolator())
+//            }
+//
+//            onEnd { super.finish() }
+//            onCancel { super.finish() }
+//        })
+//
+//        frequentsCard.visibility = View.INVISIBLE
+//        favoritesCard.visibility = View.INVISIBLE
+//        searchCard.visibility = View.INVISIBLE
+//        btnCreateNewProduct.visibility = View.INVISIBLE
+//        bg.visibility = View.INVISIBLE
     }
 
     private fun initData() {
