@@ -1,9 +1,6 @@
 package com.github.s0nerik.shoppingassistant.model
 
-import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.ext.getString
 import com.github.s0nerik.shoppingassistant.randomUuidString
-import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -13,52 +10,18 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-typealias PricePair = Pair<Float?, Currency?>
-
 open class Price(
         @PrimaryKey open var id: String = randomUuidString(),
-        open var shop: Shop? = null,
-        open var valueChanges: RealmList<PriceChange> = RealmList()
+        open var value: Float? = null,
+        open var currency: Currency? = null,
+        open var date: Date? = null,
+        open var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
 ) : RealmObject() {
-    val currentValueString: String
-        get() = getPriceString(Date(), true)
+    enum class QuantityQualifier { ITEM, KG }
 
-    fun getPriceChangeForDate(date: Date): PriceChange? {
-        if (valueChanges.size == 1) {
-            return valueChanges[0]
-        } else if (valueChanges.size > 0) {
-            valueChanges.sortedBy { it.date }.forEach {
-                if (date < it.date!!) {
-                    return it
-                }
-            }
+    var quantityQualifier: QuantityQualifier
+        get() = QuantityQualifier.valueOf(quantityQualifierName)
+        set(value) {
+            quantityQualifierName = value.name
         }
-        return null
-    }
-
-    fun getPriceForDate(date: Date, amount: Float = 1f): PricePair {
-        var price: Float? = null
-        var currency: Currency? = null
-        if (valueChanges.size > 0) {
-            valueChanges.sortedBy { it.date }.forEach {
-                if (date < it.date!!) {
-                    return Pair(price, currency)
-                }
-                price = it.value
-                currency = it.currency
-            }
-        }
-        return Pair(price?.times(amount), currency)
-    }
-
-    fun getPriceString(date: Date, withCurrency: Boolean, amount: Float = 1f): String {
-        val price = getPriceForDate(date, amount)
-        if (price.first == null) {
-            return getString(R.string.price_unknown)
-        } else if (withCurrency && price.second != null) {
-            return getString(R.string.price_with_currency_fmt, price.second!!.sign, price.first!!)
-        } else {
-            return getString(R.string.price_no_currency_fmt, price.first!!)
-        }
-    }
 }

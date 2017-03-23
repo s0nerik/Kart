@@ -59,9 +59,9 @@ class CreateProductViewModel(
 
     private var itemCategory = Category()
     private var itemShop = Shop()
-    private val itemPrice by lazy { Price() }
+    private val itemPrice by lazy { PriceHistory() }
     private val itemPriceChange by lazy {
-        val priceChange = PriceChange()
+        val priceChange = Price()
         priceChange.date = Date()
         priceChange
     }
@@ -86,9 +86,9 @@ class CreateProductViewModel(
                     .map { if (!it.isNullOrBlank()) it.toFloat() else null }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe {
-                        if (pendingItem.price == null) {
-                            pendingItem.price = itemPrice
-                            pendingItem.price?.valueChanges?.add(itemPriceChange)
+                        if (pendingItem.priceHistory == null) {
+                            pendingItem.priceHistory = itemPrice
+                            pendingItem.priceHistory?.values?.add(itemPriceChange)
                         }
                         itemPriceChange.value = it
                         notifyPropertyChanged(BR.item)
@@ -100,9 +100,9 @@ class CreateProductViewModel(
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe { i ->
                         itemPriceChange.quantityQualifier = when (i) {
-                            0 -> PriceChange.QuantityQualifier.ITEM
-                            1 -> PriceChange.QuantityQualifier.KG
-                            else -> PriceChange.QuantityQualifier.ITEM
+                            0 -> Price.QuantityQualifier.ITEM
+                            1 -> Price.QuantityQualifier.KG
+                            else -> Price.QuantityQualifier.ITEM
                         }
                     }
         }
@@ -119,15 +119,15 @@ class CreateProductViewModel(
     }
 
     @Bindable
-    fun getShop() = pendingItem.price?.shop
+    fun getShop() = pendingItem.priceHistory?.shop
     fun setShop(s: Shop) {
-        pendingItem.price?.shop = s
+        pendingItem.priceHistory?.shop = s
 
-        if (pendingItem.price == null) {
-            pendingItem.price = itemPrice
-            pendingItem.price!!.shop = s
-        } else if (pendingItem.price!!.isValid) {
-            pendingItem.price!!.shop = s
+        if (pendingItem.priceHistory == null) {
+            pendingItem.priceHistory = itemPrice
+            pendingItem.priceHistory!!.shop = s
+        } else if (pendingItem.priceHistory!!.isValid) {
+            pendingItem.priceHistory!!.shop = s
         }
 
         notifyPropertyChanged(BR.shop)
@@ -136,9 +136,9 @@ class CreateProductViewModel(
     }
 
     @Bindable
-    fun getPrice() = pendingItem.price
-    fun setPrice(p: Price) {
-        pendingItem.price = p
+    fun getPrice() = pendingItem.priceHistory
+    fun setPrice(p: PriceHistory) {
+        pendingItem.priceHistory = p
         notifyPropertyChanged(BR.price)
         notifyPropertyChanged(BR.priceIconUrl)
         notifyPropertyChanged(BR.item)
@@ -232,7 +232,7 @@ class CreateProductViewModel(
         activity.finish()
     }
 
-    //region Price methods
+    //region PriceHistory methods
     fun selectPrice() {
         setAction(Action.CREATE_PRICE)
     }
@@ -244,7 +244,7 @@ class CreateProductViewModel(
     fun confirmPriceCreation() {
         val priceText = activity.etNewPriceValue.text.toString()
         if (priceText.isBlank()) {
-            activity.toast("Price can't be blank!")
+            activity.toast("PriceHistory can't be blank!")
             return
         }
 
@@ -252,7 +252,7 @@ class CreateProductViewModel(
         try {
             priceValue = priceText.toFloat()
         } catch (e: NumberFormatException) {
-            activity.toast("Wrong price format!")
+            activity.toast("Wrong priceHistory format!")
             return
         }
 
@@ -260,11 +260,11 @@ class CreateProductViewModel(
         itemPriceChange.date = Date()
         itemPriceChange.value = priceValue
 
-        itemPrice.valueChanges.clear()
-        itemPrice.valueChanges.add(itemPriceChange)
+        itemPrice.values.clear()
+        itemPrice.values.add(itemPriceChange)
         setPrice(itemPrice)
 
-        // TODO: create Price if doesn't exist
+        // TODO: create PriceHistory if doesn't exist
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
@@ -364,7 +364,7 @@ class CreateProductViewModel(
             activity.toast("Category must be selected!")
             return
         }
-        if (pendingItem.price?.shop == null) {
+        if (pendingItem.priceHistory?.shop == null) {
             activity.toast("Shop must be selected!")
             return
         }

@@ -148,58 +148,6 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     override fun finish() {
         animate(false)
-//        TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
-//            transitionSet {
-//                views(frequentsCard)
-//                duration(200)
-//                interpolator(FastOutSlowInInterpolator())
-//                transition(Fade(Fade.OUT))
-//                transition(Slide(Gravity.BOTTOM))
-//            }
-//
-//            transitionSet {
-//                views(favoritesCard)
-//                duration(200)
-//                delay(100)
-//                interpolator(FastOutSlowInInterpolator())
-//                transition(Fade(Fade.OUT))
-//                transition(Slide(Gravity.BOTTOM))
-//            }
-//
-//            transitionSet {
-//                view(btnCreateNewProduct)
-//                duration(200)
-//                delay(200)
-//                interpolator(FastOutSlowInInterpolator())
-//                transition(Fade(Fade.OUT))
-//                transition(Slide(Gravity.BOTTOM))
-//            }
-//
-//            transitionSet {
-//                view(searchCard)
-//                duration(200)
-//                delay(300)
-//                interpolator(FastOutSlowInInterpolator())
-//                transition(Fade(Fade.OUT))
-//                transition(Slide(Gravity.BOTTOM))
-//            }
-//
-//            transition(Fade(Fade.OUT)) {
-//                view(bg)
-//                duration(200)
-//                delay(300)
-//                interpolator(FastOutSlowInInterpolator())
-//            }
-//
-//            onEnd { super.finish() }
-//            onCancel { super.finish() }
-//        })
-//
-//        frequentsCard.visibility = View.INVISIBLE
-//        favoritesCard.visibility = View.INVISIBLE
-//        searchCard.visibility = View.INVISIBLE
-//        btnCreateNewProduct.visibility = View.INVISIBLE
-//        bg.visibility = View.INVISIBLE
     }
 
     private fun initData() {

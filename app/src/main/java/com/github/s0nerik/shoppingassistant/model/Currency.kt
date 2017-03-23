@@ -13,5 +13,7 @@ open class Currency(
         open var sign: String = "",
         open var name: String = ""
 ) : RealmObject() {
+    override fun toString() =  sign
+
     // TODO: add a way to convert between the currencies (probably async, using backend)
 }

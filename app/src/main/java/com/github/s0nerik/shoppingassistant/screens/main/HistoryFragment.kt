@@ -12,6 +12,7 @@ import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.adapter_items.HistoryHeader
+import com.github.s0nerik.shoppingassistant.adapter_items.MoneySpent
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
@@ -19,7 +20,6 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import io.realm.PurchaseRealmProxy
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
 
@@ -59,7 +59,7 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
         LastAdapter.with(historyItems, BR.item)
                 .type {
                     when (item) {
-                        is PurchaseRealmProxy -> Type<ItemHistoryBinding>(R.layout.item_history)
+                        is Purchase -> Type<ItemHistoryBinding>(R.layout.item_history)
                         is HistoryHeader -> Type<ItemHistoryHeaderBinding>(R.layout.item_history_header)
                         else -> Type<ItemHistoryBinding>(R.layout.item_history)
                     }
@@ -70,7 +70,6 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     override fun onResume() {
         super.onResume()
         initHistory()
-//        animateAppear()
     }
 
     private fun initHistory() {
@@ -81,25 +80,8 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
                 .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
 
         purchases.forEach {
-            historyItems.add(HistoryHeader(it.key.toDate()))
+            historyItems.add(HistoryHeader(it.key.toDate(), MoneySpent(it.value.sumByDouble { (it.amount * it.priceLocal).toDouble() }.toFloat(), it.value[0].price.currency!!)))
             historyItems.addAll(it.value)
         }
     }
-
-//    private fun animateAppear() {
-//        async {
-//            recycler.visibility = View.INVISIBLE
-//
-//            awaitPreDraw(root)
-//
-//            val set = TransitionSet()
-//                    .addTransition(Slide(Gravity.BOTTOM))
-//                    .addTransition(Fade())
-//                    .setInterpolator(FastOutSlowInInterpolator())
-//                    .setDuration(200)
-//
-//            TransitionManager.beginDelayedTransition(root, set)
-//            recycler.visibility = View.VISIBLE
-//        }
-//    }
 }

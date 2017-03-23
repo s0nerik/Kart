@@ -13,7 +13,7 @@ open class Item(
         @PrimaryKey open var id: String = randomUuidString(),
         open var name: String = "",
         open var category: Category? = null,
-        open var price: Price? = null,
+        open var priceHistory: PriceHistory? = null,
         open var isFavorite: Boolean = false
 ) : RealmObject() {
     val readableNamePreview: String
@@ -21,11 +21,11 @@ open class Item(
     val readableName: String
         get() = if (name.isNotBlank()) name else "Unnamed"
     val readablePrice: String
-        get() = if (price != null) price!!.currentValueString else "Unknown price"
+        get() = if (priceHistory != null) priceHistory!!.currentValueString else "Unknown priceHistory"
     val readableCategory: String
         get() = if (category != null) category!!.name else "Uncategorized"
     val readableShop: String
-        get() = if (price != null && price!!.shop != null) price!!.shop!!.name else "Unknown shop"
+        get() = if (priceHistory != null && priceHistory!!.shop != null) priceHistory!!.shop!!.name else "Unknown shop"
     val iconUrl: String
         get() = if (category != null) category!!.iconUrl else ""
 }
