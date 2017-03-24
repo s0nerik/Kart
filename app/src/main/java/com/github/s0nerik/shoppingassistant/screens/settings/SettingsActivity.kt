@@ -20,9 +20,13 @@ class SettingsActivityViewModel(val a: SettingsActivity) {
     fun selectDefaultCurrency() {
         SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
     }
+
+    fun selectPurchasesLimit() {
+//        SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
+    }
 }
 
-class SettingsActivity : BaseBoundActivity<ActivitySettingsBinding>(R.layout.activity_settings) {
+class SettingsActivity : BaseBoundActivity<ActivitySettingsBinding>(R.layout.activity_settings, false) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = SettingsActivityViewModel(this)
