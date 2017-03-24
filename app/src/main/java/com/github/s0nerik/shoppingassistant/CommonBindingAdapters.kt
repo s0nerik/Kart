@@ -35,8 +35,10 @@ fun setFont(textView: TextView, fontName: String) {
 
 @BindingAdapter(value = *arrayOf("menu", "menuTint"), requireAll = false)
 fun setMenu(toolbar: Toolbar, @MenuRes menuId: Int, @ColorRes tintColorId: Int?) {
-    toolbar.inflateMenu(menuId)
+    if (menuId != 0) toolbar.inflateMenu(menuId)
     if (tintColorId != null) {
+        toolbar.navigationIcon?.apply { setColorFilter(ContextCompat.getColor(toolbar.context, tintColorId), PorterDuff.Mode.SRC_IN) }
+
         val menu = toolbar.menu
         for (i in 0..menu.size() - 1) {
             val item = menu.getItem(i)

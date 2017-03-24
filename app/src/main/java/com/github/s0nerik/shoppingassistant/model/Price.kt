@@ -13,8 +13,8 @@ import java.util.*
 open class Price(
         @PrimaryKey open var id: String = randomUuidString(),
         open var value: Float? = null,
-        open var currency: Currency? = null,
-        open var date: Date? = null,
+        open var currency: Currency = Currency.default,
+        open var date: Date = Date(),
         open var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
 ) : RealmObject() {
     enum class QuantityQualifier { ITEM, KG }

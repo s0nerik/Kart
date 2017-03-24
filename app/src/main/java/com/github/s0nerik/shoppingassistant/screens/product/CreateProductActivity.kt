@@ -55,7 +55,7 @@ class CreateProductViewModel(
 ) : BaseObservable() {
     enum class Action { CREATE_PRODUCT, CREATE_PRICE, SELECT_CATEGORY, CREATE_CATEGORY, SELECT_SHOP, CREATE_SHOP }
 
-    val pendingCurrency = ObservableField<Currency?>(null)
+    val pendingCurrency = ObservableField<Currency>(Currency.default)
 
     private var itemCategory = Category()
     private var itemShop = Shop()

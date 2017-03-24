@@ -64,16 +64,16 @@ private fun providePurchase(realm: Realm, name: String, category: String) {
 }
 
 private fun providePriceHistory(realm: Realm, shop: Shop, date: DateTime, value: Float, currency: Currency): PriceHistory {
-    val priceChange = realm.createObject(Price::class)
-    priceChange.date = (date - 1.minutes().minutes).toDate()
-    priceChange.value = value
-    priceChange.currency = currency
+    val price = Price()
+    price.date = (date - 1.minutes().minutes).toDate()
+    price.value = value
+    price.currency = currency
 
-    val price = realm.createObject(PriceHistory::class)
-    price.shop = shop
-    price.values = RealmList(priceChange)
+    val priceHistory = realm.createObject(PriceHistory::class)
+    priceHistory.shop = shop
+    priceHistory.values = RealmList(realm.copyToRealmOrUpdate(price))
 
-    return price
+    return priceHistory
 }
 
 private fun providePurchase(realm: Realm, shop: Shop, date: DateTime, name: String, category: Category, price: Float, currency: Currency): Purchase {

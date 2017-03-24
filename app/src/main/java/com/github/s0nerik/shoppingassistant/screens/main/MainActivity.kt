@@ -12,7 +12,10 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.screens.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.appcompat.v7.onMenuItemClick
+import org.jetbrains.anko.startActivity
 
 class MainActivityViewModel(private val activity: MainActivity) {
     val dashboardFragment by lazy { DashboardFragment() }
@@ -60,6 +63,12 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, binding.vm.dashboardFragment)
                 .commit()
+
+        toolbar.onMenuItemClick {
+            if (it!!.itemId == R.id.settings)
+                startActivity<SettingsActivity>()
+            true
+        }
 
         badge = Badger.sett(binding.bottomNavigation.menu.getItem(2), CountBadge.Factory(this, BadgeShape.circle(0.5f, Gravity.RIGHT.or(Gravity.TOP))))
         Cart.purchases.addOnListChangedCallback(cartChangeListener)
