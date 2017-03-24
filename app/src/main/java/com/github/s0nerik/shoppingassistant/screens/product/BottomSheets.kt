@@ -1,22 +1,16 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.design.widget.BottomSheetDialogFragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.model.Shop
-import io.realm.Realm
 import kotlinx.android.synthetic.main.sheet_select_category.*
 
 /**
@@ -24,17 +18,6 @@ import kotlinx.android.synthetic.main.sheet_select_category.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-
-open class BaseBottomSheet<out T, V : ViewDataBinding>(val vm: T, @LayoutRes val layout: Int) : BottomSheetDialogFragment() {
-    val realm: Realm by lazy { Realm.getDefaultInstance() }
-    lateinit var binding: V
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<V>(inflater, layout, container, false)
-        binding.setVariable(BR.vm, vm)
-        return binding.root
-    }
-}
 
 class SelectCategoryBottomSheet(
         vm: CreateProductViewModel
