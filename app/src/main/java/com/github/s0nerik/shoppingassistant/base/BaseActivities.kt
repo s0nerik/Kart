@@ -24,7 +24,8 @@ abstract class BaseActivity : RxAppCompatActivity() {
 }
 
 abstract class BaseBoundActivity<out T : ViewDataBinding>(
-        protected val layoutId: Int
+        protected val layoutId: Int,
+        protected val disableTransitions: Boolean = true
 ) : RxAppCompatActivity() {
     private lateinit var innerBinding: T
     protected val binding: T by lazy { innerBinding }
@@ -33,13 +34,8 @@ abstract class BaseBoundActivity<out T : ViewDataBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(0, 0)
+        if (disableTransitions) overridePendingTransition(0, 0)
         innerBinding = DataBindingUtil.setContentView(this, layoutId)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        overridePendingTransition(0, 0)
     }
 
     override fun onDestroy() {

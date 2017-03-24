@@ -24,6 +24,11 @@ enum class DashboardDataPeriod(@StringRes val stringId: Int) {
     }
 }
 
-class DashboardPrefs : KotprefModel() {
+object DashboardPrefs : KotprefModel() {
     var dataPeriod by enumValuePref(DashboardDataPeriod.LAST_WEEK)
+}
+
+object MainPrefs : KotprefModel() {
+    var purchaseLimitDays by intPref(30)
+    var purchaseLimit by floatPref(0F)
 }

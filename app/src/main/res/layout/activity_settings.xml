@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginLeft="16dp"
                 android:text="General"
                 android:textColor="@color/colorAccent"
@@ -47,11 +47,9 @@
                 />
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:orientation="vertical"
                 android:onClick='@{() -> vm.selectDefaultCurrency()}'
                 android:foreground="?selectableItemBackground"
@@ -71,7 +69,40 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     app:sign='@{vm.defaultCurrency.sign}'
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical"
+                android:onClick='@{() -> vm.selectPurchasesLimit()}'
+                android:foreground="?selectableItemBackground"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/purchasesLimit"
+                    android:layout_marginRight="16dp"
+                    android:text="Purchases limit"
+                    style="@style/MaterialTypography.Regular.Subheading"
+                    />
+                <TextView
+                    android:id="@+id/purchasesLimit"
+                    layout="@layout/view_currency_sign"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    tools:text='UAH 100 / month'
                     />
             </RelativeLayout>
         </LinearLayout>
