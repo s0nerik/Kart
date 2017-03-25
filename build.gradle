@@ -8,12 +8,11 @@ buildscript {
         dagger_version = '2.5'
         rxbinding_version = '1.0.1'
         rxlifecycle_version = '1.0'
-        android_plugin_version = '2.3.0-beta2'
+        android_plugin_version = '2.3.0'
     }
 
     repositories {
         jcenter()
-        maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
     }
 
     dependencies {
@@ -30,7 +29,6 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
         maven { url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo' }
     }
 }

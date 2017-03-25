@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.github.s0nerik.kart"
         minSdkVersion 21
@@ -44,7 +44,7 @@ dependencies {
 
     // Language features
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'co.metalab.asyncawait:asyncawait:0.9.5'
+    compile 'co.metalab.asyncawait:asyncawait:1.0.0'
 
     // Support libs
     compile "com.android.support:appcompat-v7:$support_version"
