@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
+import com.facebook.stetho.Stetho
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import rx_activity_result.RxActivityResult
@@ -79,5 +81,21 @@ open class App : Application() {
 //                    }
 //                }
         }
+    }
+}
+
+class DebugApp : App() {
+    override fun onCreate() {
+        super.onCreate()
+        initStetho()
+    }
+
+    private fun initStetho() {
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build()
+        )
     }
 }
