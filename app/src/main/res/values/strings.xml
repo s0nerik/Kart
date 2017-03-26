@@ -16,4 +16,12 @@
         <item>Per KG</item>
     </string-array>
 
+    // Dashboard stats periods
+    <string name="stats_period_today">Today</string>
+    <string name="stats_period_yesterday">Yesterday</string>
+    <string name="stats_period_last_week">Last week</string>
+    <string name="stats_period_last_month">Last month</string>
+    <string name="stats_period_six_months">Six months</string>
+    <string name="stats_period_last_year">Last year</string>
+
 </resources>

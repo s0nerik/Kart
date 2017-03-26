@@ -112,6 +112,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
         initRecents()
         initStats()
 
+//        periodSpinner.adapter = ArrayAdapter.createFromResource(act, R.array.stats_periods, R.layout.item_money_spent_spinner)
+
         animator.start()
     }
 
