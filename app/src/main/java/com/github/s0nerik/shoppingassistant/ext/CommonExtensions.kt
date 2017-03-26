@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.ext
 
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
+import android.view.View
 import java.lang.ref.WeakReference
 
 /**
@@ -19,3 +20,10 @@ fun <T> observableListOf(collection: Collection<T> = emptyList()): ObservableLis
     list.addAll(collection)
     return list
 }
+
+var View.scales: Float
+    get() = throw IllegalAccessError()
+    set(value) {
+        scaleX = value
+        scaleY = value
+    }
