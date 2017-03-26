@@ -82,6 +82,61 @@ class CreatePurchaseViewModel(
     }
 }
 
+class CreatePurchaseAnimator(val a: CreatePurchaseActivity, val binding: ActivityCreatePurchaseBinding) {
+    fun appear(callback: (() -> Unit)? = null) {
+        animate(true, callback)
+    }
+
+    fun disappear(callback: (() -> Unit)? = null) {
+        animate(false, callback)
+    }
+
+    private fun animate(appear: Boolean, callback: (() -> Unit)?) {
+        with(a) {
+            var views = listOf(bg, searchCard, btnCreateNewProduct, favoritesCard, frequentsCard)
+
+            if (appear) {
+                scrollView.applyWrongNestedScrollWorkaround()
+                views.subList(1, views.size).forEach {
+                    it.translationY = dip(80).toFloat()
+                    it.alpha = 0f
+                }
+            } else {
+                views = views.reversed()
+            }
+
+            val durations = arrayOf(500, 200, 200, 200, 200)
+            val delays = if (binding.vm.favorites.isNotEmpty()) {
+                arrayOf(0, 0, 200, 400, 600)
+            } else {
+                arrayOf(0, 0, 200, 400, 400)
+            }
+
+            val interpolator = if (appear) FastOutSlowInInterpolator() else DecelerateInterpolator(2f)
+
+            val anim = AnimatorSet()
+            anim.playTogether(
+                    views.mapIndexed { i, view ->
+                        ViewPropertyObjectAnimator.animate(view)
+                                .alpha(if (appear) 1f else 0f)
+                                .translationY(if (appear) 0f else dip(80).toFloat())
+                                .setDuration(durations[i].toLong())
+                                .setStartDelay(delays[i].toLong())
+                                .setInterpolator(interpolator)
+                                .get()
+                    }
+            )
+            callback?.let {
+                anim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationCancel(animation: Animator?) = it()
+                    override fun onAnimationEnd(animation: Animator?) = it()
+                })
+            }
+            anim.start()
+        }
+    }
+}
+
 class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
 
     private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
@@ -95,59 +150,19 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 finish()
             }
 
+    private lateinit var animator: CreatePurchaseAnimator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         binding.vm = CreatePurchaseViewModel(this, realm)
         initData()
-        animate(true)
-    }
-
-    private fun animate(appear: Boolean) {
-        var views = listOf(bg, searchCard, btnCreateNewProduct, favoritesCard, frequentsCard)
-
-        if (appear) {
-            scrollView.applyWrongNestedScrollWorkaround()
-            views.subList(1, views.size).forEach {
-                it.translationY = dip(80).toFloat()
-                it.alpha = 0f
-            }
-        } else {
-            views = views.reversed()
-        }
-
-        val durations = arrayOf(500, 200, 200, 200, 200)
-        val delays = if (binding.vm.favorites.isNotEmpty()) {
-            arrayOf(0, 0, 200, 400, 600)
-        } else {
-            arrayOf(0, 0, 200, 400, 400)
-        }
-
-        val interpolator = if (appear) FastOutSlowInInterpolator() else DecelerateInterpolator(2f)
-
-        val anim = AnimatorSet()
-        anim.playTogether(
-                views.mapIndexed { i, view ->
-                    ViewPropertyObjectAnimator.animate(view)
-                            .alpha(if (appear) 1f else 0f)
-                            .translationY(if (appear) 0f else dip(80).toFloat())
-                            .setDuration(durations[i].toLong())
-                            .setStartDelay(delays[i].toLong())
-                            .setInterpolator(interpolator)
-                            .get()
-                }
-        )
-        if (!appear) {
-            anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationCancel(animation: Animator?) = super@CreatePurchaseActivity.finish()
-                override fun onAnimationEnd(animation: Animator?) = super@CreatePurchaseActivity.finish()
-            })
-        }
-        anim.start()
+        animator = CreatePurchaseAnimator(this, binding)
+        animator.appear()
     }
 
     override fun finish() {
-        animate(false)
+        animator.disappear { super.finish() }
     }
 
     private fun initData() {
