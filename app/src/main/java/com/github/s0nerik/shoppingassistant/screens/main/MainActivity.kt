@@ -26,7 +26,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
     val historyFragment by lazy { HistoryFragment() }
     val cartFragment by lazy { CartFragment() }
 
-    val dashboardPeriod = ObservableField<DashboardDataPeriod>(DashboardPrefs().dataPeriod)
+    val dashboardPeriod = ObservableField<DashboardDataPeriod>(DashboardPrefs.dataPeriod)
 
     init {
         activity.bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected)
@@ -59,7 +59,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
                 else -> throw IllegalArgumentException()
             }
             dashboardPeriod.set(period)
-            DashboardPrefs().dataPeriod = period
+            DashboardPrefs.dataPeriod = period
             true
         }
         menu.show()
