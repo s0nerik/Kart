@@ -81,7 +81,7 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:orientation="vertical"
-                android:onClick='@{() -> vm.selectPurchasesLimit()}'
+                android:onClick='@{() -> vm.selectExpensesLimit()}'
                 android:foreground="?selectableItemBackground"
                 >
                 <TextView
@@ -90,7 +90,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/purchasesLimit"
                     android:layout_marginRight="16dp"
-                    android:text="Purchases limit"
+                    android:text="Expenses limit"
                     style="@style/MaterialTypography.Regular.Subheading"
                     />
                 <TextView

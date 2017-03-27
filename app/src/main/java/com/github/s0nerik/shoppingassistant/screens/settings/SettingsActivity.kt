@@ -21,8 +21,8 @@ class SettingsActivityViewModel(val a: SettingsActivity) {
         SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
     }
 
-    fun selectPurchasesLimit() {
-//        SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
+    fun selectExpensesLimit() {
+        SelectExpensesLimitBottomSheet(this).show(a.supportFragmentManager, null)
     }
 }
 

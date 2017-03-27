@@ -24,4 +24,12 @@
     <string name="stats_period_six_months">Six months</string>
     <string name="stats_period_last_year">Last year</string>
 
+    // Dashboard stats periods
+    <string name="expenses_limit_period_day">Per day</string>
+    <string name="expenses_limit_period_week">Per week</string>
+    <string name="expenses_limit_period_month">Per month</string>
+    <string name="expenses_limit_period_day_format">%1$s / day</string>
+    <string name="expenses_limit_period_week_format">%1$s / week</string>
+    <string name="expenses_limit_period_month_format">%1$s / month</string>
+
 </resources>

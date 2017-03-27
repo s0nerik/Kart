@@ -11,6 +11,7 @@ import com.github.s0nerik.shoppingassistant.ext.getString
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+
 enum class DashboardDataPeriod(@StringRes val stringId: Int) {
     TODAY(stats_period_today),
     YESTERDAY(stats_period_yesterday),
@@ -24,11 +25,25 @@ enum class DashboardDataPeriod(@StringRes val stringId: Int) {
     }
 }
 
+enum class ExpensesLimitPeriod(@StringRes val stringId: Int, @StringRes val formatStringId: Int) {
+    DAY(expenses_limit_period_day, expenses_limit_period_day_format),
+    WEEK(expenses_limit_period_week, expenses_limit_period_week_format),
+    MONTH(expenses_limit_period_month, expenses_limit_period_month_format);
+
+    fun format(amount: String): String {
+        return getString(formatStringId, amount)
+    }
+
+    override fun toString(): String {
+        return getString(stringId)
+    }
+}
+
 object DashboardPrefs : KotprefModel() {
     var dataPeriod by enumValuePref(DashboardDataPeriod.LAST_WEEK)
 }
 
 object MainPrefs : KotprefModel() {
-    var purchaseLimitDays by intPref(30)
-    var purchaseLimit by floatPref(0F)
+    var expensesLimitPeriod by enumValuePref(ExpensesLimitPeriod.MONTH)
+    var expensesLimit by floatPref(0F)
 }
