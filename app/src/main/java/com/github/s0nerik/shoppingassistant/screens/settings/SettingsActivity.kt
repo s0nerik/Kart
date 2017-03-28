@@ -31,7 +31,7 @@ class SettingsActivityViewModel(val a: SettingsActivity) {
     }
 
     fun selectExpensesLimit() {
-        SelectExpensesLimitBottomSheet(SelectExpensesLimitViewModel()).show(a.supportFragmentManager, null)
+        SelectExpensesLimitBottomSheet(SelectExpensesLimitViewModel(defaultCurrency.get().sign)).show(a.supportFragmentManager, null)
     }
 }
 

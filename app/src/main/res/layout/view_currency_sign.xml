@@ -9,6 +9,10 @@
             name="sign"
             type="String"
             />
+        <variable
+            name="background"
+            type="Integer"
+            />
     </data>
     <FrameLayout
         android:layout_width="wrap_content"
@@ -19,7 +23,8 @@
             android:layout_height="36dp"
             android:layout_gravity="center"
             android:src="@drawable/checkbox_blank_circle"
-            android:tint="@color/colorAccent"
+            android:tint='@{background != null ? background : @color/colorAccent}'
+            tools:tint="@color/colorAccent"
             />
 
         <me.grantland.widget.AutofitTextView
@@ -29,12 +34,13 @@
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:text='@{sign}'
             android:textAppearance="@style/MaterialTypography.Dense.Body2"
             android:textColor="@color/material_color_white"
             android:textSize="16sp"
             android:maxLines="1"
-            android:singleLine="true"
+            android:includeFontPadding="false"
             app:minTextSize="10sp"
             tools:text="$"
             />

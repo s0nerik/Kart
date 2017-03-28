@@ -28,9 +28,9 @@
     <string name="expenses_limit_period_day">Per day</string>
     <string name="expenses_limit_period_week">Per week</string>
     <string name="expenses_limit_period_month">Per month</string>
-    <string name="expenses_limit_period_day_format">%1$.2f / day</string>
-    <string name="expenses_limit_period_week_format">%1$.2f / week</string>
-    <string name="expenses_limit_period_month_format">%1$.2f / month</string>
+    <string name="expenses_limit_period_day_format">%1$s / day</string>
+    <string name="expenses_limit_period_week_format">%1$s / week</string>
+    <string name="expenses_limit_period_month_format">%1$s / month</string>
 
     <string name="expenses_limit_unknown">Not set</string>
 

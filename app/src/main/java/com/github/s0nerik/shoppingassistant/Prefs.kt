@@ -7,6 +7,7 @@ import com.chibatching.kotpref.enumpref.enumValuePref
 import com.github.s0nerik.shoppingassistant.R.string.*
 import com.github.s0nerik.shoppingassistant.ext.getString
 import com.github.s0nerik.shoppingassistant.model.Currency
+import java.text.DecimalFormat
 
 /**
  * Created by Alex on 3/26/2017.
@@ -33,7 +34,7 @@ enum class ExpensesLimitPeriod(@StringRes val stringId: Int, @StringRes val form
     MONTH(expenses_limit_period_month, expenses_limit_period_month_format);
 
     fun format(amount: Float): String {
-        return "${Currency.default.sign} ${getString(formatStringId, amount)}"
+        return "${Currency.default.sign} ${getString(formatStringId, DecimalFormat("0.##").format(amount))}"
     }
 
     override fun toString(): String {

@@ -26,6 +26,7 @@ import com.vicpin.krealmextensions.save
 import kotlinx.android.synthetic.main.sheet_select_category.*
 import kotlinx.android.synthetic.main.sheet_select_expenses_limit.*
 import rx.Subscription
+import java.text.DecimalFormat
 
 /**
  * Created by Alex on 3/23/2017.
@@ -60,11 +61,11 @@ class SelectDefaultCurrencyBottomSheet(
     }
 }
 
-class SelectExpensesLimitViewModel {
+class SelectExpensesLimitViewModel(val currencySign: String) {
     lateinit var f: SelectExpensesLimitBottomSheet
 
     fun accept() {
-        if (f.expensesLimit != null && f.expensesLimitPeriod != null) {
+        if (f.wasChanged && f.expensesLimit != null && f.expensesLimitPeriod != null) {
             MainPrefs.expensesLimit = f.expensesLimit!!
             MainPrefs.expensesLimitPeriod = f.expensesLimitPeriod!!
         }
@@ -77,8 +78,9 @@ class SelectExpensesLimitBottomSheet(
 ) : BaseBottomSheet<SelectExpensesLimitViewModel, SheetSelectExpensesLimitBinding>(vm, R.layout.sheet_select_expenses_limit) {
     private lateinit var limitTextSubscription: Subscription
 
-    var expensesLimit: Float? = null
-    var expensesLimitPeriod: ExpensesLimitPeriod? = null
+    var expensesLimit: Float? = MainPrefs.expensesLimit
+    var expensesLimitPeriod: ExpensesLimitPeriod? = MainPrefs.expensesLimitPeriod
+    var wasChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,11 +100,16 @@ class SelectExpensesLimitBottomSheet(
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        etLimit.setText(DecimalFormat("0.##").format(expensesLimit))
+        etLimit.setSelection(etLimit.text.length)
+
         spinnerPeriod.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, ExpensesLimitPeriod.values())
+        spinnerPeriod.setSelection(ExpensesLimitPeriod.values().indexOf(expensesLimitPeriod))
         spinnerPeriod.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 expensesLimitPeriod = ExpensesLimitPeriod.values()[position]
+                wasChanged = true
             }
         }
     }
@@ -111,6 +118,7 @@ class SelectExpensesLimitBottomSheet(
         super.onResume()
         limitTextSubscription = etLimit.textChanges().skip(1).subscribe {
             expensesLimit = it.toString().toFloatOrNull()
+            wasChanged = true
         }
     }
 

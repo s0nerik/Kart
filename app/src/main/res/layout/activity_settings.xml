@@ -103,7 +103,7 @@
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
                     android:text='@{vm.expensesLimitString}'
-                    tools:text='UAH 100 / month'
+                    tools:text='$ 100 / month'
                     />
             </RelativeLayout>
         </LinearLayout>
