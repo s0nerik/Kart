@@ -91,12 +91,14 @@
                         android:backgroundTint="@color/material_color_white"
                         android:orientation="horizontal"
                         android:onClick='@{() -> vm.selectDashboardPeriod()}'
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
                         >
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="4dp"
+                            android:layout_marginLeft="2dp"
                             android:src="@drawable/calendar_blank"
                             android:tint="@color/colorPrimaryDark"
                             />
@@ -116,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/arrow_down_drop_circle"
                             android:tint="@color/colorPrimaryDark"
-                            android:paddingRight="-4dp"
+                            android:paddingRight="-6dp"
                             />
                     </LinearLayout>
                 </RelativeLayout>
