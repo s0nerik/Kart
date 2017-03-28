@@ -102,6 +102,7 @@
                     android:layout_centerVertical="true"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
+                    android:text='@{vm.expensesLimitString}'
                     tools:text='UAH 100 / month'
                     />
             </RelativeLayout>

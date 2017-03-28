@@ -1,10 +1,12 @@
 package com.github.s0nerik.shoppingassistant
 
+import android.content.SharedPreferences
 import android.support.annotation.StringRes
 import com.chibatching.kotpref.KotprefModel
 import com.chibatching.kotpref.enumpref.enumValuePref
 import com.github.s0nerik.shoppingassistant.R.string.*
 import com.github.s0nerik.shoppingassistant.ext.getString
+import com.github.s0nerik.shoppingassistant.model.Currency
 
 /**
  * Created by Alex on 3/26/2017.
@@ -30,8 +32,8 @@ enum class ExpensesLimitPeriod(@StringRes val stringId: Int, @StringRes val form
     WEEK(expenses_limit_period_week, expenses_limit_period_week_format),
     MONTH(expenses_limit_period_month, expenses_limit_period_month_format);
 
-    fun format(amount: String): String {
-        return getString(formatStringId, amount)
+    fun format(amount: Float): String {
+        return "${Currency.default.sign} ${getString(formatStringId, amount)}"
     }
 
     override fun toString(): String {
@@ -46,4 +48,16 @@ object DashboardPrefs : KotprefModel() {
 object MainPrefs : KotprefModel() {
     var expensesLimitPeriod by enumValuePref(ExpensesLimitPeriod.MONTH)
     var expensesLimit by floatPref(0F)
+
+    val formattedExpensesLimit: String
+        get() {
+            if (expensesLimit > 0F) {
+                return expensesLimitPeriod.format(expensesLimit)
+            } else {
+                return getString(R.string.expenses_limit_unknown)
+            }
+        }
+
+    val sharedPreferences: SharedPreferences
+        get() = context.getSharedPreferences(kotprefName, kotprefMode)
 }
