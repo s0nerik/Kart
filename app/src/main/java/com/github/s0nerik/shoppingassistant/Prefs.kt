@@ -59,6 +59,15 @@ object MainPrefs : KotprefModel() {
             }
         }
 
+    val formattedExpensesLimitOrEmpty: String
+        get() {
+            if (expensesLimit > 0F) {
+                return "/ ${expensesLimitPeriod.format(expensesLimit)}"
+            } else {
+                return ""
+            }
+        }
+
     val sharedPreferences: SharedPreferences
         get() = context.getSharedPreferences(kotprefName, kotprefMode)
 }
