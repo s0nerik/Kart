@@ -1,7 +1,6 @@
 package com.github.s0nerik.shoppingassistant.adapter_items
 
 import com.github.debop.kodatimes.toDateTime
-import com.github.s0nerik.shoppingassistant.model.Currency
 import java.util.*
 
 /**
@@ -16,5 +15,5 @@ data class HistoryHeader(val date: Date, val spentMoney: MoneySpent) {
     val readableDate: String
         get() = date.toDateTime().toString("MMMM d")
     val readableSpentMoney: String
-        get() = "${spentMoney.second} ${"%.2f".format(spentMoney.first)}"
+        get() = "${spentMoney.second.symbol} ${"%.2f".format(spentMoney.first)}"
 }

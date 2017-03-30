@@ -9,9 +9,9 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.model.Category
-import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.model.Shop
 import kotlinx.android.synthetic.main.sheet_select_category.*
+import java.util.*
 
 /**
  * Created by Alex on 1/26/2017.
@@ -39,7 +39,7 @@ class SelectCurrencyBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCurrencyBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        LastAdapter.with(realm.where(Currency::class.java).findAll(), BR.item)
+        LastAdapter.with(Currency.getAvailableCurrencies().toList(), BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {

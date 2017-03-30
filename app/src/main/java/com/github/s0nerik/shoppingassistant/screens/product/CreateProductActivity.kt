@@ -16,12 +16,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import com.github.s0nerik.shoppingassistant.BR
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
 import com.github.s0nerik.shoppingassistant.getDrawablePath
 import com.github.s0nerik.shoppingassistant.model.*
-import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.view.focusChanges
 import com.jakewharton.rxbinding.widget.itemSelections
 import com.jakewharton.rxbinding.widget.textChanges
@@ -55,7 +55,7 @@ class CreateProductViewModel(
 ) : BaseObservable() {
     enum class Action { CREATE_PRODUCT, CREATE_PRICE, SELECT_CATEGORY, CREATE_CATEGORY, SELECT_SHOP, CREATE_SHOP }
 
-    val pendingCurrency = ObservableField<Currency>(Currency.default)
+    val pendingCurrency = ObservableField<Currency>(MainPrefs.defaultCurrency)
 
     private var itemCategory = Category()
     private var itemShop = Shop()

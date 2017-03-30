@@ -33,6 +33,7 @@ interface CurrenciesApi {
 
         fun loadExchangeRates(date: Date): Single<RemoteExchangeRates> {
             return instance.loadExchangeRates(date.toDateTime().toIsoFormatDateString())
+                    .doOnSuccess { it.saveToDatabase() }
         }
     }
 }

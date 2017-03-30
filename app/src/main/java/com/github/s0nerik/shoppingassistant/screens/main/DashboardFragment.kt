@@ -19,7 +19,6 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.scales
-import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
@@ -35,7 +34,7 @@ import java.text.DecimalFormat
  */
 class DashboardViewModel(val f: DashboardFragment) {
     val moneySpentAmountString: String
-        get() = "${Currency.default.sign} ${DecimalFormat("0.##").format(
+        get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
                 recentPurchases(f.realm, 1.months().ago().toDate()).sumByDouble { it.fullPrice.toDouble() }
         )}"
 

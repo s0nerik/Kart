@@ -19,14 +19,12 @@ import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySettingsBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
 import com.github.s0nerik.shoppingassistant.databinding.SheetSelectExpensesLimitBinding
-import com.github.s0nerik.shoppingassistant.model.Currency
 import com.jakewharton.rxbinding.widget.textChanges
-import com.vicpin.krealmextensions.queryAll
-import com.vicpin.krealmextensions.save
 import kotlinx.android.synthetic.main.sheet_select_category.*
 import kotlinx.android.synthetic.main.sheet_select_expenses_limit.*
 import rx.Subscription
 import java.text.DecimalFormat
+import java.util.*
 
 /**
  * Created by Alex on 3/23/2017.
@@ -38,21 +36,12 @@ class SelectDefaultCurrencyBottomSheet(
         vm: SettingsActivityViewModel
 ) : BaseBottomSheet<SettingsActivityViewModel, ActivitySettingsBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        LastAdapter.with(Currency().queryAll(), BR.item)
+        LastAdapter.with(Currency.getAvailableCurrencies().toList(), BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {
                                 val selectedCurrency = item as Currency
-
-                                if (Currency.default.isDefault) {
-                                    val defaultCurrency = Currency.default
-                                    defaultCurrency.isDefault = false
-                                    defaultCurrency.save()
-                                }
-
-                                selectedCurrency.isDefault = true
-                                selectedCurrency.save()
-
+                                MainPrefs.defaultCurrency = selectedCurrency
                                 vm.defaultCurrency.set(selectedCurrency)
                                 dismiss()
                             }

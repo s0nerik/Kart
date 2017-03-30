@@ -5,7 +5,6 @@ import com.github.debop.kodatimes.ago
 import com.github.debop.kodatimes.days
 import com.github.debop.kodatimes.minutes
 import com.github.s0nerik.shoppingassistant.model.*
-import com.github.s0nerik.shoppingassistant.model.Currency
 import io.realm.Realm
 import io.realm.RealmList
 import org.joda.time.DateTime
@@ -39,15 +38,14 @@ private fun createPurchases(realm: Realm, category: String, vararg names: String
 }
 
 private fun providePurchase(realm: Realm, name: String, category: String) {
-    val currenciesNum = realm.where(Currency::class.java).count().toInt()
-    val currencies = realm.where(Currency::class.java).findAll()
+    val currencies = Currency.getAvailableCurrencies().toList()
 
     val shopsNum = realm.where(Shop::class.java).count().toInt()
     val shops = realm.where(Shop::class.java).findAll()
 
     val rand = Random().nextInt(1_000_000)
     val randShopNum = rand % shopsNum
-    val randCurrencyNum = rand % currenciesNum
+    val randCurrencyNum = rand % currencies.size
 
     val shop = shops[randShopNum]
     val currency = currencies[randCurrencyNum]

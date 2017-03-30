@@ -26,7 +26,7 @@ open class PriceHistory(
             return values[0]
         } else if (values.size > 0) {
             values.sortedBy { it.date }.forEach {
-                if (date < it.date!!) {
+                if (date < it.date) {
                     return it
                 }
             }
@@ -38,7 +38,7 @@ open class PriceHistory(
         var price: Price = Price()
         if (values.size > 0) {
             values.sortedBy { it.date }.forEach {
-                if (date < it.date!!) {
+                if (date < it.date) {
                     return it
                 }
                 price = it
@@ -51,8 +51,8 @@ open class PriceHistory(
         val price = getPriceForDate(date)
         if (price.value == null) {
             return getString(R.string.price_unknown)
-        } else if (withCurrency && price.currency != null) {
-            return getString(R.string.price_with_currency_fmt, price.currency!!.sign, price.value!! * amount)
+        } else if (withCurrency) {
+            return getString(R.string.price_with_currency_fmt, price.currency.symbol, price.value!! * amount)
         } else {
             return getString(R.string.price_no_currency_fmt, price.value!! * amount)
         }

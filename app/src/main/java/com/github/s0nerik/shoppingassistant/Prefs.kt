@@ -6,8 +6,8 @@ import com.chibatching.kotpref.KotprefModel
 import com.chibatching.kotpref.enumpref.enumValuePref
 import com.github.s0nerik.shoppingassistant.R.string.*
 import com.github.s0nerik.shoppingassistant.ext.getString
-import com.github.s0nerik.shoppingassistant.model.Currency
 import java.text.DecimalFormat
+import java.util.*
 
 /**
  * Created by Alex on 3/26/2017.
@@ -34,7 +34,7 @@ enum class ExpensesLimitPeriod(@StringRes val stringId: Int, @StringRes val form
     MONTH(expenses_limit_period_month, expenses_limit_period_month_format);
 
     fun format(amount: Float): String {
-        return "${Currency.default.sign} ${getString(formatStringId, DecimalFormat("0.##").format(amount))}"
+        return "${MainPrefs.defaultCurrency.symbol} ${getString(formatStringId, DecimalFormat("0.##").format(amount))}"
     }
 
     override fun toString(): String {
@@ -49,6 +49,13 @@ object DashboardPrefs : KotprefModel() {
 object MainPrefs : KotprefModel() {
     var expensesLimitPeriod by enumValuePref(ExpensesLimitPeriod.MONTH)
     var expensesLimit by floatPref(0F)
+    var defaultCurrencyCode by stringPref(Currency.getInstance(Locale.getDefault()).currencyCode)
+
+    var defaultCurrency: Currency
+        get() = Currency.getInstance(defaultCurrencyCode)
+        set(value) {
+            defaultCurrencyCode = value.currencyCode
+        }
 
     val formattedExpensesLimit: String
         get() {

@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -13,11 +14,17 @@ import java.util.*
 open class Price(
         @PrimaryKey open var id: String = randomUuidString(),
         open var value: Float? = null,
-        open var currency: Currency = Currency.default,
+        open var currencyCode: String = MainPrefs.defaultCurrencyCode,
         open var date: Date = Date(),
         open var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
 ) : RealmObject() {
     enum class QuantityQualifier { ITEM, KG }
+
+    var currency: Currency
+        get() = Currency.getInstance(currencyCode)
+        set(value) {
+            currencyCode = value.currencyCode
+        }
 
     var quantityQualifier: QuantityQualifier
         get() = QuantityQualifier.valueOf(quantityQualifierName)
