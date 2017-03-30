@@ -2,7 +2,7 @@ package com.github.s0nerik.shoppingassistant.api
 
 import com.github.debop.kodatimes.toDateTime
 import com.github.debop.kodatimes.toIsoFormatDateString
-import com.github.s0nerik.shoppingassistant.model.ExchangeRates
+import com.github.s0nerik.shoppingassistant.model.RemoteExchangeRates
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,6 +18,9 @@ import java.util.*
  */
 
 interface CurrenciesApi {
+    @GET("{date}")
+    fun loadExchangeRates(@Path("date") formattedDate: String): Single<RemoteExchangeRates>
+
     companion object {
         private val instance: CurrenciesApi by lazy {
             Retrofit.Builder()
@@ -28,11 +31,8 @@ interface CurrenciesApi {
                     .create(CurrenciesApi::class.java)
         }
 
-        fun loadConversions(date: Date): Single<ExchangeRates> {
-            return instance.loadConversions(date.toDateTime().toIsoFormatDateString())
+        fun loadExchangeRates(date: Date): Single<RemoteExchangeRates> {
+            return instance.loadExchangeRates(date.toDateTime().toIsoFormatDateString())
         }
     }
-
-    @GET("{date}")
-    fun loadConversions(@Path("date") formattedDate: String): Single<ExchangeRates>
 }

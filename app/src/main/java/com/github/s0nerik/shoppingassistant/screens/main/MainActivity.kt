@@ -95,7 +95,7 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
 
         toolbar.onMenuItemClick {
             if (it!!.itemId == R.id.settings) {
-//                CurrenciesApi.loadConversions(now().toDate())
+//                CurrenciesApi.loadExchangeRates(now().toDate())
 //                        .subscribe {
 //                            d { it.toString() }
 //                        }
