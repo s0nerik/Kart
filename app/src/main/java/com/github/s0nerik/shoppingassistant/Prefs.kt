@@ -75,6 +75,15 @@ object MainPrefs : KotprefModel() {
             }
         }
 
+    val formattedShortExpensesLimitOrEmpty: String
+        get() {
+            if (expensesLimit > 0F) {
+                return "/ ${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(MainPrefs.expensesLimit)}"
+            } else {
+                return ""
+            }
+        }
+
     val sharedPreferences: SharedPreferences
         get() = context.getSharedPreferences(kotprefName, kotprefMode)
 }

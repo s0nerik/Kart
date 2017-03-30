@@ -39,7 +39,7 @@ class DashboardViewModel(val f: DashboardFragment) {
         )}"
 
     val expensesLimitString: String
-        get() = MainPrefs.formattedExpensesLimitOrEmpty
+        get() = MainPrefs.formattedShortExpensesLimitOrEmpty
 
     fun onCreateNewPurchase() {
         f.startActivity<CreatePurchaseActivity>()

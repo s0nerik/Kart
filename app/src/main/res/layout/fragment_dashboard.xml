@@ -74,7 +74,7 @@
                                 android:id="@+id/moneySpentLimit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_marginLeft="2dp"
+                                android:layout_marginLeft="4sp"
                                 android:layout_marginBottom="4dp"
                                 android:gravity="bottom"
                                 android:visibility="visible"
