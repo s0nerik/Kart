@@ -19,6 +19,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySettingsBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
 import com.github.s0nerik.shoppingassistant.databinding.SheetSelectExpensesLimitBinding
+import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
 import com.jakewharton.rxbinding.widget.textChanges
 import kotlinx.android.synthetic.main.sheet_select_category.*
 import kotlinx.android.synthetic.main.sheet_select_expenses_limit.*
@@ -36,7 +37,7 @@ class SelectDefaultCurrencyBottomSheet(
         vm: SettingsActivityViewModel
 ) : BaseBottomSheet<SettingsActivityViewModel, ActivitySettingsBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        LastAdapter.with(Currency.getAvailableCurrencies().toList(), BR.item)
+        LastAdapter.with(currenciesSorted, BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {

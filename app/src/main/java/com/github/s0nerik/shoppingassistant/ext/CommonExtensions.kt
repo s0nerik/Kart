@@ -4,6 +4,7 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import android.view.View
 import java.lang.ref.WeakReference
+import java.util.*
 
 /**
  * Created by Alex on 1/4/2017.
@@ -27,3 +28,9 @@ var View.scales: Float
         scaleX = value
         scaleY = value
     }
+
+val currenciesSorted: List<Currency>
+    get() = Currency.getAvailableCurrencies()
+            .toList()
+            .sortedBy { it.symbol }
+            .sortedBy { it.symbol.length }

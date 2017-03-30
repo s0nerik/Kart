@@ -8,6 +8,7 @@ import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.*
+import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Shop
 import kotlinx.android.synthetic.main.sheet_select_category.*
@@ -39,7 +40,7 @@ class SelectCurrencyBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCurrencyBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        LastAdapter.with(Currency.getAvailableCurrencies().toList(), BR.item)
+        LastAdapter.with(currenciesSorted, BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {
