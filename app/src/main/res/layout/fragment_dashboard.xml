@@ -67,6 +67,7 @@
                                 android:gravity="right"
                                 android:paddingTop="2dp"
                                 android:textColor="@color/colorPrimary"
+                                android:text='@{vm.moneySpentAmountString}'
                                 tools:text="UAH 1000"
                                 />
                             <TextView
@@ -78,6 +79,7 @@
                                 android:gravity="bottom"
                                 android:visibility="visible"
                                 android:textColor="@color/material_color_grey_500"
+                                android:text='@{vm.expensesLimitString}'
                                 tools:text="/ UAH 7000"
                                 style="@style/MaterialTypography.Regular.Caption"
                                 />

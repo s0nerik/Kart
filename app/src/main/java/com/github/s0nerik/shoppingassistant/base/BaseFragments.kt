@@ -40,7 +40,7 @@ abstract class BaseBoundFragment<out T : ViewDataBinding>(
         get() = innerBinding
 
     private lateinit var innerRealm: Realm
-    protected val realm
+    val realm
         get() = innerRealm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

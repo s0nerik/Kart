@@ -92,6 +92,7 @@ dependencies {
     compile 'com.github.florent37:glidepalette:1.0.2@aar'
     compile 'com.github.s0nerik:glide-bindingadapter:1.1'
 
+    // TODO: update to RxJava 2
     // Rx
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.4'
@@ -106,6 +107,11 @@ dependencies {
     compile "com.trello:rxlifecycle-components:$rxlifecycle_version"
     compile "com.trello:rxlifecycle-kotlin:$rxlifecycle_version"
     compile 'com.github.VictorAlbertos:RxActivityResult:0.4.1-1.x'
+
+    // Networking
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
 
     // Misc
     compile 'com.github.ajalt:timberkt:1.1.0'

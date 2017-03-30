@@ -38,6 +38,8 @@ open class Purchase(
         get() = item!!.iconUrl
     val price: Price
         get() = item!!.priceHistory!!.getPriceForDate(date!!)
+    val fullPrice: Float
+        get() = amount.times(price.value ?: 0f)
 
     // TODO: provide a way of conversion between the currencies
     val priceLocal: Float

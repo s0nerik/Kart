@@ -9,9 +9,12 @@ import android.view.MenuItem
 import berlin.volders.badger.BadgeShape
 import berlin.volders.badger.Badger
 import berlin.volders.badger.CountBadge
+import com.github.ajalt.timberkt.d
+import com.github.debop.kodatimes.now
 import com.github.s0nerik.shoppingassistant.DashboardDataPeriod
 import com.github.s0nerik.shoppingassistant.DashboardPrefs
 import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.api.CurrenciesApi
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
 import com.github.s0nerik.shoppingassistant.model.Cart
@@ -91,8 +94,13 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
                 .commit()
 
         toolbar.onMenuItemClick {
-            if (it!!.itemId == R.id.settings)
+            if (it!!.itemId == R.id.settings) {
+//                CurrenciesApi.loadConversions(now().toDate())
+//                        .subscribe {
+//                            d { it.toString() }
+//                        }
                 startActivity<SettingsActivity>()
+            }
             true
         }
 

@@ -1,11 +1,9 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
-import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
@@ -95,8 +93,10 @@ fun frequentItemsObservable(realm: Realm): Observable<out List<Item>> {
             }
 }
 
-fun recentPurchases(realm: Realm): List<Purchase> {
-    return realm.where(Purchase::class.java).findAllSorted("date", Sort.DESCENDING)
+fun recentPurchases(realm: Realm, fromDate: Date? = null): List<Purchase> {
+    val query = realm.where(Purchase::class.java)
+    fromDate?.let { query.between("date", it, Date()) }
+    return query.findAllSorted("date", Sort.DESCENDING)
 }
 
 fun recentPurchasesObservable(realm: Realm): Observable<out List<Purchase>> {

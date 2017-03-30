@@ -9,32 +9,41 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.view.View
 import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
+import com.github.debop.kodatimes.ago
+import com.github.debop.kodatimes.months
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
-import com.github.s0nerik.shoppingassistant.BR
-import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
+import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.scales
-import com.github.s0nerik.shoppingassistant.recentPurchases
+import com.github.s0nerik.shoppingassistant.model.Currency
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
 import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.startActivity
+import java.text.DecimalFormat
 
 /**
  * Created by Alex on 12/25/2016.
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class DashboardViewModel(val fragment: DashboardFragment) {
+class DashboardViewModel(val f: DashboardFragment) {
+    val moneySpentAmountString: String
+        get() = "${Currency.default.sign} ${DecimalFormat("0.##").format(
+                recentPurchases(f.realm, 1.months().ago().toDate()).sumByDouble { it.fullPrice.toDouble() }
+        )}"
+
+    val expensesLimitString: String
+        get() = MainPrefs.formattedExpensesLimit
+
     fun onCreateNewPurchase() {
-        fragment.startActivity<CreatePurchaseActivity>()
+        f.startActivity<CreatePurchaseActivity>()
     }
 }
 
@@ -111,6 +120,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
         initRecents()
         initStats()
+
+        val moneySpent = recentPurchases(realm, 1.months().ago().toDate()).sumByDouble { it.fullPrice.toDouble() }
 
 //        periodSpinner.adapter = ArrayAdapter.createFromResource(act, R.array.stats_periods, R.layout.item_money_spent_spinner)
 
