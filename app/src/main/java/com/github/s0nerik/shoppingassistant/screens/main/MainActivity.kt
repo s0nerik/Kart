@@ -11,6 +11,7 @@ import berlin.volders.badger.Badger
 import berlin.volders.badger.CountBadge
 import com.github.s0nerik.shoppingassistant.DashboardDataPeriod
 import com.github.s0nerik.shoppingassistant.DashboardPrefs
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
@@ -26,7 +27,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
     val historyFragment by lazy { HistoryFragment() }
     val cartFragment by lazy { CartFragment() }
 
-    val dashboardPeriod = ObservableField<DashboardDataPeriod>(DashboardPrefs.dataPeriod)
+    val dashboardPeriod = ObservableField<DashboardDataPeriod>(DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod))
 
     init {
         activity.bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected)

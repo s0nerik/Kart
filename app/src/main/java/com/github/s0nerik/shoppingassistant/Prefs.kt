@@ -26,6 +26,16 @@ enum class DashboardDataPeriod(@StringRes val stringId: Int) {
     override fun toString(): String {
         return getString(stringId)
     }
+
+    companion object {
+        fun from(expensesLimitPeriod: ExpensesLimitPeriod): DashboardDataPeriod {
+            return when (expensesLimitPeriod) {
+                ExpensesLimitPeriod.DAY -> TODAY
+                ExpensesLimitPeriod.WEEK -> LAST_WEEK
+                ExpensesLimitPeriod.MONTH -> LAST_MONTH
+            }
+        }
+    }
 }
 
 enum class ExpensesLimitPeriod(@StringRes val stringId: Int, @StringRes val formatStringId: Int) {
