@@ -7,6 +7,8 @@
     >
     <data>
         <import type="com.github.s0nerik.shoppingassistant.R" />
+        <import type="android.view.View" />
+        <import type="com.github.s0nerik.shoppingassistant.screens.main.DashboardFragment" />
         <variable name="vm" type="com.github.s0nerik.shoppingassistant.screens.main.MainActivityViewModel" />
     </data>
     <RelativeLayout
@@ -42,6 +44,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 app:applyStatusBarPadding='@{true}'
                 app:menu="@{R.menu.main_toolbar}"
                 app:menuTint="@{R.color.material_color_white}"
@@ -93,6 +96,7 @@
                         android:onClick='@{() -> vm.selectDashboardPeriod()}'
                         android:clipChildren="false"
                         android:clipToPadding="false"
+                        android:visibility='@{vm.currentFragment instanceof DashboardFragment ? View.VISIBLE: View.GONE}'
                         >
                         <ImageView
                             android:layout_width="16dp"

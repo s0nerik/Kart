@@ -3,6 +3,7 @@ package com.github.s0nerik.shoppingassistant.screens.main
 import android.databinding.ObservableField
 import android.databinding.ObservableList
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.PopupMenu
 import android.view.Gravity
 import android.view.MenuItem
@@ -28,20 +29,24 @@ class MainActivityViewModel(private val activity: MainActivity) {
     val cartFragment by lazy { CartFragment() }
 
     val dashboardPeriod = ObservableField<DashboardDataPeriod>(DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod))
+    val currentFragment = ObservableField<Fragment>(dashboardFragment)
 
     init {
         activity.bottomNavigation.setOnNavigationItemSelectedListener(this::onNavigationItemSelected)
     }
 
     fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val selectedFragment = when(item.itemId) {
+            R.id.dashboard -> dashboardFragment
+            R.id.history -> historyFragment
+            R.id.cart -> cartFragment
+            else -> dashboardFragment
+        }
+        currentFragment.set(selectedFragment)
+
         activity.supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, when(item.itemId) {
-                    R.id.dashboard -> dashboardFragment
-                    R.id.history -> historyFragment
-                    R.id.cart -> cartFragment
-                    else -> dashboardFragment
-                })
+                .replace(R.id.container, selectedFragment)
                 .commit()
         return true
     }
