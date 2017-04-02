@@ -1,8 +1,13 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
+import com.github.debop.kodatimes.startOfDay
+import com.github.debop.kodatimes.toDateTime
+import com.github.debop.kodatimes.tomorrow
+import com.github.s0nerik.shoppingassistant.model.ExchangeRates
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
@@ -108,4 +113,26 @@ fun <E : RealmModel> Realm.createObject(clazz: KClass<E>): E {
 
 fun randomUuidString(): String {
     return UUID.randomUUID().toString()
+}
+
+fun exchangedValue(sourceValue: Float, sourceCurrency: Currency, targetCurrency: Currency, date: Date): Float? {
+    val ratesContainer = ExchangeRates().queryFirst {
+        it.between("date", date.toDateTime().startOfDay().toDate(), date.toDateTime().tomorrow().startOfDay().toDate())
+    }
+    if (ratesContainer == null) return null
+
+    val sourceRate = if (sourceCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
+        1f
+    } else {
+        ratesContainer.rates.find { it.currencyCode == sourceCurrency.currencyCode }?.value
+    }
+    val targetRate = if (targetCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
+        1f
+    } else {
+        ratesContainer.rates.find { it.currencyCode == targetCurrency.currencyCode }?.value
+    }
+
+    if (sourceRate == null || targetRate == null) return null
+
+    return sourceValue / sourceRate * targetRate
 }

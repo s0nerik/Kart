@@ -25,9 +25,7 @@ open class ExchangeRate(
 
 data class RemoteExchangeRates(val timestamp: Long, val source: String, val rates: List<RemoteExchangeRate>) {
     fun saveToDatabase() {
-        val exchangeRates = ExchangeRates()
-        exchangeRates.date = Date(timestamp)
-        exchangeRates.sourceCurrencyCode = source
+        val exchangeRates = ExchangeRates(Date(timestamp * 1000), source)
         exchangeRates.rates.addAll(rates.map { ExchangeRate(it.currency, it.value) })
 
         exchangeRates.save()

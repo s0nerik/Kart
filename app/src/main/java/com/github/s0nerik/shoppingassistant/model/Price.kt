@@ -1,6 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
 import com.github.s0nerik.shoppingassistant.MainPrefs
+import com.github.s0nerik.shoppingassistant.exchangedValue
 import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -19,6 +20,11 @@ open class Price(
         open var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
 ) : RealmObject() {
     enum class QuantityQualifier { ITEM, KG }
+
+    fun convertedTo(currency: Currency): Price {
+        if (currencyCode == MainPrefs.defaultCurrencyCode) return this
+        return Price(id, exchangedValue(value!!, this.currency, currency, date), currency.currencyCode, date, quantityQualifierName)
+    }
 
     var currency: Currency
         get() = Currency.getInstance(currencyCode)

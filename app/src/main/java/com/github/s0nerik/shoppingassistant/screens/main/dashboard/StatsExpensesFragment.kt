@@ -39,7 +39,7 @@ class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.
                 .map {
                     BarEntry(
                             i++.toFloat(),
-                            it.value.map(Purchase::priceLocal).sum()
+                            it.value.map(Purchase::priceInDefaultCurrency).sum()
                     )
                 }
 
