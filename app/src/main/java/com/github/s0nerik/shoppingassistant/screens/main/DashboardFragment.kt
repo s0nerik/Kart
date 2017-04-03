@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.animation.Animator
 import android.animation.AnimatorSet
+import android.databinding.ObservableField
 import android.os.Bundle
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.PagerAdapter
@@ -97,12 +98,12 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     private val recentPurchases
         get() = recentPurchases(realm)
 
+    private val statsDistributionFragment = StatsDistributionFragment()
+    private val statsExpensesFragment = StatsExpensesFragment()
+
     private val statsAdapter: PagerAdapter
         get() = object : FragmentPagerAdapter(childFragmentManager) {
-            val fragments = listOf(
-                    StatsDistributionFragment(),
-                    StatsExpensesFragment()
-            )
+            val fragments = listOf(statsDistributionFragment, statsExpensesFragment)
 
             val names = listOf("Purchases distribution", "Expenses")
 
@@ -141,5 +142,10 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     private fun initStats() {
         statsPager.adapter = statsAdapter
         statsPagerTabs.setupWithViewPager(statsPager)
+    }
+
+    companion object {
+        @JvmStatic
+        val dataPeriod = ObservableField<DashboardDataPeriod>(DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod))
     }
 }

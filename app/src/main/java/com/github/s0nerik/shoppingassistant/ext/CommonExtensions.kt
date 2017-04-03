@@ -22,6 +22,8 @@ fun <T> observableListOf(collection: Collection<T> = emptyList()): ObservableLis
     return list
 }
 
+fun <T> List<T>.limit(count: Int): List<T> = this.subList(0, if (count < size) count else size)
+
 var View.scales: Float
     get() = throw IllegalAccessError()
     set(value) {

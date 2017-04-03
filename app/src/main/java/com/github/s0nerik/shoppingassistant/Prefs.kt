@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.support.annotation.StringRes
 import com.chibatching.kotpref.KotprefModel
 import com.chibatching.kotpref.enumpref.enumValuePref
+import com.github.debop.kodatimes.*
 import com.github.s0nerik.shoppingassistant.R.string.*
 import com.github.s0nerik.shoppingassistant.ext.getString
 import java.text.DecimalFormat
@@ -22,6 +23,18 @@ enum class DashboardDataPeriod(@StringRes val stringId: Int) {
     LAST_MONTH(stats_period_last_month),
     SIX_MONTHS(stats_period_six_months),
     LAST_YEAR(stats_period_last_year);
+
+    val startDate: Date
+        get() {
+            return when (this) {
+                TODAY -> now().startOfDay().toDate()
+                YESTERDAY -> 1.days().ago().startOfDay().toDate()
+                LAST_WEEK -> 1.weeks().ago().startOfDay().toDate()
+                LAST_MONTH -> 1.months().ago().startOfDay().toDate()
+                SIX_MONTHS -> 6.months().ago().startOfDay().toDate()
+                LAST_YEAR -> 1.years().ago().startOfDay().toDate()
+            }
+        }
 
     override fun toString(): String {
         return getString(stringId)
@@ -52,9 +65,9 @@ enum class ExpensesLimitPeriod(@StringRes val stringId: Int, @StringRes val form
     }
 }
 
-object DashboardPrefs : KotprefModel() {
-    var dataPeriod by enumValuePref(DashboardDataPeriod.LAST_WEEK)
-}
+//object DashboardPrefs : KotprefModel() {
+//    var dataPeriod by enumValuePref(DashboardDataPeriod.LAST_WEEK)
+//}
 
 object MainPrefs : KotprefModel() {
     var expensesLimitPeriod by enumValuePref(ExpensesLimitPeriod.MONTH)

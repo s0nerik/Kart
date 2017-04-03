@@ -13,8 +13,6 @@ import berlin.volders.badger.CountBadge
 import com.github.ajalt.timberkt.d
 import com.github.debop.kodatimes.now
 import com.github.s0nerik.shoppingassistant.DashboardDataPeriod
-import com.github.s0nerik.shoppingassistant.DashboardPrefs
-import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.api.CurrenciesApi
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
@@ -31,7 +29,6 @@ class MainActivityViewModel(private val activity: MainActivity) {
     val historyFragment by lazy { HistoryFragment() }
     val cartFragment by lazy { CartFragment() }
 
-    val dashboardPeriod = ObservableField<DashboardDataPeriod>(DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod))
     val currentFragment = ObservableField<Fragment>(dashboardFragment)
 
     init {
@@ -67,8 +64,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
                 R.id.last_year -> DashboardDataPeriod.LAST_YEAR
                 else -> throw IllegalArgumentException()
             }
-            dashboardPeriod.set(period)
-            DashboardPrefs.dataPeriod = period
+            DashboardFragment.dataPeriod.set(period)
             true
         }
         menu.show()
