@@ -64,7 +64,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
                 R.id.last_year -> DashboardDataPeriod.LAST_YEAR
                 else -> throw IllegalArgumentException()
             }
-            DashboardFragment.dataPeriod.set(period)
+            DashboardFragment.vm.dataPeriod = period
             true
         }
         menu.show()

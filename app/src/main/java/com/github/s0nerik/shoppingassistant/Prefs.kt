@@ -80,6 +80,10 @@ object MainPrefs : KotprefModel() {
             defaultCurrencyCode = value.currencyCode
         }
 
+    @JvmStatic
+    val defaultDashboardPeriod: DashboardDataPeriod
+        get() = DashboardDataPeriod.from(expensesLimitPeriod)
+
     val formattedExpensesLimit: String
         get() {
             if (expensesLimit > 0F) {

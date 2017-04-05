@@ -37,3 +37,17 @@ fun <T> ObservableField<T>.toObservable(startWithCurrentValue: Boolean = true): 
                                       if (startWithCurrentValue) emitter.onNext(get())
                                   }, Emitter.BackpressureMode.LATEST)
 }
+
+fun android.databinding.Observable.observeChanges(brId: Int? = null): Observable<Int> {
+    return Observable.fromEmitter({ emitter ->
+                                      val callback = object : OnPropertyChangedCallback() {
+                                          override fun onPropertyChanged(dataBindingObservable: android.databinding.Observable, propertyId: Int) {
+                                              if (dataBindingObservable === this@observeChanges) {
+                                                  if (brId == null || propertyId == brId) emitter.onNext(propertyId)
+                                              }
+                                          }
+                                      }
+                                      addOnPropertyChangedCallback(callback)
+                                      emitter.setCancellation { removeOnPropertyChangedCallback(callback) }
+                                  }, Emitter.BackpressureMode.LATEST)
+}

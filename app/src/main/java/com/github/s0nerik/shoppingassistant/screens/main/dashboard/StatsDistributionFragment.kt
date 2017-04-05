@@ -15,7 +15,7 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsDistributio
 import com.github.s0nerik.shoppingassistant.databinding.ItemStatsDistributionBinding
 import com.github.s0nerik.shoppingassistant.ext.getColor
 import com.github.s0nerik.shoppingassistant.ext.limit
-import com.github.s0nerik.shoppingassistant.ext.toObservable
+import com.github.s0nerik.shoppingassistant.ext.observeChanges
 import com.github.s0nerik.shoppingassistant.purchases
 import com.github.s0nerik.shoppingassistant.screens.main.DashboardFragment
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -35,10 +35,10 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
 
     override fun onViewCreated(view: android.view.View?, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DashboardFragment.dataPeriod
-                .toObservable()
+        initDistributionChart(DashboardFragment.vm.dataPeriod)
+        DashboardFragment.vm.observeChanges(BR.dataPeriod)
                 .bindUntilEvent(this, FragmentEvent.DESTROY)
-                .subscribe(this::initDistributionChart)
+                .subscribe { initDistributionChart(DashboardFragment.vm.dataPeriod) }
     }
 
     private fun initDistributionChart(period: DashboardDataPeriod) {

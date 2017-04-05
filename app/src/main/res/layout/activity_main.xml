@@ -113,7 +113,7 @@
                             android:layout_marginLeft="6dp"
                             android:layout_marginRight="4dp"
                             android:gravity="center"
-                            android:text='@{DashboardFragment.dataPeriod.toString()}'
+                            android:text='@{DashboardFragment.vm.dataPeriod.toString()}'
                             android:textColor="@color/colorPrimaryDark"
                             tools:text="Last week"
                             />

@@ -2,7 +2,8 @@ package com.github.s0nerik.shoppingassistant.screens.main
 
 import android.animation.Animator
 import android.animation.AnimatorSet
-import android.databinding.ObservableField
+import android.databinding.BaseObservable
+import android.databinding.Bindable
 import android.os.Bundle
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.PagerAdapter
@@ -10,8 +11,6 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.transition.Fade
 import android.view.View
 import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
-import com.github.debop.kodatimes.ago
-import com.github.debop.kodatimes.months
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
@@ -33,14 +32,21 @@ import java.text.DecimalFormat
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class DashboardViewModel(val f: DashboardFragment) {
+class DashboardViewModel(val f: DashboardFragment): BaseObservable() {
+    var dataPeriod: DashboardDataPeriod = DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod)
+        @Bindable get
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.dataPeriod)
+        }
+
     val moneySpentAmountString: String
-        get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
-                recentPurchases(f.realm, 1.months().ago().toDate()).sumByDouble { it.fullPrice.toDouble() }
+        @Bindable("dataPeriod") get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
+                recentPurchases(f.realm, dataPeriod.startDate).sumByDouble { it.fullPrice.toDouble() }
         )}"
 
     val expensesLimitString: String
-        get() = MainPrefs.formattedShortExpensesLimitOrEmpty
+        @Bindable("dataPeriod") get() = MainPrefs.formattedShortExpensesLimitOrEmpty
 
     fun onCreateNewPurchase() {
         f.startActivity<CreatePurchaseActivity>()
@@ -117,13 +123,10 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = DashboardViewModel(this)
+        vm = binding.vm
 
         initRecents()
         initStats()
-
-        val moneySpent = recentPurchases(realm, 1.months().ago().toDate()).sumByDouble { it.fullPrice.toDouble() }
-
-//        periodSpinner.adapter = ArrayAdapter.createFromResource(act, R.array.stats_periods, R.layout.item_money_spent_spinner)
 
         animator.start()
     }
@@ -146,6 +149,6 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     companion object {
         @JvmStatic
-        val dataPeriod = ObservableField<DashboardDataPeriod>(DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod))
+        lateinit var vm: DashboardViewModel
     }
 }

@@ -21,6 +21,9 @@ import kotlin.reflect.KClass
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
+val defaultRealm: Realm
+    get() = Realm.getDefaultInstance()
+
 fun initDatabase(ctx: Context, isDebug: Boolean = false, removeOldData: Boolean = false, dummyShops: Boolean = false, dummyCategories: Boolean = false, dummyPurchases: Boolean = false) {
     Realm.getDefaultInstance().use {
         if (isDebug && removeOldData)
@@ -98,8 +101,8 @@ fun frequentItemsObservable(realm: Realm): Observable<out List<Item>> {
 }
 
 fun recentPurchases(realm: Realm, fromDate: Date? = null): List<Purchase> {
-    val query = realm.where(Purchase::class.java)
-    fromDate?.let { query.between("date", it, Date()) }
+    var query = realm.where(Purchase::class.java)
+    fromDate?.let { query = query.greaterThan("date", it) }
     return query.findAllSorted("date", Sort.DESCENDING)
 }
 
