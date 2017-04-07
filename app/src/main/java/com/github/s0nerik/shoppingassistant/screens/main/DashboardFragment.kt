@@ -32,7 +32,9 @@ import java.text.DecimalFormat
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class DashboardViewModel(val f: DashboardFragment): BaseObservable() {
+class DashboardViewModel: BaseObservable() {
+    lateinit var f: DashboardFragment
+
     var dataPeriod: DashboardDataPeriod = DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod)
         @Bindable get
         set(value) {
@@ -122,8 +124,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vm = DashboardViewModel(this)
-        vm = binding.vm
+        binding.vm = vm
+        vm.f = this
 
         initRecents()
         initStats()
@@ -149,6 +151,6 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     companion object {
         @JvmStatic
-        lateinit var vm: DashboardViewModel
+        val vm = DashboardViewModel()
     }
 }

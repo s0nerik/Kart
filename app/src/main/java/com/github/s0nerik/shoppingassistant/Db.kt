@@ -121,8 +121,7 @@ fun randomUuidString(): String {
 fun exchangedValue(sourceValue: Float, sourceCurrency: Currency, targetCurrency: Currency, date: Date): Float? {
     val ratesContainer = ExchangeRates().queryFirst {
         it.between("date", date.toDateTime().startOfDay().toDate(), date.toDateTime().tomorrow().startOfDay().toDate())
-    }
-    if (ratesContainer == null) return null
+    } ?: return null
 
     val sourceRate = if (sourceCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
         1f
