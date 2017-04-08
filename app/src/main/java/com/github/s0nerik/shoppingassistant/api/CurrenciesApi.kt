@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.api
 
+import com.github.debop.kodatimes.asUtc
 import com.github.debop.kodatimes.toDateTime
 import com.github.debop.kodatimes.toIsoFormatDateString
 import com.github.s0nerik.shoppingassistant.model.RemoteExchangeRates
@@ -32,7 +33,7 @@ interface CurrenciesApi {
         }
 
         fun loadExchangeRates(date: Date): Single<RemoteExchangeRates> {
-            return instance.loadExchangeRates(date.toDateTime().toIsoFormatDateString())
+            return instance.loadExchangeRates(date.toDateTime().asUtc().toIsoFormatDateString())
                     .doOnSuccess { it.saveToDatabase() }
         }
     }
