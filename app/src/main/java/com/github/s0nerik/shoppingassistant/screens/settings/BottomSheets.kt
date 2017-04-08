@@ -90,7 +90,8 @@ class SelectExpensesLimitBottomSheet(
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        etLimit.setText(DecimalFormat("0.##").format(expensesLimit))
+        if (expensesLimit != null && expensesLimit!! > 0f)
+            etLimit.setText(DecimalFormat("0.##").format(expensesLimit))
         etLimit.setSelection(etLimit.text.length)
 
         spinnerPeriod.adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, ExpensesLimitPeriod.values())
