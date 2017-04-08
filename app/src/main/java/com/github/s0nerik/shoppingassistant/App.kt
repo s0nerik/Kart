@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import com.facebook.stetho.Stetho
+import com.github.s0nerik.shoppingassistant.jobs.UpdateExchangeRatesJob
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -53,6 +54,8 @@ open class App : Application() {
         initDatabase(this, true, true, true, true, true)
         configureGlide()
         configureTimber()
+
+        UpdateExchangeRatesJob.schedule(this)
     }
 
     private fun configureTimber() {

@@ -46,6 +46,12 @@
             android:launchMode="singleTop"
             android:parentActivityName=".screens.main.MainActivity"
             />
+
+        <service
+            android:name=".jobs.UpdateExchangeRatesJob"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            />
     </application>
 
 </manifest>

@@ -1,13 +1,10 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
-import com.github.debop.kodatimes.startOfDay
-import com.github.debop.kodatimes.toDateTime
-import com.github.debop.kodatimes.tomorrow
 import com.github.s0nerik.shoppingassistant.model.ExchangeRates
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.querySorted
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
@@ -119,9 +116,11 @@ fun randomUuidString(): String {
 }
 
 fun exchangedValue(sourceValue: Float, sourceCurrency: Currency, targetCurrency: Currency, date: Date): Float? {
-    val ratesContainer = ExchangeRates().queryFirst {
-        it.between("date", date.toDateTime().startOfDay().toDate(), date.toDateTime().tomorrow().startOfDay().toDate())
-    } ?: return null
+    val rateContainers = ExchangeRates().querySorted("date", Sort.DESCENDING, {
+        it.lessThanOrEqualTo("date", date)
+    })
+
+    val ratesContainer = rateContainers.firstOrNull() ?: return null
 
     val sourceRate = if (sourceCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
         1f
