@@ -4,7 +4,6 @@ import android.content.Context
 import com.github.s0nerik.shoppingassistant.model.ExchangeRates
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.vicpin.krealmextensions.querySorted
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
@@ -17,9 +16,6 @@ import kotlin.reflect.KClass
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-
-val defaultRealm: Realm
-    get() = Realm.getDefaultInstance()
 
 fun initDatabase(ctx: Context, isDebug: Boolean = false, removeOldData: Boolean = false, dummyShops: Boolean = false, dummyCategories: Boolean = false, dummyPurchases: Boolean = false) {
     Realm.getDefaultInstance().use {
@@ -35,21 +31,6 @@ fun initDatabase(ctx: Context, isDebug: Boolean = false, removeOldData: Boolean 
         }
     }
 }
-
-//fun createCurrenciesIfNeeded(realm: Realm) {
-//    val currencies = java.util.Currency.getAvailableCurrencies()
-//
-//    if (realm.where(Currency::class.java).findFirst() == null) {
-//        // TODO: replace with async transaction when fake data is no longer needed
-//        realm.executeTransaction {
-//            currencies.forEach {
-//                val currency = realm.createObject(Currency::class.java, it.currencyCode)
-//                currency.sign = it.symbol
-//                currency.name = it.displayName
-//            }
-//        }
-//    }
-//}
 
 fun purchases(realm: Realm): List<Purchase> {
     return realm.where(Purchase::class.java).findAll()
@@ -116,24 +97,27 @@ fun randomUuidString(): String {
 }
 
 fun exchangedValue(sourceValue: Float, sourceCurrency: Currency, targetCurrency: Currency, date: Date): Float? {
-    val rateContainers = ExchangeRates().querySorted("date", Sort.DESCENDING, {
-        it.lessThanOrEqualTo("date", date)
-    })
+//    val rateContainers = ExchangeRates().querySorted("date", Sort.DESCENDING, {
+//        it.lessThanOrEqualTo("date", date)
+//    })
 
-    val ratesContainer = rateContainers.firstOrNull() ?: return null
+    Realm.getDefaultInstance().use {
+        val ratesContainer = it.where(ExchangeRates::class.java).findAll().minBy { date.time - it.date.time } ?: return null
+//        val ratesContainer = ExchangeRates().queryAll().minBy { date.time - it.date.time } ?: return null
 
-    val sourceRate = if (sourceCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
-        1f
-    } else {
-        ratesContainer.rates.find { it.currencyCode == sourceCurrency.currencyCode }?.value
+        val sourceRate = if (sourceCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
+            1f
+        } else {
+            ratesContainer.rates.find { it.currencyCode == sourceCurrency.currencyCode }?.value
+        }
+        val targetRate = if (targetCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
+            1f
+        } else {
+            ratesContainer.rates.find { it.currencyCode == targetCurrency.currencyCode }?.value
+        }
+
+        if (sourceRate == null || targetRate == null) return null
+
+        return sourceValue / sourceRate * targetRate
     }
-    val targetRate = if (targetCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
-        1f
-    } else {
-        ratesContainer.rates.find { it.currencyCode == targetCurrency.currencyCode }?.value
-    }
-
-    if (sourceRate == null || targetRate == null) return null
-
-    return sourceValue / sourceRate * targetRate
 }

@@ -3,6 +3,7 @@ package com.github.s0nerik.shoppingassistant.ext
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import android.view.View
+import com.github.s0nerik.shoppingassistant.SUPPORTED_CURRENCIES
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -32,7 +33,7 @@ var View.scales: Float
     }
 
 val currenciesSorted: List<Currency>
-    get() = Currency.getAvailableCurrencies()
+    get() = SUPPORTED_CURRENCIES
             .toList()
             .sortedBy { it.symbol }
             .sortedBy { it.symbol.length }

@@ -38,7 +38,7 @@ private fun createPurchases(realm: Realm, category: String, vararg names: String
 }
 
 private fun providePurchase(realm: Realm, name: String, category: String) {
-    val currencies = Currency.getAvailableCurrencies().toList()
+    val currencies = SUPPORTED_CURRENCIES.toList()
 
     val shopsNum = realm.where(Shop::class.java).count().toInt()
     val shops = realm.where(Shop::class.java).findAll()
