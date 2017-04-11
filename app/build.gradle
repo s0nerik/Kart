@@ -11,6 +11,7 @@ android {
         applicationId "com.github.s0nerik.kart"
         minSdkVersion 21
         targetSdkVersion 25
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -81,7 +82,7 @@ dependencies {
     compile 'blue.aodev:material-values:1.1.1'
     compile 'com.labo.kaji:relativepopupwindow:0.2.1'
     compile 'me.grantland:autofittextview:0.2.1'
-    compile "berlin.volders:badger:0.1"
+    compile "berlin.volders:badger:0.2.1"
     compile 'com.bartoszlipinski:viewpropertyobjectanimator:1.4.5'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     compile 'com.github.iffa:wrapping-viewpager:1.0.1'
