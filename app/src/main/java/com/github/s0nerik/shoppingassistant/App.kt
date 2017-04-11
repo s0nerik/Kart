@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import com.facebook.stetho.Stetho
 import com.github.s0nerik.shoppingassistant.jobs.UpdateExchangeRatesJob
@@ -13,6 +14,8 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import rx_activity_result.RxActivityResult
 import timber.log.Timber
+
+
 
 /**
  * Created by Alex on 12/25/2016.
@@ -89,8 +92,21 @@ open class App : Application() {
 
 class DebugApp : App() {
     override fun onCreate() {
+        initStrictMode()
         super.onCreate()
         initStetho()
+    }
+
+    private fun initStrictMode() {
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                                           .detectAll()
+                                           .penaltyLog()
+                                           .build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                                       .detectAll()
+                                       .penaltyLog()
+                                       .penaltyDeath()
+                                       .build())
     }
 
     private fun initStetho() {
