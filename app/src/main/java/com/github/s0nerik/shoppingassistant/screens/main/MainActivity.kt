@@ -24,6 +24,7 @@ import org.jetbrains.anko.startActivity
 class MainActivityViewModel(private val activity: MainActivity) {
     val dashboardFragment by lazy { DashboardFragment() }
     val historyFragment by lazy { HistoryFragment() }
+    val listsFragment by lazy { ListsFragment() }
     val cartFragment by lazy { CartFragment() }
 
     val currentFragment = ObservableField<Fragment>(dashboardFragment)
@@ -36,6 +37,7 @@ class MainActivityViewModel(private val activity: MainActivity) {
         val selectedFragment = when(item.itemId) {
             R.id.dashboard -> dashboardFragment
             R.id.history -> historyFragment
+            R.id.lists -> listsFragment
             R.id.cart -> cartFragment
             else -> dashboardFragment
         }
@@ -99,7 +101,7 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
             true
         }
 
-        badge = Badger.sett(binding.bottomNavigation.menu.getItem(2), CountBadge.Factory(this, BadgeShape.circle(0.5f, Gravity.RIGHT.or(Gravity.TOP))))
+        badge = Badger.sett(binding.bottomNavigation.menu.getItem(3), CountBadge.Factory(this, BadgeShape.circle(0.5f, Gravity.RIGHT.or(Gravity.TOP))))
         Cart.purchases.addOnListChangedCallback(cartChangeListener)
     }
 

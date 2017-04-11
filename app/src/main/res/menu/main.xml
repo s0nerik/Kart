@@ -14,6 +14,11 @@
         android:icon="@drawable/history"
         />
     <item
+        android:id="@+id/lists"
+        android:title="Lists"
+        android:icon="@drawable/format_list_bulleted"
+        />
+    <item
         android:id="@+id/cart"
         android:title="Cart"
         android:icon="@drawable/cart_menu"
