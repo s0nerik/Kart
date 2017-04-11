@@ -65,16 +65,16 @@ class DashboardAnimator(val f: DashboardFragment) {
 
     fun start() {
         with(f) {
-            val cards = arrayOf(statsCard, recentsCard)
-            val cardDuration = arrayOf(200, 200)
-            val cardDelay = arrayOf(0, 400)
+            val cards = arrayOf(moneySpentCard, statsCard, recentsCard)
+            val cardDuration = 200
+            val cardDelays = arrayOf(0, 300, 500)
             val cardAnimations = cards.mapIndexed { i, v ->
                 v.alpha = 0f
                 v.translationY = dip(80f).toFloat()
 
                 ViewPropertyObjectAnimator.animate(v)
-                        .setDuration(cardDuration[i].toLong())
-                        .setStartDelay(cardDelay[i].toLong())
+                        .setDuration(cardDuration.toLong())
+                        .setStartDelay(cardDelays[i].toLong())
                         .alpha(1f)
                         .translationY(0f)
                         .setInterpolator(FastOutSlowInInterpolator())
@@ -85,7 +85,7 @@ class DashboardAnimator(val f: DashboardFragment) {
             fab.scales = 0.7f
             val fabAnim = ViewPropertyObjectAnimator.animate(fab)
                     .setDuration(200)
-                    .setStartDelay(500)
+                    .setStartDelay(cardDelays.last() + cardDuration.toLong())
                     .alpha(1f)
                     .scales(1f)
                     .setInterpolator(FastOutSlowInInterpolator())
