@@ -33,14 +33,6 @@ class UpdateExchangeRatesJob : JobService() {
 
     companion object {
         val JOB_ID = 643
-        val INSTANT_JOB_ID = 644
-
-        fun scheduleNow(ctx: Context) {
-            val jobScheduler = ctx.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-            jobScheduler.schedule(JobInfo.Builder(INSTANT_JOB_ID, ComponentName(ctx, UpdateExchangeRatesJob::class.java))
-                                          .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                                          .build())
-        }
 
         fun schedule(ctx: Context) {
             val jobScheduler = ctx.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
