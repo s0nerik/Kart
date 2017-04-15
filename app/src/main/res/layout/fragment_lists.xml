@@ -10,6 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="@string/rv_layout_manager_linear"
+            tools:listitem="@layout/item_lists_item"
+            />
     </RelativeLayout>
 </layout>

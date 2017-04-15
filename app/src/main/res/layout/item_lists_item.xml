@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.model.Item" />
+        <variable name="swipeListener" type="com.daimajia.swipe.SwipeLayout.SwipeListener" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_3_line_height"
+        android:background="@color/material_color_white"
+        android:elevation="2dp"
+        >
+        <com.daimajia.swipe.SwipeLayout
+            android:id="@+id/swipeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:drag_edge="left|right"
+            >
+
+            <LinearLayout
+                android:id="@+id/left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:background="@color/material_color_green_500"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableTop="@drawable/check"
+                    android:paddingTop="16dp"
+                    android:text="Confirm"
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:background="@color/material_color_red_500"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableTop="@drawable/delete"
+                    android:paddingTop="16dp"
+                    android:text="Remove"
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+
+            <include
+                layout="@layout/item_purchase_item"
+                app:item='@{item}'
+                />
+
+        </com.daimajia.swipe.SwipeLayout>
+    </RelativeLayout>
+</layout>

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="btn_icon_negative_margin">-2dp</dimen>
     <dimen name="btn_icon_default_margin">0dp</dimen>
+    <dimen name="item_3_line_height">@dimen/material_list_three_line_normal_height</dimen>
 </resources>
