@@ -19,20 +19,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:drag_edge="left|right"
+            app:show_mode="lay_down"
             >
 
             <LinearLayout
                 android:id="@+id/left"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="right"
-                android:background="@color/material_color_green_500"
+                android:gravity="left"
+                android:background="@color/material_color_green_primary"
                 >
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableTop="@drawable/check"
                     android:paddingTop="16dp"
+                    android:drawableTop="@drawable/check"
+                    android:drawableTint="@color/material_color_white"
+                    android:textColor="@color/material_color_white"
                     android:text="Confirm"
                     android:background="@android:color/transparent"
                     />
@@ -42,14 +45,16 @@
                 android:id="@+id/right"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left"
-                android:background="@color/material_color_red_500"
+                android:gravity="right"
+                android:background="@color/material_color_red_primary"
                 >
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableTop="@drawable/delete"
                     android:paddingTop="16dp"
+                    android:drawableTop="@drawable/delete"
+                    android:drawableTint="@color/material_color_white"
+                    android:textColor="@color/material_color_white"
                     android:text="Remove"
                     android:background="@android:color/transparent"
                     />
