@@ -24,7 +24,7 @@ import org.jetbrains.anko.startActivity
 class MainActivityViewModel(private val activity: MainActivity) {
     val dashboardFragment by lazy { DashboardFragment() }
     val historyFragment by lazy { HistoryFragment() }
-    val listsFragment by lazy { ListsFragment() }
+    val listsFragment by lazy { PurchaseListsFragment() }
     val cartFragment by lazy { CartFragment() }
 
     val currentFragment = ObservableField<Fragment>(dashboardFragment)
@@ -91,7 +91,7 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
         binding.vm = MainActivityViewModel(this)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, binding.vm.dashboardFragment)
+                .replace(R.id.container, binding.vm!!.dashboardFragment)
                 .commit()
 
         toolbar.onMenuItemClick {

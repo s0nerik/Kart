@@ -5,6 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
+        <variable
+            name="vm"
+            type="com.github.s0nerik.shoppingassistant.screens.main.PurchaseListsViewModel"
+            />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"

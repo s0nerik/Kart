@@ -392,7 +392,7 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
         binding.vm = CreateProductViewModel(this, realm)
 
         val extraName = intent.getStringExtra("name")
-        extraName?.let { binding.vm.setName(it.capitalize()) }
+        extraName?.let { binding.vm!!.setName(it.capitalize()) }
 
         animateAppear()
     }

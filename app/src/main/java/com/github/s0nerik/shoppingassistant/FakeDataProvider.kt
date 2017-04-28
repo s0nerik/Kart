@@ -4,6 +4,7 @@ import android.content.Context
 import com.github.debop.kodatimes.ago
 import com.github.debop.kodatimes.days
 import com.github.debop.kodatimes.minutes
+import com.github.debop.kodatimes.now
 import com.github.s0nerik.shoppingassistant.model.*
 import io.realm.Realm
 import io.realm.RealmList
@@ -28,12 +29,29 @@ fun createDummyPurchases(ctx: Context, realm: Realm) {
         createPurchases(it, "Phones", "Samsung Galaxy S8", "Xiaomi Mi Mix", "HTC 11")
         createPurchases(it, "Sportswear", "Trousers", "Boots", "Helmet")
         createPurchases(it, "Presents", "Barbie")
+
+        createPurchaseLists(it)
     }
 }
 
 private fun createPurchases(realm: Realm, category: String, vararg names: String) {
     names.forEach { name ->
         providePurchase(realm, name, category)
+    }
+}
+
+private fun createPurchaseLists(realm: Realm) {
+    val items = mutableListOf<Item>()
+    items += realm.where(Item::class.java).findAll()
+    for (i in 0..10) {
+        Collections.shuffle(items)
+        items.take(Random().nextInt(10)+5).forEach {
+            val futurePurchase = realm.createObject(FuturePurchase::class)
+            futurePurchase.creationDate = now().minusDays(i).toDate()
+            futurePurchase.lastUpdate = futurePurchase.creationDate
+            futurePurchase.item = it
+            futurePurchase.amount = Random().nextInt(3) + 1f
+        }
     }
 }
 

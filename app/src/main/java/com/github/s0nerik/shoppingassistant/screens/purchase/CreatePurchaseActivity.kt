@@ -106,7 +106,7 @@ class CreatePurchaseAnimator(val a: CreatePurchaseActivity, val binding: Activit
             }
 
             val durations = arrayOf(500, 200, 200, 200, 200)
-            val delays = if (binding.vm.favorites.isNotEmpty()) {
+            val delays = if (binding.vm!!.favorites.isNotEmpty()) {
                 arrayOf(0, 0, 200, 400, 600)
             } else {
                 arrayOf(0, 0, 200, 400, 400)
@@ -172,7 +172,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     }
 
     private fun initFavorites() {
-        LastAdapter.with(binding.vm.favorites, BR.item)
+        LastAdapter.with(binding.vm!!.favorites, BR.item)
                 .type { horizontalItemAdapterType }
                 .into(rvFavorites)
 
@@ -181,7 +181,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     }
 
     private fun initFrequents() {
-        LastAdapter.with(binding.vm.frequents, BR.item)
+        LastAdapter.with(binding.vm!!.frequents, BR.item)
                 .type { itemAdapterType }
                 .into(rvFrequents)
 
@@ -189,7 +189,7 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
     }
 
     private fun initSearchResults() {
-        LastAdapter.with(binding.vm.filteredSearchResults, BR.item)
+        LastAdapter.with(binding.vm!!.filteredSearchResults, BR.item)
                 .type { itemAdapterType }
                 .into(rvSearchResults)
 
@@ -202,10 +202,10 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
                 .filter { it.resultCode() == Activity.RESULT_OK }
                 .subscribe { result ->
                     with (Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!) {
-                        binding.vm.frequents.add(item!!)
-                        binding.vm.items.add(item!!)
+                        binding.vm!!.frequents.add(item!!)
+                        binding.vm!!.items.add(item!!)
                         if (item!!.isFavorite)
-                            binding.vm.favorites.add(item)
+                            binding.vm!!.favorites.add(item)
 
                         Cart.add(this)
                     }
@@ -214,9 +214,9 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == binding.vm.VOICE_SEARCH_REQ_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == binding.vm!!.VOICE_SEARCH_REQ_CODE && resultCode == Activity.RESULT_OK) {
             data?.apply {
-                binding.vm.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
+                binding.vm!!.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
             }
         }
     }

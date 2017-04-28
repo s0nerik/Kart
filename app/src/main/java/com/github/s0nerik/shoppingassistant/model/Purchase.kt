@@ -4,6 +4,8 @@ import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
 import com.github.s0nerik.shoppingassistant.randomUuidString
+import com.vicpin.krealmextensions.delete
+import com.vicpin.krealmextensions.save
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -52,4 +54,20 @@ open class Purchase(
         get() = price.currencyCode == MainPrefs.defaultCurrencyCode
     val priceInDefaultCurrency: Float
         get() = price.convertedTo(MainPrefs.defaultCurrency).value ?: 0f
+}
+
+open class FuturePurchase(
+        @PrimaryKey open var id: String = randomUuidString(),
+        open var item: Item? = null,
+        open var creationDate: Date? = null,
+        open var lastUpdate: Date? = null,
+        open var amount: Float = 1f
+) : RealmObject() {
+    fun confirm() {
+        Purchase(id, item, Date(), amount).save()
+    }
+
+    fun remove() {
+        this.delete { it.equalTo("id", id) }
+    }
 }

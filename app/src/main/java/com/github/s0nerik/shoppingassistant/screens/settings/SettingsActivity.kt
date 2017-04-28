@@ -42,12 +42,12 @@ class SettingsActivity : BaseBoundActivity<ActivitySettingsBinding>(R.layout.act
         toolbar.setNavigationOnClickListener { finish() }
 
         MainPrefs.sharedPreferences
-                .registerOnSharedPreferenceChangeListener(binding.vm.sharedPreferencesChangeListener)
+                .registerOnSharedPreferenceChangeListener(binding.vm!!.sharedPreferencesChangeListener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         MainPrefs.sharedPreferences
-                .unregisterOnSharedPreferenceChangeListener(binding.vm.sharedPreferencesChangeListener)
+                .unregisterOnSharedPreferenceChangeListener(binding.vm!!.sharedPreferencesChangeListener)
     }
 }
