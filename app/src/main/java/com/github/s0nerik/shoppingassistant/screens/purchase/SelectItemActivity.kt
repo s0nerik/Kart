@@ -18,7 +18,8 @@ import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
-import com.github.s0nerik.shoppingassistant.databinding.ActivityCreatePurchaseBinding
+import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
+import com.github.s0nerik.shoppingassistant.databinding.ActivitySelectItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
@@ -29,16 +30,17 @@ import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivit
 import com.github.s0nerik.shoppingassistant.screens.product.EXTRA_ID
 import com.jakewharton.rxbinding.widget.textChanges
 import com.trello.rxlifecycle.android.ActivityEvent
+import com.trello.rxlifecycle.android.FragmentEvent
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
-import kotlinx.android.synthetic.main.activity_create_purchase.*
+import kotlinx.android.synthetic.main.activity_select_item.*
 import org.jetbrains.anko.dip
 import rx_activity_result.RxActivityResult
 import java.util.*
 
-class CreatePurchaseViewModel(
-        private val activity: CreatePurchaseActivity,
+class SelectItemViewModel(
+        private val activity: SelectItemActivity,
         private val realm: Realm
 ) : BaseObservable() {
     val VOICE_SEARCH_REQ_CODE = 672
@@ -82,7 +84,7 @@ class CreatePurchaseViewModel(
     }
 }
 
-class CreatePurchaseAnimator(val a: CreatePurchaseActivity, val binding: ActivityCreatePurchaseBinding) {
+class SelectItemActivityAnimator(val a: SelectItemActivity, val binding: ActivitySelectItemBinding) {
     fun appear(callback: (() -> Unit)? = null) {
         animate(true, callback)
     }
@@ -137,32 +139,32 @@ class CreatePurchaseAnimator(val a: CreatePurchaseActivity, val binding: Activit
     }
 }
 
-class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(R.layout.activity_create_purchase) {
+class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout.activity_select_item) {
 
     private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
-            .onClick {
-                Cart.add(Purchase(item = binding.item, date = Date()))
-                finish()
-            }
-    private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
-            .onClick {
-                Cart.add(Purchase(item = binding.item, date = Date()))
-                finish()
-            }
+            .onClick { finishWithResult(binding.item) }
 
-    private lateinit var animator: CreatePurchaseAnimator
+    private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
+            .onClick { finishWithResult(binding.item) }
+
+    private lateinit var animator: SelectItemActivityAnimator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        binding.vm = CreatePurchaseViewModel(this, realm)
+        binding.vm = SelectItemViewModel(this, realm)
         initData()
-        animator = CreatePurchaseAnimator(this, binding)
+        animator = SelectItemActivityAnimator(this, binding)
         animator.appear()
     }
 
     override fun finish() {
         animator.disappear { super.finish() }
+    }
+
+    private fun finishWithResult(item: Item) {
+        setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_ITEM_ID, item.id))
+        finish()
     }
 
     private fun initData() {
@@ -218,6 +220,23 @@ class CreatePurchaseActivity : BaseBoundActivity<ActivityCreatePurchaseBinding>(
             data?.apply {
                 binding.vm!!.notifyVoiceSearchResult(getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)[0])
             }
+        }
+    }
+
+    companion object {
+        private val SELECTED_ITEM_ID = "SELECTED_ITEM_ID"
+
+        fun startForResult(f: BaseBoundFragment<*>, listener: (Item) -> Unit = {
+            Cart.add(Purchase(item = it, date = Date()))
+        }) {
+            RxActivityResult.on(f)
+                    .startIntent(Intent(f.activity, SelectItemActivity::class.java))
+                    .bindUntilEvent(f, FragmentEvent.DESTROY)
+                    .subscribe {
+                        val itemId = it.data().getStringExtra(SelectItemActivity.SELECTED_ITEM_ID)
+                        val selectedItem = Item().queryFirst { it.equalTo("id", itemId) }
+                        listener(selectedItem!!)
+                    }
         }
     }
 }

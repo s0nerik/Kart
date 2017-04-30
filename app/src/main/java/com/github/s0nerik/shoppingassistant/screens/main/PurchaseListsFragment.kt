@@ -17,6 +17,10 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemListsHeaderBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemListsItemBinding
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.FuturePurchase
+import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
+import com.trello.rxlifecycle.android.FragmentEvent
+import com.trello.rxlifecycle.kotlin.bindUntilEvent
+import com.vicpin.krealmextensions.save
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.jetbrains.anko.support.v4.dip
@@ -53,6 +57,12 @@ class PurchasesListItemViewModel(
 
 class PurchaseListsViewModel {
     lateinit var f: PurchaseListsFragment
+
+    fun addNewItem() {
+        SelectItemActivity.startForResult(f, {
+            FuturePurchase(item = it, creationDate = Date(), lastUpdate = Date()).save()
+        })
+    }
 }
 
 class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.fragment_lists) {
@@ -62,6 +72,7 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm.f = this
+        prepareList()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -111,21 +122,38 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
                 .into(recycler)
     }
 
-    override fun onResume() {
-        super.onResume()
-        initLists()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        initLists()
+//    }
 
-    private fun initLists() {
-        listItems.clear()
-
-        val futurePurchases = realm.where(FuturePurchase::class.java)
+    private fun prepareList() {
+        realm.where(FuturePurchase::class.java)
                 .findAllSorted("lastUpdate", Sort.DESCENDING)
-                .groupBy { it.lastUpdate!!.toDateTime().withTimeAtStartOfDay() }
+                .asObservable()
+                .bindUntilEvent(this, FragmentEvent.DESTROY)
+                .subscribe {
+                    listItems.clear()
 
-        futurePurchases.forEach {
-            listItems.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
-            listItems.addAll(it.value.map { PurchasesListItemViewModel(listItems, it) })
-        }
+                    val futurePurchases = it.groupBy { it.lastUpdate!!.toDateTime().withTimeAtStartOfDay() }
+
+                    futurePurchases.forEach {
+                        listItems.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
+                        listItems.addAll(it.value.map { PurchasesListItemViewModel(listItems, it) })
+                    }
+                }
     }
+
+//    private fun initLists() {
+//        listItems.clear()
+//
+//        val futurePurchases = realm.where(FuturePurchase::class.java)
+//                .findAllSorted("lastUpdate", Sort.DESCENDING)
+//                .groupBy { it.lastUpdate!!.toDateTime().withTimeAtStartOfDay() }
+//
+//        futurePurchases.forEach {
+//            listItems.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
+//            listItems.addAll(it.value.map { PurchasesListItemViewModel(listItems, it) })
+//        }
+//    }
 }

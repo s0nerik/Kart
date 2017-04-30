@@ -21,10 +21,9 @@ import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.scales
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
-import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
+import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.dip
-import org.jetbrains.anko.support.v4.startActivity
 import java.text.DecimalFormat
 
 /**
@@ -51,7 +50,7 @@ class DashboardViewModel: BaseObservable() {
         @Bindable("dataPeriod") get() = MainPrefs.formattedShortExpensesLimitOrEmpty
 
     fun onCreateNewPurchase() {
-        f.startActivity<CreatePurchaseActivity>()
+        SelectItemActivity.startForResult(f)
     }
 }
 

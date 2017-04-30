@@ -21,5 +21,17 @@
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_lists_item"
             />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/plus"
+            android:tint="@color/material_color_white"
+            android:onClick='@{() -> vm.addNewItem()}'
+            app:fabSize="normal"
+            />
     </RelativeLayout>
 </layout>

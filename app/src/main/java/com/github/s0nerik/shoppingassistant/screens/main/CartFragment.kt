@@ -22,9 +22,8 @@ import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
+import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import kotlinx.android.synthetic.main.fragment_cart.*
-import org.jetbrains.anko.support.v4.startActivity
 
 /**
  * Created by Alex on 12/25/2016.
@@ -33,7 +32,7 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class CartViewModel(val f: CartFragment) {
     fun createNewPurchase() {
-        f.startActivity<CreatePurchaseActivity>()
+        SelectItemActivity.startForResult(f)
     }
 
     fun saveCart() {
