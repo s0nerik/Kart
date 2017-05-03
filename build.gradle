@@ -6,8 +6,9 @@ buildscript {
         anko_version = '0.8.3'
         support_version = '25.3.1'
         dagger_version = '2.5'
-        rxbinding_version = '1.0.1'
-        rxlifecycle_version = '1.0'
+        retrofit_version = '2.2.0'
+        rxbinding_version = '2.0.0'
+        rxlifecycle_version = '2.0.1'
         android_plugin_version = '2.3.1'
     }
 

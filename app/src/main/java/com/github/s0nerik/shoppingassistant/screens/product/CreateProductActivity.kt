@@ -22,11 +22,11 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
 import com.github.s0nerik.shoppingassistant.getDrawablePath
 import com.github.s0nerik.shoppingassistant.model.*
-import com.jakewharton.rxbinding.view.focusChanges
-import com.jakewharton.rxbinding.widget.itemSelections
-import com.jakewharton.rxbinding.widget.textChanges
-import com.trello.rxlifecycle.android.ActivityEvent
-import com.trello.rxlifecycle.kotlin.bindUntilEvent
+import com.jakewharton.rxbinding2.view.focusChanges
+import com.jakewharton.rxbinding2.widget.itemSelections
+import com.jakewharton.rxbinding2.widget.textChanges
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.create
 import com.vicpin.krealmextensions.query
 import com.vicpin.krealmextensions.saveManaged

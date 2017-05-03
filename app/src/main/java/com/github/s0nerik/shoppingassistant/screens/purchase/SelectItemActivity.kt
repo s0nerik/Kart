@@ -28,15 +28,15 @@ import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
 import com.github.s0nerik.shoppingassistant.screens.product.EXTRA_ID
-import com.jakewharton.rxbinding.widget.textChanges
-import com.trello.rxlifecycle.android.ActivityEvent
-import com.trello.rxlifecycle.android.FragmentEvent
-import com.trello.rxlifecycle.kotlin.bindUntilEvent
+import com.jakewharton.rxbinding2.widget.textChanges
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.queryFirst
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_select_item.*
 import org.jetbrains.anko.dip
-import rx_activity_result.RxActivityResult
+import rx_activity_result2.RxActivityResult
 import java.util.*
 
 class SelectItemViewModel(

@@ -12,7 +12,7 @@ import com.github.s0nerik.shoppingassistant.jobs.UpdateExchangeRatesJob
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import rx_activity_result.RxActivityResult
+import rx_activity_result2.RxActivityResult
 import timber.log.Timber
 
 

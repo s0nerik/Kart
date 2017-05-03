@@ -8,7 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import com.github.debop.kodatimes.hours
 import com.github.s0nerik.shoppingassistant.api.CurrenciesApi
-import rx.Subscription
+import io.reactivex.disposables.Disposable
 import java.util.*
 
 /**
@@ -17,17 +17,17 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class UpdateExchangeRatesJob : JobService() {
-    private lateinit var subscription: Subscription
+    private lateinit var disposable: Disposable
 
     override fun onStartJob(params: JobParameters?): Boolean {
-        subscription = CurrenciesApi.loadExchangeRates(Date())
+        disposable = CurrenciesApi.loadExchangeRates(Date())
                 .subscribe({ jobFinished(params, false) }, { jobFinished(params, true) })
 
         return true
     }
 
     override fun onStopJob(params: JobParameters?): Boolean {
-        subscription.unsubscribe()
+        disposable.dispose()
         return true
     }
 

@@ -4,12 +4,12 @@ import com.github.debop.kodatimes.asUtc
 import com.github.debop.kodatimes.toDateTime
 import com.github.debop.kodatimes.toIsoFormatDateString
 import com.github.s0nerik.shoppingassistant.model.RemoteExchangeRates
+import io.reactivex.Single
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
-import rx.Single
 import java.util.*
 
 /**
@@ -25,7 +25,7 @@ interface CurrenciesApi {
     companion object {
         private val instance: CurrenciesApi by lazy {
             Retrofit.Builder()
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.createAsync())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                     .addConverterFactory(GsonConverterFactory.create())
                     .baseUrl("https://s3-us-west-2.amazonaws.com/kart-currencies/")
                     .build()

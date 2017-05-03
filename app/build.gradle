@@ -33,6 +33,10 @@ android {
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
     }
+    // TODO: remove when https://github.com/realm/realm-java/issues/3497 gets done
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 kapt {
@@ -49,7 +53,9 @@ dependencies {
 
     // Language features
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'co.metalab.asyncawait:asyncawait:1.0.0'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.14.1"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:0.14.1"
+//    compile 'co.metalab.asyncawait:asyncawait:1.0.0'
 
     // Support libs
     compile "com.android.support:appcompat-v7:$support_version"
@@ -101,24 +107,24 @@ dependencies {
 
     // TODO: update to RxJava 2
     // Rx
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.4'
-    compile 'io.reactivex:rxkotlin:0.60.0'
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
-    compile "com.jakewharton.rxbinding:rxbinding-kotlin:$rxbinding_version"
-    compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7-kotlin:$rxbinding_version"
-    compile "com.jakewharton.rxbinding:rxbinding-design-kotlin:$rxbinding_version"
-    compile "com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:$rxbinding_version"
-    compile "com.trello:rxlifecycle:$rxlifecycle_version"
-    compile "com.trello:rxlifecycle-android:$rxlifecycle_version"
-    compile "com.trello:rxlifecycle-components:$rxlifecycle_version"
-    compile "com.trello:rxlifecycle-kotlin:$rxlifecycle_version"
-    compile 'com.github.VictorAlbertos:RxActivityResult:0.4.1-1.x'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile 'io.reactivex.rxjava2:rxkotlin:2.0.2'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxbinding_version"
+    compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxbinding_version"
+    compile "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxbinding_version"
+    compile "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxbinding_version"
+    compile "com.trello.rxlifecycle2:rxlifecycle:$rxlifecycle_version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android:$rxlifecycle_version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:$rxlifecycle_version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxlifecycle_version"
+    compile 'com.github.VictorAlbertos:RxActivityResult:0.4.4-2.x'
 
     // Networking
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
     // Misc
     compile 'com.github.ajalt:timberkt:1.1.0'

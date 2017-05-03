@@ -20,10 +20,10 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivitySettingsBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
 import com.github.s0nerik.shoppingassistant.databinding.SheetSelectExpensesLimitBinding
 import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
-import com.jakewharton.rxbinding.widget.textChanges
+import com.jakewharton.rxbinding2.widget.textChanges
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.sheet_select_category.*
 import kotlinx.android.synthetic.main.sheet_select_expenses_limit.*
-import rx.Subscription
 import java.text.DecimalFormat
 import java.util.*
 
@@ -66,7 +66,7 @@ class SelectExpensesLimitViewModel(val currencySign: String) {
 class SelectExpensesLimitBottomSheet(
         vm: SelectExpensesLimitViewModel
 ) : BaseBottomSheet<SelectExpensesLimitViewModel, SheetSelectExpensesLimitBinding>(vm, R.layout.sheet_select_expenses_limit) {
-    private lateinit var limitTextSubscription: Subscription
+    private lateinit var limitTextDisposable: Disposable
 
     var expensesLimit: Float? = MainPrefs.expensesLimit
     var expensesLimitPeriod: ExpensesLimitPeriod? = MainPrefs.expensesLimitPeriod
@@ -107,7 +107,7 @@ class SelectExpensesLimitBottomSheet(
 
     override fun onResume() {
         super.onResume()
-        limitTextSubscription = etLimit.textChanges().skip(1).subscribe {
+        limitTextDisposable = etLimit.textChanges().skip(1).subscribe {
             expensesLimit = it.toString().toFloatOrNull()
             wasChanged = true
         }
@@ -115,6 +115,6 @@ class SelectExpensesLimitBottomSheet(
 
     override fun onPause() {
         super.onPause()
-        limitTextSubscription.unsubscribe()
+        limitTextDisposable.dispose()
     }
 }

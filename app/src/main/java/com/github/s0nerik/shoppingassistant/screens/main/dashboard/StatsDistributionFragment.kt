@@ -19,8 +19,8 @@ import com.github.s0nerik.shoppingassistant.ext.observeChanges
 import com.github.s0nerik.shoppingassistant.purchases
 import com.github.s0nerik.shoppingassistant.screens.main.DashboardFragment
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.trello.rxlifecycle.android.FragmentEvent
-import com.trello.rxlifecycle.kotlin.bindUntilEvent
+import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import kotlinx.android.synthetic.main.fragment_stats_distribution.*
 import org.jetbrains.anko.support.v4.act
 
