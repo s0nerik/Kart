@@ -8,7 +8,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.github.s0nerik.kart"
+        applicationId "today.kart"
         minSdkVersion 21
         targetSdkVersion 25
         multiDexEnabled true
