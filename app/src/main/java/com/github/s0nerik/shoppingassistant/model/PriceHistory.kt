@@ -1,9 +1,9 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
-import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -15,7 +15,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class PriceHistory(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var shop: Shop? = null,
         open var values: RealmList<Price> = RealmList()
 ) : RealmObject() {

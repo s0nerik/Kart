@@ -43,7 +43,7 @@ class DashboardViewModel: BaseObservable() {
 
     val moneySpentAmountString: String
         @Bindable("dataPeriod") get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
-                recentPurchases(f.realm, dataPeriod.startDate).sumByDouble { it.fullPrice.toDouble() }
+                Db.recentPurchases(f.realm, dataPeriod.startDate).sumByDouble { it.fullPrice.toDouble() }
         )}"
 
     val expensesLimitString: String
@@ -103,7 +103,7 @@ class DashboardAnimator(val f: DashboardFragment) {
 
 class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
     private val recentPurchases
-        get() = recentPurchases(realm)
+        get() = Db.recentPurchases(realm)
 
     private val statsDistributionFragment = StatsDistributionFragment()
     private val statsExpensesFragment = StatsExpensesFragment()

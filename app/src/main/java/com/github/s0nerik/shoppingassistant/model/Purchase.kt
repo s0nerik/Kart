@@ -1,9 +1,9 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
-import com.github.s0nerik.shoppingassistant.randomUuidString
 import com.vicpin.krealmextensions.delete
 import com.vicpin.krealmextensions.save
 import io.realm.RealmObject
@@ -16,7 +16,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Purchase(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var item: Item? = null,
         open var date: Date? = null,
         open var amount: Float = 1f
@@ -57,7 +57,7 @@ open class Purchase(
 }
 
 open class FuturePurchase(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var item: Item? = null,
         open var creationDate: Date? = null,
         open var lastUpdate: Date? = null,

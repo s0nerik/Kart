@@ -1,8 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
 import com.github.s0nerik.shoppingassistant.MainPrefs
-import com.github.s0nerik.shoppingassistant.exchangedValue
-import com.github.s0nerik.shoppingassistant.randomUuidString
+import com.github.s0nerik.shoppingassistant.Db
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -13,7 +12,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Price(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var value: Float? = null,
         open var currencyCode: String = MainPrefs.defaultCurrencyCode,
         open var date: Date = Date(),
@@ -23,7 +22,7 @@ open class Price(
 
     fun convertedTo(currency: Currency): Price {
         if (currencyCode == MainPrefs.defaultCurrencyCode) return this
-        return Price(id, exchangedValue(value!!, this.currency, currency, date), currency.currencyCode, date, quantityQualifierName)
+        return Price(id, Db.exchangedValue(value!!, this.currency, currency, date), currency.currencyCode, date, quantityQualifierName)
     }
 
     var currency: Currency

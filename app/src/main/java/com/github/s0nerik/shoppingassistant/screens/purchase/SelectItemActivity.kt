@@ -16,7 +16,10 @@ import android.view.animation.DecelerateInterpolator
 import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
-import com.github.s0nerik.shoppingassistant.*
+import com.github.s0nerik.shoppingassistant.BR
+import com.github.s0nerik.shoppingassistant.Db
+import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySelectItemBinding
@@ -47,9 +50,9 @@ class SelectItemViewModel(
 
     val isSearching = ObservableBoolean(false)
 
-    val frequents by lazy { observableListOf(frequentItems(realm)) }
-    val favorites by lazy { observableListOf(favoriteItems(realm)) }
-    val items by lazy { observableListOf(items(realm)) }
+    val frequents by lazy { observableListOf(Db.frequentItems(realm)) }
+    val favorites by lazy { observableListOf(Db.favoriteItems(realm)) }
+    val items by lazy { observableListOf(Db.items(realm)) }
 
     val filteredSearchResults = ObservableArrayList<Item>()
 

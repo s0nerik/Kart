@@ -54,7 +54,7 @@ open class App : Application() {
                         .deleteRealmIfMigrationNeeded()
                         .build()
         )
-        initDatabase(this, true, true, true, true, true)
+        Db.initDatabase(this, true, true, true, true, true)
         configureGlide()
         configureTimber()
 

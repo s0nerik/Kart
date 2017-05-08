@@ -9,6 +9,7 @@ import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.DashboardDataPeriod
+import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsDistributionBinding
@@ -16,7 +17,6 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemStatsDistributionBin
 import com.github.s0nerik.shoppingassistant.ext.getColor
 import com.github.s0nerik.shoppingassistant.ext.limit
 import com.github.s0nerik.shoppingassistant.ext.observeChanges
-import com.github.s0nerik.shoppingassistant.purchases
 import com.github.s0nerik.shoppingassistant.screens.main.DashboardFragment
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.trello.rxlifecycle2.android.FragmentEvent
@@ -31,7 +31,7 @@ import org.jetbrains.anko.support.v4.act
  */
 class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBinding>(R.layout.fragment_stats_distribution) {
     val purchases
-        get() = purchases(realm)
+        get() = Db.purchases(realm)
 
     override fun onViewCreated(view: android.view.View?, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -7,11 +7,11 @@ import com.github.debop.kodatimes.toDateTime
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsExpensesBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.github.s0nerik.shoppingassistant.purchases
 import kotlinx.android.synthetic.main.fragment_stats_expenses.*
 import org.jetbrains.anko.support.v4.act
 
@@ -22,7 +22,7 @@ import org.jetbrains.anko.support.v4.act
  */
 class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.layout.fragment_stats_expenses) {
     val purchases
-        get() = purchases(realm)
+        get() = Db.purchases(realm)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
