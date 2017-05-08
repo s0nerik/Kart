@@ -151,6 +151,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
             .onClick { finishWithResult(binding.item) }
 
     private lateinit var animator: SelectItemActivityAnimator
+    private var selectedItem: Item? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,11 +163,17 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     }
 
     override fun finish() {
-        animator.disappear { super.finish() }
+        animator.disappear {
+            if (selectedItem != null)
+                setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_ITEM_ID, selectedItem!!.id))
+            else
+                setResult(Activity.RESULT_CANCELED)
+            super.finish()
+        }
     }
 
     private fun finishWithResult(item: Item) {
-        setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_ITEM_ID, item.id))
+        selectedItem = item
         finish()
     }
 
@@ -204,7 +211,9 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     fun createProduct() {
         RxActivityResult.on(this)
                 .startIntent(CreateProductActivity.intent(this, etSearch.text.toString()))
+                .firstElement()
                 .filter { it.resultCode() == Activity.RESULT_OK }
+                .bindUntilEvent(this, ActivityEvent.DESTROY)
                 .subscribe { result ->
                     with (Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!) {
                         binding.vm!!.frequents.add(item!!)
@@ -234,6 +243,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
         }) {
             RxActivityResult.on(f)
                     .startIntent(Intent(f.activity, SelectItemActivity::class.java))
+                    .firstElement()
                     .bindUntilEvent(f, FragmentEvent.DESTROY)
                     .subscribe {
                         val itemId = it.data().getStringExtra(SelectItemActivity.SELECTED_ITEM_ID)

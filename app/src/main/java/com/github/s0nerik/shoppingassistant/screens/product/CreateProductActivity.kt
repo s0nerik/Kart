@@ -83,14 +83,14 @@ class CreateProductViewModel(
             etNewPriceValue
                     .textChanges()
                     .map { it.toString() }
-                    .map { if (!it.isNullOrBlank()) it.toFloat() else null }
+                    .map { if (!it.isNullOrBlank()) it.toFloat() else -1f }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe {
                         if (pendingItem.priceHistory == null) {
                             pendingItem.priceHistory = itemPrice
                             pendingItem.priceHistory?.values?.add(itemPriceChange)
                         }
-                        itemPriceChange.value = it
+                        itemPriceChange.value = if (it < 0) null else it
                         notifyPropertyChanged(BR.item)
                         notifyPropertyChanged(BR.priceSet)
                     }
