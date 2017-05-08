@@ -23,6 +23,9 @@ open class Cart(
         fun add(purchase: Purchase) {
             purchases.add(purchase)
         }
+        fun add(item: Item, date: Date = Date()) {
+            add(Purchase(item = item, date = date))
+        }
         fun remove(purchase: Purchase) {
             purchases.remove(purchase)
         }

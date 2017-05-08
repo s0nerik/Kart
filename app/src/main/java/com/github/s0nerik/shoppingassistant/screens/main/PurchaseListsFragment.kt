@@ -19,11 +19,13 @@ import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.FuturePurchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.save
 import io.realm.RealmChangeListener
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
+import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.dip
 import java.util.*
 
@@ -60,9 +62,9 @@ class PurchaseListsViewModel {
     lateinit var f: PurchaseListsFragment
 
     fun addNewItem() {
-        SelectItemActivity.startForResult(f, {
-            FuturePurchase(item = it, creationDate = Date(), lastUpdate = Date()).save()
-        })
+        SelectItemActivity.startForResult(f.act)
+                .bindUntilEvent(f, FragmentEvent.DESTROY)
+                .subscribe { FuturePurchase(item = it, creationDate = Date(), lastUpdate = Date()).save() }
     }
 }
 

@@ -21,26 +21,22 @@ import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
-import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySelectItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
-import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
-import com.github.s0nerik.shoppingassistant.screens.product.EXTRA_ID
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.ActivityEvent
-import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.queryFirst
+import io.reactivex.Maybe
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_select_item.*
 import org.jetbrains.anko.dip
 import rx_activity_result2.RxActivityResult
-import java.util.*
 
 class SelectItemViewModel(
         private val activity: SelectItemActivity,
@@ -209,20 +205,16 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     }
 
     fun createProduct() {
-        RxActivityResult.on(this)
-                .startIntent(CreateProductActivity.intent(this, etSearch.text.toString()))
-                .firstElement()
-                .filter { it.resultCode() == Activity.RESULT_OK }
+        CreateProductActivity.startForResult(this, etSearch.text.toString())
                 .bindUntilEvent(this, ActivityEvent.DESTROY)
-                .subscribe { result ->
-                    with (Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!!) {
+                .subscribe {
+                    with(it) {
                         binding.vm!!.frequents.add(item!!)
                         binding.vm!!.items.add(item!!)
                         if (item!!.isFavorite)
                             binding.vm!!.favorites.add(item)
-
-                        Cart.add(this)
                     }
+                    Cart.add(it)
                 }
     }
 
@@ -238,17 +230,14 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     companion object {
         private val SELECTED_ITEM_ID = "SELECTED_ITEM_ID"
 
-        fun startForResult(f: BaseBoundFragment<*>, listener: (Item) -> Unit = {
-            Cart.add(Purchase(item = it, date = Date()))
-        }) {
-            RxActivityResult.on(f)
-                    .startIntent(Intent(f.activity, SelectItemActivity::class.java))
+        fun startForResult(a: Activity): Maybe<Item> {
+            return RxActivityResult.on(a)
+                    .startIntent(Intent(a, SelectItemActivity::class.java))
                     .firstElement()
-                    .bindUntilEvent(f, FragmentEvent.DESTROY)
-                    .subscribe {
+                    .filter { it.resultCode() == Activity.RESULT_OK }
+                    .map {
                         val itemId = it.data().getStringExtra(SelectItemActivity.SELECTED_ITEM_ID)
-                        val selectedItem = Item().queryFirst { it.equalTo("id", itemId) }
-                        listener(selectedItem!!)
+                        Item().queryFirst { it.equalTo("id", itemId) }
                     }
         }
     }

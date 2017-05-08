@@ -29,7 +29,9 @@ import com.trello.rxlifecycle2.android.ActivityEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.create
 import com.vicpin.krealmextensions.query
+import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.saveManaged
+import io.reactivex.Maybe
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_create_product.*
 import kotlinx.android.synthetic.main.item_purchase_preview.view.*
@@ -39,6 +41,7 @@ import kotlinx.android.synthetic.main.view_create_shop.*
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
+import rx_activity_result2.RxActivityResult
 import java.util.*
 
 /**
@@ -380,10 +383,18 @@ class CreateProductViewModel(
 
 class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.layout.activity_create_product) {
     companion object {
-        fun intent(ctx: Context, productName: String? = null): Intent {
+        private fun intent(ctx: Context, productName: String? = null): Intent {
             val intent = Intent(ctx, CreateProductActivity::class.java)
             intent.putExtra("name", productName)
             return intent
+        }
+
+        fun startForResult(a: Activity, searchQuery: String = ""): Maybe<Purchase> {
+            return RxActivityResult.on(a)
+                    .startIntent(intent(a, searchQuery))
+                    .firstElement()
+                    .filter { it.resultCode() == Activity.RESULT_OK }
+                    .map { result -> Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!! }
         }
     }
 

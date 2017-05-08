@@ -19,10 +19,14 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.scales
+import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
+import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.dip
 import java.text.DecimalFormat
 
@@ -50,7 +54,9 @@ class DashboardViewModel: BaseObservable() {
         @Bindable("dataPeriod") get() = MainPrefs.formattedShortExpensesLimitOrEmpty
 
     fun onCreateNewPurchase() {
-        SelectItemActivity.startForResult(f)
+        SelectItemActivity.startForResult(f.act)
+                .bindUntilEvent(f, FragmentEvent.DESTROY)
+                .subscribe { Cart.add(it) }
     }
 }
 

@@ -23,7 +23,10 @@ import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
+import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import kotlinx.android.synthetic.main.fragment_cart.*
+import org.jetbrains.anko.support.v4.act
 
 /**
  * Created by Alex on 12/25/2016.
@@ -32,7 +35,9 @@ import kotlinx.android.synthetic.main.fragment_cart.*
  */
 class CartViewModel(val f: CartFragment) {
     fun createNewPurchase() {
-        SelectItemActivity.startForResult(f)
+        SelectItemActivity.startForResult(f.act)
+                .bindUntilEvent(f, FragmentEvent.DESTROY)
+                .subscribe { Cart.add(it) }
     }
 
     fun saveCart() {
