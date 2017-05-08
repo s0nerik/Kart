@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.screens.product
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
@@ -10,8 +11,14 @@ import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
 import com.github.s0nerik.shoppingassistant.model.Category
+import com.github.s0nerik.shoppingassistant.model.Price
 import com.github.s0nerik.shoppingassistant.model.Shop
+import com.jakewharton.rxbinding2.widget.itemSelections
+import com.jakewharton.rxbinding2.widget.textChanges
+import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import kotlinx.android.synthetic.main.sheet_select_category.*
+import kotlinx.android.synthetic.main.sheet_select_price.*
 import java.util.*
 
 /**
@@ -24,6 +31,7 @@ class SelectCategoryBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCategoryBinding>(vm, R.layout.sheet_select_category) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         LastAdapter.with(realm.where(Category::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCategoryBinding>(R.layout.item_category)
@@ -36,10 +44,42 @@ class SelectCategoryBottomSheet(
     }
 }
 
+class SelectPriceBottomSheet(
+        vm: CreateProductViewModel
+) : BaseBottomSheet<CreateProductViewModel, SheetSelectPriceBinding>(vm, R.layout.sheet_select_price) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(vm) {
+            etNewPriceValue
+                    .textChanges()
+                    .map { it.toString() }
+                    .map { if (!it.isNullOrBlank()) it.toFloat() else -1f }
+                    .bindUntilEvent(this@SelectPriceBottomSheet, FragmentEvent.DESTROY)
+                    .subscribe {
+                        itemPriceChange.value = if (it < 0) null else it
+                        notifyPropertyChanged(BR.item)
+                        notifyPropertyChanged(BR.priceSet)
+                    }
+
+            spinnerQuantityQualifier.adapter = ArrayAdapter.createFromResource(activity, R.array.price_quantity_qualifiers, android.R.layout.simple_spinner_dropdown_item)
+            spinnerQuantityQualifier.itemSelections()
+                    .bindUntilEvent(this@SelectPriceBottomSheet, FragmentEvent.DESTROY)
+                    .subscribe { i ->
+                        itemPriceChange.quantityQualifier = when (i) {
+                            0 -> Price.QuantityQualifier.ITEM
+                            1 -> Price.QuantityQualifier.KG
+                            else -> Price.QuantityQualifier.ITEM
+                        }
+                    }
+        }
+    }
+}
+
 class SelectCurrencyBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCurrencyBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         LastAdapter.with(currenciesSorted, BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
@@ -56,6 +96,7 @@ class SelectShopBottomSheet(
         vm: CreateProductViewModel
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectShopBinding>(vm, R.layout.sheet_select_shop) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         LastAdapter.with(realm.where(Shop::class.java).findAll(), BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_shop)

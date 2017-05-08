@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.MainPrefs
@@ -23,7 +22,6 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBin
 import com.github.s0nerik.shoppingassistant.getDrawablePath
 import com.github.s0nerik.shoppingassistant.model.*
 import com.jakewharton.rxbinding2.view.focusChanges
-import com.jakewharton.rxbinding2.widget.itemSelections
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.ActivityEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
@@ -59,11 +57,12 @@ class CreateProductViewModel(
     enum class Action { CREATE_PRODUCT, CREATE_PRICE, SELECT_CATEGORY, CREATE_CATEGORY, SELECT_SHOP, CREATE_SHOP }
 
     val pendingCurrency = ObservableField<Currency>(MainPrefs.defaultCurrency)
+    val pendingPriceText = ObservableField<String>("")
 
     private var itemCategory = Category()
     private var itemShop = Shop()
     private val itemPrice by lazy { PriceHistory() }
-    private val itemPriceChange by lazy {
+    val itemPriceChange by lazy {
         val priceChange = Price()
         priceChange.date = Date()
         priceChange
@@ -76,38 +75,17 @@ class CreateProductViewModel(
     private var bottomSheet: BottomSheetDialogFragment? = null
 
     init {
+        if (pendingItem.priceHistory == null) {
+            pendingItem.priceHistory = itemPrice
+            pendingItem.priceHistory?.values?.add(itemPriceChange)
+        }
+
         activity.apply {
             preview.title
                     .textChanges()
                     .map { it.toString() }
                     .bindUntilEvent(activity, ActivityEvent.DESTROY)
                     .subscribe { setName(it) }
-
-            etNewPriceValue
-                    .textChanges()
-                    .map { it.toString() }
-                    .map { if (!it.isNullOrBlank()) it.toFloat() else -1f }
-                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
-                    .subscribe {
-                        if (pendingItem.priceHistory == null) {
-                            pendingItem.priceHistory = itemPrice
-                            pendingItem.priceHistory?.values?.add(itemPriceChange)
-                        }
-                        itemPriceChange.value = if (it < 0) null else it
-                        notifyPropertyChanged(BR.item)
-                        notifyPropertyChanged(BR.priceSet)
-                    }
-
-            spinnerQuantityQualifier.adapter = ArrayAdapter.createFromResource(activity, R.array.price_quantity_qualifiers, android.R.layout.simple_spinner_dropdown_item)
-            spinnerQuantityQualifier.itemSelections()
-                    .bindUntilEvent(activity, ActivityEvent.DESTROY)
-                    .subscribe { i ->
-                        itemPriceChange.quantityQualifier = when (i) {
-                            0 -> Price.QuantityQualifier.ITEM
-                            1 -> Price.QuantityQualifier.KG
-                            else -> Price.QuantityQualifier.ITEM
-                        }
-                    }
         }
     }
 
@@ -165,6 +143,13 @@ class CreateProductViewModel(
                     bottomSheet = sheet
                 }
             }
+            Action.CREATE_PRICE -> {
+                if (action != Action.CREATE_PRICE) {
+                    val sheet = SelectPriceBottomSheet(this)
+                    sheet.show(activity.supportFragmentManager, null)
+                    bottomSheet = sheet
+                }
+            }
             Action.CREATE_PRODUCT -> bottomSheet?.dismiss()
         }
 
@@ -174,7 +159,7 @@ class CreateProductViewModel(
             val focusedText = when (a) {
                 Action.CREATE_CATEGORY -> etNewCategoryName
 //                Action.CREATE_PRODUCT -> etNewProductName
-                Action.CREATE_PRICE -> etNewPriceValue
+//                Action.CREATE_PRICE -> etNewPriceValue
                 else -> null
             }
             focusedText?.requestFocus()
@@ -244,8 +229,8 @@ class CreateProductViewModel(
         SelectCurrencyBottomSheet(this).show(activity.supportFragmentManager, null)
     }
 
-    fun confirmPriceCreation() {
-        val priceText = activity.etNewPriceValue.text.toString()
+    fun confirmPendingPrice() {
+        val priceText = pendingPriceText.get()
         if (priceText.isBlank()) {
             activity.toast("PriceHistory can't be blank!")
             return

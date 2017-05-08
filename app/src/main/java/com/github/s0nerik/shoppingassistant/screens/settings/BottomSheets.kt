@@ -37,6 +37,7 @@ class SelectDefaultCurrencyBottomSheet(
         vm: SettingsActivityViewModel
 ) : BaseBottomSheet<SettingsActivityViewModel, ActivitySettingsBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         LastAdapter.with(currenciesSorted, BR.item)
                 .type {
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
@@ -90,6 +91,7 @@ class SelectExpensesLimitBottomSheet(
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (expensesLimit != null && expensesLimit!! > 0f)
             etLimit.setText(DecimalFormat("0.##").format(expensesLimit))
         etLimit.setSelection(etLimit.text.length)
