@@ -34,4 +34,8 @@
 
     <string name="expenses_limit_unknown">Not set</string>
 
+    // Item selection
+    <string name="item_search_noting_found_title">¯\\_(ツ)_/¯</string>
+    <string name="item_search_noting_found_subtitle">Nothing found…\nYou can create a new product using a button above</string>
+
 </resources>

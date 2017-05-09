@@ -175,7 +175,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="32dp"
-                                android:text="¯\\_(ツ)_/¯"
+                                android:text="@string/item_search_noting_found_title"
                                 style="@style/TextAppearance.AppCompat.Headline"
                                 />
                             <TextView
@@ -183,8 +183,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
                                 android:layout_marginBottom="48dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
                                 android:gravity="center"
-                                android:text="Nothing found...\nYou can create a new product using a button above"
+                                android:text="@string/item_search_noting_found_subtitle"
                                 style="@style/MaterialTypography.Regular.Caption"
                                 />
                             <!--<Button-->
