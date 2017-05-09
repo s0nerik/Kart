@@ -101,6 +101,7 @@ private fun providePurchase(realm: Realm, shop: Shop, date: DateTime, name: Stri
     item.name = name
     item.category = category
     item.priceHistory = providePriceHistory(realm, shop, date, price, currency)
+    item.isFavorite = Random().nextBoolean()
 
     purchase.item = item
 

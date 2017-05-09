@@ -18,6 +18,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentDashboardBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
+import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.scales
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
@@ -147,6 +148,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
         recentsRecycler.setHasFixedSize(true)
 
         scrollView.applyWrongNestedScrollWorkaround()
+
+        recentsRecycler.addItemDecoration(RecyclerDivider.horizontal)
     }
 
     private fun initStats() {

@@ -24,6 +24,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySelectItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
+import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
@@ -186,6 +187,8 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
 
         rvFavorites.isNestedScrollingEnabled = false
         rvFavorites.setHasFixedSize(true)
+
+        rvFavorites.addItemDecoration(RecyclerDivider.vertical)
     }
 
     private fun initFrequents() {
@@ -194,6 +197,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
                 .into(rvFrequents)
 
         rvFrequents.isNestedScrollingEnabled = false
+        rvFrequents.addItemDecoration(RecyclerDivider.horizontal)
     }
 
     private fun initSearchResults() {
