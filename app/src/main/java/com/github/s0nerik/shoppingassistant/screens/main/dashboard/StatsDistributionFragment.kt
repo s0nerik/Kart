@@ -65,8 +65,8 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
 
         rvLegend.layoutManager = FlexboxLayoutManager()
 
-        LastAdapter.with(legendItems, BR.item)
-                .type { Type<ItemStatsDistributionBinding>(R.layout.item_stats_distribution) }
+        LastAdapter(legendItems, BR.item)
+                .type { _, _ -> Type<ItemStatsDistributionBinding>(R.layout.item_stats_distribution) }
                 .into(rvLegend)
 
         val dataSet = PieDataSet(entries, null)

@@ -142,10 +142,10 @@ class SelectItemActivityAnimator(val a: SelectItemActivity, val binding: Activit
 class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout.activity_select_item) {
 
     private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
-            .onClick { finishWithResult(binding.item) }
+            .onClick { finishWithResult(it.binding.item) }
 
     private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
-            .onClick { finishWithResult(binding.item) }
+            .onClick { finishWithResult(it.binding.item) }
 
     private lateinit var animator: SelectItemActivityAnimator
     private var selectedItem: Item? = null
@@ -181,8 +181,8 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     }
 
     private fun initFavorites() {
-        LastAdapter.with(binding.vm!!.favorites, BR.item)
-                .type { horizontalItemAdapterType }
+        LastAdapter(binding.vm!!.favorites, BR.item)
+                .type { _, _ -> horizontalItemAdapterType }
                 .into(rvFavorites)
 
         rvFavorites.isNestedScrollingEnabled = false
@@ -192,8 +192,8 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     }
 
     private fun initFrequents() {
-        LastAdapter.with(binding.vm!!.frequents, BR.item)
-                .type { itemAdapterType }
+        LastAdapter(binding.vm!!.frequents, BR.item)
+                .type { _, _ -> itemAdapterType }
                 .into(rvFrequents)
 
         rvFrequents.isNestedScrollingEnabled = false
@@ -201,8 +201,8 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     }
 
     private fun initSearchResults() {
-        LastAdapter.with(binding.vm!!.filteredSearchResults, BR.item)
-                .type { itemAdapterType }
+        LastAdapter(binding.vm!!.filteredSearchResults, BR.item)
+                .type { _, _ -> itemAdapterType }
                 .into(rvSearchResults)
 
         rvSearchResults.isNestedScrollingEnabled = false

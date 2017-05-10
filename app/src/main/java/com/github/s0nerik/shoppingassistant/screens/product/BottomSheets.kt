@@ -32,8 +32,8 @@ class SelectCategoryBottomSheet(
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCategoryBinding>(vm, R.layout.sheet_select_category) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LastAdapter.with(realm.where(Category::class.java).findAll(), BR.item)
-                .type {
+        LastAdapter(realm.where(Category::class.java).findAll(), BR.item)
+                .type { item, _ ->
                     Type<ItemCategoryBinding>(R.layout.item_category)
                             .onClick {
                                 vm.setCategory(item as Category)
@@ -80,8 +80,8 @@ class SelectCurrencyBottomSheet(
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCurrencyBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LastAdapter.with(currenciesSorted, BR.item)
-                .type {
+        LastAdapter(currenciesSorted, BR.item)
+                .type { item, _ ->
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {
                                 vm.pendingCurrency.set(item as Currency)
@@ -97,8 +97,8 @@ class SelectShopBottomSheet(
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectShopBinding>(vm, R.layout.sheet_select_shop) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LastAdapter.with(realm.where(Shop::class.java).findAll(), BR.item)
-                .type {
+        LastAdapter(realm.where(Shop::class.java).findAll(), BR.item)
+                .type { item, _ ->
                     Type<ItemCurrencyBinding>(R.layout.item_shop)
                             .onClick {
                                 vm.setShop(item as Shop)

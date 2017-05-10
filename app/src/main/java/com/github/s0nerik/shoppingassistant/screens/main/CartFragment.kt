@@ -156,8 +156,8 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
     }
 
     fun initCart() {
-        LastAdapter.with(Cart.purchases, BR.item)
-                .type { Type<ItemPurchaseBinding>(R.layout.item_purchase) }
+        LastAdapter(Cart.purchases, BR.item)
+                .type { _, _ -> Type<ItemPurchaseBinding>(R.layout.item_purchase) }
                 .into(recycler)
 
         recycler.isNestedScrollingEnabled = false

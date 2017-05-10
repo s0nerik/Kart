@@ -140,8 +140,8 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
     }
 
     private fun initRecents() {
-        LastAdapter.with(recentPurchases, BR.item)
-                .type { Type<ItemPurchaseBinding>(R.layout.item_purchase) }
+        LastAdapter(recentPurchases, BR.item)
+                .type { _, _ -> Type<ItemPurchaseBinding>(R.layout.item_purchase) }
                 .into(recentsRecycler)
 
         recentsRecycler.isNestedScrollingEnabled = false

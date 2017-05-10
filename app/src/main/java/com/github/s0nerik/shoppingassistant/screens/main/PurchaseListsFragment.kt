@@ -85,38 +85,40 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
 
-        LastAdapter.with(listItems, BR.item)
-                .type {
+        LastAdapter(listItems, BR.item)
+                .type { item, _ ->
                     when (item) {
                         is PurchasesListItemViewModel -> Type<ItemListsItemBinding>(R.layout.item_lists_item)
                                 .onBind {
                                     val vm = item as PurchasesListItemViewModel
 
-                                    binding.swipeLayout.close(false)
-                                    binding.swipeLayout.removeSwipeListener(binding.swipeListener)
-                                    binding.swipeListener = object : SimpleSwipeListener() {
-                                        var startElevation: Float = 0f
+                                    with(it) {
+                                        binding.swipeLayout.close(false)
+                                        binding.swipeLayout.removeSwipeListener(binding.swipeListener)
+                                        binding.swipeListener = object : SimpleSwipeListener() {
+                                            var startElevation: Float = 0f
 
-                                        override fun onStartOpen(layout: SwipeLayout) {
-                                            startElevation = binding.root.elevation
-                                            binding.root.elevation = startElevation + dip(1)
-                                        }
-
-                                        override fun onOpen(layout: SwipeLayout) {
-                                            when (layout.dragEdge) {
-                                                SwipeLayout.DragEdge.Left -> vm.confirm()
-                                                SwipeLayout.DragEdge.Right -> vm.remove()
+                                            override fun onStartOpen(layout: SwipeLayout) {
+                                                startElevation = binding.root.elevation
+                                                binding.root.elevation = startElevation + dip(1)
                                             }
-                                            // TODO: remove header if needed
-                                            listItems.remove(item)
-                                            binding.root.elevation = startElevation
-                                        }
 
-                                        override fun onClose(layout: SwipeLayout) {
-                                            binding.root.elevation = startElevation
+                                            override fun onOpen(layout: SwipeLayout) {
+                                                when (layout.dragEdge) {
+                                                    SwipeLayout.DragEdge.Left -> vm.confirm()
+                                                    SwipeLayout.DragEdge.Right -> vm.remove()
+                                                }
+                                                // TODO: remove header if needed
+                                                listItems.remove(item)
+                                                binding.root.elevation = startElevation
+                                            }
+
+                                            override fun onClose(layout: SwipeLayout) {
+                                                binding.root.elevation = startElevation
+                                            }
                                         }
+                                        binding.swipeLayout.addSwipeListener(binding.swipeListener)
                                     }
-                                    binding.swipeLayout.addSwipeListener(binding.swipeListener)
                                 }
                         is PurchasesListHeaderViewModel -> Type<ItemListsHeaderBinding>(R.layout.item_lists_header)
                         else -> Type<ItemHistoryBinding>(R.layout.item_lists_item)

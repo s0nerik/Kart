@@ -38,8 +38,8 @@ class SelectDefaultCurrencyBottomSheet(
 ) : BaseBottomSheet<SettingsActivityViewModel, ActivitySettingsBinding>(vm, R.layout.sheet_select_currency) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LastAdapter.with(currenciesSorted, BR.item)
-                .type {
+        LastAdapter(currenciesSorted, BR.item)
+                .type { item, _ ->
                     Type<ItemCurrencyBinding>(R.layout.item_currency)
                             .onClick {
                                 val selectedCurrency = item as Currency

@@ -57,8 +57,8 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
 
-        LastAdapter.with(historyItems, BR.item)
-                .type {
+        LastAdapter(historyItems, BR.item)
+                .type { item, _ ->
                     when (item) {
                         is Purchase -> Type<ItemHistoryBinding>(R.layout.item_history)
                         is HistoryHeader -> Type<ItemHistoryHeaderBinding>(R.layout.item_history_header)
