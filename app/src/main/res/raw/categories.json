@@ -1,0 +1,18 @@
+[
+  { "name": "Food & Drinks", "icon": "product_cat_food" },
+  { "name": "Clothes", "icon": "product_cat_clothes" },
+  { "name": "Books", "icon": "product_cat_books" },
+  { "name": "Electronics", "icon": "product_cat_electronics" },
+  { "name": "Gifts", "icon": "product_cat_gifts" },
+  { "name": "Household", "icon": "product_cat_household" },
+  { "name": "Instruments", "icon": "product_cat_instruments" },
+  { "name": "Medicines", "icon": "product_cat_medicines" },
+  { "name": "Pets", "icon": "product_cat_pets" },
+  { "name": "Restaurants", "icon": "product_cat_restaurants" },
+  { "name": "Tickets", "icon": "product_cat_tickets" },
+  { "name": "Software", "icon": "product_cat_software" },
+  { "name": "Games", "icon": "product_cat_games" },
+  { "name": "Music", "icon": "product_cat_music" },
+  { "name": "Computers & Peripherals", "icon": "product_cat_computers" },
+  { "name": "Smartphones & Accessories", "icon": "product_cat_smartphones" }
+]

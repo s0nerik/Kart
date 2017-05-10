@@ -1,12 +1,14 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
+import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.ExchangeRates
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
+import org.json.JSONArray
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -22,12 +24,36 @@ object Db {
             if (isDebug && removeOldData)
                 it.executeTransaction(Realm::deleteAll)
 
+            createBasicCategories(ctx, it)
+
             if (isDebug) {
                 if (dummyShops) createDummyShops(ctx, it)
-                if (dummyCategories) createDummyCategories(ctx, it)
                 if (dummyPurchases && dummyShops && dummyCategories) createDummyPurchases(ctx, it)
             }
         }
+    }
+
+    private fun createBasicCategories(ctx: Context, realm: Realm) {
+        realm.executeTransaction {
+            val categories = JSONArray(ctx.resources.openRawResource(R.raw.categories).bufferedReader().use { it.readText() })
+            for (i in 0..(categories.length() - 1)) {
+                val category = categories.getJSONObject(i)
+                val name = category.getString("name")
+                val iconId = ctx.resources.getIdentifier(category.getString("icon"), "drawable", ctx.packageName)
+                createOrReturnCategory(it, name, iconId.getDrawablePath(ctx))
+            }
+        }
+    }
+
+    fun createOrReturnCategory(realm: Realm, name: String, iconUrl: String? = null): Category {
+        val presentCategory = realm.where(Category::class.java).equalTo("name", name).findFirst()
+        if (presentCategory != null) return presentCategory
+
+        val category = realm.createObject(Category::class)
+        category.name = name
+        if (iconUrl != null) category.iconUrl = iconUrl
+
+        return category
     }
 
     fun purchases(realm: Realm): List<Purchase> {
