@@ -45,7 +45,7 @@
             android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="16dp"
             android:tint="@{textColor != null ? textColor : @color/material_color_white, default=@color/material_color_white}"
-            app:glideImageSrc='@{iconUrl != null ? iconUrl : ""}'
+            app:glideSrc='@{iconUrl != null ? iconUrl : ""}'
             app:glideConfig='@{glideConfig != null ? glideConfig : "purchase_icon"}'
             tools:src="@drawable/product_cat_food"
             />

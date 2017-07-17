@@ -18,7 +18,6 @@ import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.appcompat.v7.onMenuItemClick
 import org.jetbrains.anko.startActivity
 
 class MainActivityViewModel(private val activity: MainActivity) {
@@ -94,7 +93,7 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
                 .replace(R.id.container, binding.vm!!.dashboardFragment)
                 .commit()
 
-        toolbar.onMenuItemClick {
+        toolbar.setOnMenuItemClickListener {
             if (it!!.itemId == R.id.settings) {
                 startActivity<SettingsActivity>()
             }
