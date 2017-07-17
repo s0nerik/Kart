@@ -22,9 +22,11 @@ import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity
+import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
+import com.trello.rxlifecycle2.android.FragmentEvent
+import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import kotlinx.android.synthetic.main.fragment_cart.*
-import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.support.v4.act
 
 /**
  * Created by Alex on 12/25/2016.
@@ -33,7 +35,9 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class CartViewModel(val f: CartFragment) {
     fun createNewPurchase() {
-        f.startActivity<CreatePurchaseActivity>()
+        SelectItemActivity.startForResult(f.act)
+                .bindUntilEvent(f, FragmentEvent.DESTROY)
+                .subscribe { Cart.add(it) }
     }
 
     fun saveCart() {
@@ -152,8 +156,8 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
     }
 
     fun initCart() {
-        LastAdapter.with(Cart.purchases, BR.item)
-                .type { Type<ItemPurchaseBinding>(R.layout.item_purchase) }
+        LastAdapter(Cart.purchases, BR.item)
+                .type { _, _ -> Type<ItemPurchaseBinding>(R.layout.item_purchase) }
                 .into(recycler)
 
         recycler.isNestedScrollingEnabled = false

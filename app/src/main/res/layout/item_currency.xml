@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="com.github.s0nerik.shoppingassistant.model.Currency"
+            type="java.util.Currency"
             />
     </data>
     <RelativeLayout
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            app:sign='@{item.sign}'
+            app:sign='@{item.symbol}'
             />
         <TextView
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_toRightOf="@id/btnCurrency"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text='@{item.name}'
+            android:text='@{item.displayName}'
             android:textAppearance="@style/MaterialTypography.Dense.Body1"
             android:maxLines="1"
             tools:text="Food"

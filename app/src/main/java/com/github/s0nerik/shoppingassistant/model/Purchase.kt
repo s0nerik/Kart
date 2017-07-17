@@ -1,6 +1,11 @@
 package com.github.s0nerik.shoppingassistant.model
 
-import com.github.s0nerik.shoppingassistant.randomUuidString
+import com.github.s0nerik.shoppingassistant.Db
+import com.github.s0nerik.shoppingassistant.MainPrefs
+import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.ext.getString
+import com.vicpin.krealmextensions.delete
+import com.vicpin.krealmextensions.save
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -11,7 +16,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Purchase(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var item: Item? = null,
         open var date: Date? = null,
         open var amount: Float = 1f
@@ -20,6 +25,11 @@ open class Purchase(
         get() = item!!.readableName
     val readablePrice: String
         get() = item!!.priceHistory!!.getPriceString(date!!, true, amount)
+    val readablePriceDefaultCurrency: String
+        get() {
+            val priceString = item!!.priceHistory!!.getPriceString(date!!, true, amount, true)
+            return if (priceString != getString(R.string.price_unknown)) "($priceString)" else ""
+        }
     val readableCategory: String
         get() = item!!.readableCategory
     val readableShop: String
@@ -38,8 +48,26 @@ open class Purchase(
         get() = item!!.iconUrl
     val price: Price
         get() = item!!.priceHistory!!.getPriceForDate(date!!)
+    val fullPrice: Float
+        get() = amount.times(price.value ?: 0f)
+    val isInDefaultCurrency: Boolean
+        get() = price.currencyCode == MainPrefs.defaultCurrencyCode
+    val priceInDefaultCurrency: Float
+        get() = price.convertedTo(MainPrefs.defaultCurrency).value ?: 0f
+}
 
-    // TODO: provide a way of conversion between the currencies
-    val priceLocal: Float
-        get() = price.value ?: 0f
+open class FuturePurchase(
+        @PrimaryKey open var id: String = Db.randomUuidString(),
+        open var item: Item? = null,
+        open var creationDate: Date? = null,
+        open var lastUpdate: Date? = null,
+        open var amount: Float = 1f
+) : RealmObject() {
+    fun confirm() {
+        Purchase(id, item, Date(), amount).save()
+    }
+
+    fun remove() {
+        this.delete { it.equalTo("id", id) }
+    }
 }

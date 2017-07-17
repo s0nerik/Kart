@@ -1,12 +1,14 @@
 package com.github.s0nerik.shoppingassistant.screens.settings
 
+import android.content.SharedPreferences
 import android.databinding.ObservableField
 import android.os.Bundle
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySettingsBinding
-import com.github.s0nerik.shoppingassistant.model.Currency
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.util.*
 
 /**
  * Created by Alex on 3/23/2017.
@@ -15,14 +17,21 @@ import kotlinx.android.synthetic.main.activity_settings.*
  */
 
 class SettingsActivityViewModel(val a: SettingsActivity) {
-    val defaultCurrency = ObservableField<Currency>(Currency.default)
+    val defaultCurrency = ObservableField<Currency>(MainPrefs.defaultCurrency)
+
+    val expensesLimitString = ObservableField(MainPrefs.formattedExpensesLimit)
+    val sharedPreferencesChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs: SharedPreferences, key: String ->
+        if (key == "expensesLimitPeriod" || key == "expensesLimit") {
+            expensesLimitString.set(MainPrefs.formattedExpensesLimit)
+        }
+    }
 
     fun selectDefaultCurrency() {
         SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
     }
 
-    fun selectPurchasesLimit() {
-//        SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
+    fun selectExpensesLimit() {
+        SelectExpensesLimitBottomSheet(SelectExpensesLimitViewModel(defaultCurrency.get().symbol)).show(a.supportFragmentManager, null)
     }
 }
 
@@ -31,5 +40,14 @@ class SettingsActivity : BaseBoundActivity<ActivitySettingsBinding>(R.layout.act
         super.onCreate(savedInstanceState)
         binding.vm = SettingsActivityViewModel(this)
         toolbar.setNavigationOnClickListener { finish() }
+
+        MainPrefs.sharedPreferences
+                .registerOnSharedPreferenceChangeListener(binding.vm!!.sharedPreferencesChangeListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        MainPrefs.sharedPreferences
+                .unregisterOnSharedPreferenceChangeListener(binding.vm!!.sharedPreferencesChangeListener)
     }
 }

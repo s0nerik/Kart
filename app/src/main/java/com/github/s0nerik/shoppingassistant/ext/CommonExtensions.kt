@@ -2,7 +2,10 @@ package com.github.s0nerik.shoppingassistant.ext
 
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
+import android.view.View
+import com.github.s0nerik.shoppingassistant.SUPPORTED_CURRENCIES
 import java.lang.ref.WeakReference
+import java.util.*
 
 /**
  * Created by Alex on 1/4/2017.
@@ -19,3 +22,18 @@ fun <T> observableListOf(collection: Collection<T> = emptyList()): ObservableLis
     list.addAll(collection)
     return list
 }
+
+fun <T> List<T>.limit(count: Int): List<T> = this.subList(0, if (count < size) count else size)
+
+var View.scales: Float
+    get() = throw IllegalAccessError()
+    set(value) {
+        scaleX = value
+        scaleY = value
+    }
+
+val currenciesSorted: List<Currency>
+    get() = SUPPORTED_CURRENCIES
+            .toList()
+            .sortedBy { it.symbol }
+            .sortedBy { it.symbol.length }

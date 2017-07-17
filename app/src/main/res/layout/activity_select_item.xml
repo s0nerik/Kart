@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseActivity"
+    tools:context="com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity"
     >
     <data>
         <import type="android.view.View"/>
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.purchase.CreatePurchaseViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemViewModel"
             />
     </data>
     <RelativeLayout
@@ -37,8 +37,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 app:applyNavBarPadding='@{true}'
                 >
+                <!--android:visibility="@{vm.filteredSearchResults.size() != 0 ? View.VISIBLE : View.GONE}"-->
                 <Button
                     android:id="@+id/btnCreateNewProduct"
                     android:layout_width="match_parent"
@@ -58,6 +60,7 @@
                     android:visibility="@{vm.isSearching ? View.GONE : View.VISIBLE}"
                     android:orientation="vertical"
                     android:animateLayoutChanges="true"
+                    tools:visibility="visible"
                     >
                     <android.support.v7.widget.CardView
                         android:id="@+id/favoritesCard"
@@ -137,13 +140,14 @@
                     android:id="@+id/searchResultsCard"
                     android:layout_marginBottom="8dp"
                     android:visibility="@{vm.isSearching ? View.VISIBLE : View.GONE}"
-                    tools:visibility="gone"
+                    tools:visibility="visible"
                     style="@style/CreatePurchase.Card"
                     >
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:animateLayoutChanges="true"
                         >
                         <TextView
                             android:layout_width="match_parent"
@@ -157,7 +161,46 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:layoutManager="@string/rv_layout_manager_linear"
+                            tools:listitem="@layout/item_purchase"
+                            tools:visibility="visible"
                             />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility='@{vm.filteredSearchResults.size() == 0 ? View.VISIBLE : View.GONE}'
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
+                                android:text="@string/item_search_noting_found_title"
+                                style="@style/TextAppearance.AppCompat.Headline"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginBottom="48dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:gravity="center"
+                                android:text="@string/item_search_noting_found_subtitle"
+                                style="@style/MaterialTypography.Regular.Caption"
+                                />
+                            <!--<Button-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginTop="24dp"-->
+                                <!--android:layout_marginBottom="8dp"-->
+                                <!--android:layout_marginRight="8dp"-->
+                                <!--android:layout_marginLeft="8dp"-->
+                                <!--android:text="New product"-->
+                                <!--android:onClick='@{() -> vm.createProduct()}'-->
+                                <!--style="@style/Widget.AppCompat.Button.Colored"-->
+                                <!--/>-->
+                        </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>

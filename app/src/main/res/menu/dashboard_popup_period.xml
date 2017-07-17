@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item android:id="@+id/today" android:title="@string/stats_period_today" />
+    <item android:id="@+id/yesterday" android:title="@string/stats_period_yesterday" />
+    <item android:id="@+id/last_week" android:title="@string/stats_period_last_week" />
+    <item android:id="@+id/last_month" android:title="@string/stats_period_last_month" />
+    <item android:id="@+id/six_months" android:title="@string/stats_period_six_months" />
+    <item android:id="@+id/last_year" android:title="@string/stats_period_last_year" />
+</menu>

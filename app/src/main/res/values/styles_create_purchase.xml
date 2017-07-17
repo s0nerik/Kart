@@ -20,7 +20,16 @@
     <style name="CreatePurchase.Card.Title" parent="CreatePurchase">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">16dp</item>
+
+        <item name="android:padding">16dp</item>
+
+        <!--<item name="android:background">@color/material_color_grey_100</item>-->
+        <!--<item name="android:paddingLeft">16dp</item>-->
+        <!--<item name="android:paddingRight">16dp</item>-->
+        <!--<item name="android:paddingTop">12dp</item>-->
+        <!--<item name="android:paddingBottom">12dp</item>-->
+        <!--<item name="android:elevation">2dp</item>-->
+
         <item name="android:textAppearance">@style/MaterialTypography.Locale.Body2</item>
     </style>
 </resources>

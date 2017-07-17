@@ -1,10 +1,10 @@
 package com.github.s0nerik.shoppingassistant.ext
 
 import android.view.View
-import co.metalab.asyncawait.AsyncController
-import co.metalab.asyncawait.await
-import com.jakewharton.rxbinding.view.preDraws
-import rx.functions.Func0
+import com.jakewharton.rxbinding2.view.preDraws
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.rx2.awaitFirst
+import java.util.concurrent.Callable
 
 /**
  * Created by Alex on 2/26/2017.
@@ -21,4 +21,4 @@ fun View.disappearScaleOut(duration: Long = 200) {
     animate().scaleX(0f).scaleY(0f).setDuration(duration).start()
 }
 
-suspend fun AsyncController.awaitPreDraw(v: View) = this.await(v.preDraws(Func0 { true }).onMainThread())
+suspend fun Deferred<Boolean>.awaitPreDraw(v: View) = v.preDraws(Callable { true }).onMainThread().awaitFirst()

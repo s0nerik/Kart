@@ -16,4 +16,26 @@
         <item>Per KG</item>
     </string-array>
 
+    // Dashboard stats periods
+    <string name="stats_period_today">Today</string>
+    <string name="stats_period_yesterday">Yesterday</string>
+    <string name="stats_period_last_week">Last week</string>
+    <string name="stats_period_last_month">Last month</string>
+    <string name="stats_period_six_months">Six months</string>
+    <string name="stats_period_last_year">Last year</string>
+
+    // Dashboard stats periods
+    <string name="expenses_limit_period_day">Per day</string>
+    <string name="expenses_limit_period_week">Per week</string>
+    <string name="expenses_limit_period_month">Per month</string>
+    <string name="expenses_limit_period_day_format">%1$s / day</string>
+    <string name="expenses_limit_period_week_format">%1$s / week</string>
+    <string name="expenses_limit_period_month_format">%1$s / month</string>
+
+    <string name="expenses_limit_unknown">Not set</string>
+
+    // Item selection
+    <string name="item_search_noting_found_title">¯\\_(ツ)_/¯</string>
+    <string name="item_search_noting_found_subtitle">Nothing found…\nYou can create a new product using a button above</string>
+
 </resources>

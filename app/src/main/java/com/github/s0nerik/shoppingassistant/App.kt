@@ -5,11 +5,17 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
+import com.facebook.stetho.Stetho
+import com.github.s0nerik.shoppingassistant.jobs.UpdateExchangeRatesJob
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import rx_activity_result.RxActivityResult
+import rx_activity_result2.RxActivityResult
 import timber.log.Timber
+
+
 
 /**
  * Created by Alex on 12/25/2016.
@@ -48,9 +54,11 @@ open class App : Application() {
                         .deleteRealmIfMigrationNeeded()
                         .build()
         )
-        initDatabase(this, true, true, true, true, true)
+        Db.initDatabase(this, true, true, true, true, true)
         configureGlide()
         configureTimber()
+
+        UpdateExchangeRatesJob.schedule(this)
     }
 
     private fun configureTimber() {
@@ -79,5 +87,34 @@ open class App : Application() {
 //                    }
 //                }
         }
+    }
+}
+
+class DebugApp : App() {
+    override fun onCreate() {
+        initStrictMode()
+        super.onCreate()
+        initStetho()
+    }
+
+    private fun initStrictMode() {
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                                           .detectAll()
+                                           .penaltyLog()
+                                           .build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                                       .detectAll()
+                                       .penaltyLog()
+                                       .penaltyDeath()
+                                       .build())
+    }
+
+    private fun initStetho() {
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build()
+        )
     }
 }

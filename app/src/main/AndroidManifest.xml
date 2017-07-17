@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screens.purchase.CreatePurchaseActivity"
+            android:name=".screens.purchase.SelectItemActivity"
             android:theme="@style/AppTheme.CreatePurchaseActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
             android:launchMode="singleTop"
@@ -45,6 +45,12 @@
             android:label="Settings"
             android:launchMode="singleTop"
             android:parentActivityName=".screens.main.MainActivity"
+            />
+
+        <service
+            android:name=".jobs.UpdateExchangeRatesJob"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             />
     </application>
 

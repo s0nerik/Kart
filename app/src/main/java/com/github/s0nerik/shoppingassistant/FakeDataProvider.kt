@@ -4,8 +4,8 @@ import android.content.Context
 import com.github.debop.kodatimes.ago
 import com.github.debop.kodatimes.days
 import com.github.debop.kodatimes.minutes
+import com.github.debop.kodatimes.now
 import com.github.s0nerik.shoppingassistant.model.*
-import com.github.s0nerik.shoppingassistant.model.Currency
 import io.realm.Realm
 import io.realm.RealmList
 import org.joda.time.DateTime
@@ -19,16 +19,17 @@ import java.util.*
 
 fun createDummyPurchases(ctx: Context, realm: Realm) {
     realm.executeTransaction {
-        createPurchases(it, "Food", "Картошка", "Мясо", "Молоко", "Рыба", "Помидоры")
-        createPurchases(it, "Clothes", "Штаны", "Свитер", "Пальто", "Шарф", "Рубашка")
-        createPurchases(it, "Peripherals", "Mouse", "Keyboard", "Headphones")
+        createPurchases(it, "Food & Drinks", "Potato", "Meat", "Milk", "Fish", "Tomatoes", "Vodka", "Wine", "Tea")
+        createPurchases(it, "Clothes", "Pants", "Sweater", "Coat", "Scarf", "Shirt", "Trousers", "Boots", "Helmet")
+        createPurchases(it, "Computers & Peripherals", "Mouse", "Keyboard", "Headphones")
         createPurchases(it, "Software", "IntelliJ IDEA", "ReSharper")
+        createPurchases(it, "Games", "Silent Hill", "FIFA 17", "Mortal Kombat X")
         createPurchases(it, "Music", "Master Of Puppets", "Ungrateful")
         createPurchases(it, "Household", "Vacuum cleaner", "Teapot", "Cup")
-        createPurchases(it, "Drinks", "Vodka", "Wine", "Tea")
-        createPurchases(it, "Phones", "Samsung Galaxy S8", "Xiaomi Mi Mix", "HTC 11")
-        createPurchases(it, "Sportswear", "Trousers", "Boots", "Helmet")
-        createPurchases(it, "Presents", "Barbie")
+        createPurchases(it, "Smartphones & Accessories", "Samsung Galaxy S8", "Xiaomi Mi Mix", "HTC 11")
+        createPurchases(it, "Gifts", "Barbie", "Lego")
+
+        createPurchaseLists(it)
     }
 }
 
@@ -38,16 +39,30 @@ private fun createPurchases(realm: Realm, category: String, vararg names: String
     }
 }
 
+private fun createPurchaseLists(realm: Realm) {
+    val items = mutableListOf<Item>()
+    items += realm.where(Item::class.java).findAll()
+    for (i in 0..10) {
+        Collections.shuffle(items)
+        items.take(Random().nextInt(10)+5).forEach {
+            val futurePurchase = realm.createObject(FuturePurchase::class)
+            futurePurchase.creationDate = now().minusDays(i).toDate()
+            futurePurchase.lastUpdate = futurePurchase.creationDate
+            futurePurchase.item = it
+            futurePurchase.amount = Random().nextInt(3) + 1f
+        }
+    }
+}
+
 private fun providePurchase(realm: Realm, name: String, category: String) {
-    val currenciesNum = realm.where(Currency::class.java).count().toInt()
-    val currencies = realm.where(Currency::class.java).findAll()
+    val currencies = SUPPORTED_CURRENCIES.toList()
 
     val shopsNum = realm.where(Shop::class.java).count().toInt()
     val shops = realm.where(Shop::class.java).findAll()
 
     val rand = Random().nextInt(1_000_000)
     val randShopNum = rand % shopsNum
-    val randCurrencyNum = rand % currenciesNum
+    val randCurrencyNum = rand % currencies.size
 
     val shop = shops[randShopNum]
     val currency = currencies[randCurrencyNum]
@@ -57,7 +72,7 @@ private fun providePurchase(realm: Realm, name: String, category: String) {
             shop,
             Random().nextInt(10).days().ago(),
             name,
-            category(realm, category),
+            Db.createOrReturnCategory(realm, category),
             Random().nextFloat() * 500,
             currency
     )
@@ -85,35 +100,11 @@ private fun providePurchase(realm: Realm, shop: Shop, date: DateTime, name: Stri
     item.name = name
     item.category = category
     item.priceHistory = providePriceHistory(realm, shop, date, price, currency)
+    item.isFavorite = Random().nextBoolean()
 
     purchase.item = item
 
     return purchase
-}
-
-private fun category(realm: Realm, name: String): Category {
-    val category = realm.where(Category::class.java).equalTo("name", name).findFirst()
-
-    if (category != null) {
-        return category
-    } else {
-        return createCategory(realm, name, null)
-    }
-}
-
-private fun createCategory(realm: Realm, name: String, iconUrl: String?): Category {
-    val category = realm.createObject(Category::class)
-    category.name = name
-    if (iconUrl != null) category.iconUrl = iconUrl
-
-    return category
-}
-
-fun createDummyCategories(ctx: Context, realm: Realm) {
-    realm.executeTransaction {
-        createCategory(it, "Food", R.drawable.product_cat_food.getDrawablePath(ctx))
-        createCategory(it, "Clothes", R.drawable.product_cat_clothes.getDrawablePath(ctx))
-    }
 }
 
 fun createDummyShops(ctx: Context, realm: Realm) {

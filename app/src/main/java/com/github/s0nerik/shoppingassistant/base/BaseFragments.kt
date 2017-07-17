@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trello.rxlifecycle.components.support.RxFragment
+import com.trello.rxlifecycle2.components.support.RxFragment
 import io.realm.Realm
 
 abstract class BaseFragment(
@@ -40,7 +40,7 @@ abstract class BaseBoundFragment<out T : ViewDataBinding>(
         get() = innerBinding
 
     private lateinit var innerRealm: Realm
-    protected val realm
+    val realm
         get() = innerRealm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

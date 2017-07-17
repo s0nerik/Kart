@@ -1,7 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
-import com.github.s0nerik.shoppingassistant.randomUuidString
 import com.vicpin.krealmextensions.save
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -14,7 +14,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Cart(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var date: Date = Date(),
         open var purchases: RealmList<Purchase> = RealmList()
 ) : RealmObject() {
@@ -22,6 +22,9 @@ open class Cart(
         val purchases = observableListOf<Purchase>()
         fun add(purchase: Purchase) {
             purchases.add(purchase)
+        }
+        fun add(item: Item, date: Date = Date()) {
+            add(Purchase(item = item, date = date))
         }
         fun remove(purchase: Purchase) {
             purchases.remove(purchase)

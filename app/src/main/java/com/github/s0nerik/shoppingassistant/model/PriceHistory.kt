@@ -1,8 +1,9 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import com.github.s0nerik.shoppingassistant.Db
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
-import com.github.s0nerik.shoppingassistant.randomUuidString
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -14,7 +15,7 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class PriceHistory(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var shop: Shop? = null,
         open var values: RealmList<Price> = RealmList()
 ) : RealmObject() {
@@ -26,7 +27,7 @@ open class PriceHistory(
             return values[0]
         } else if (values.size > 0) {
             values.sortedBy { it.date }.forEach {
-                if (date < it.date!!) {
+                if (date < it.date) {
                     return it
                 }
             }
@@ -38,7 +39,7 @@ open class PriceHistory(
         var price: Price = Price()
         if (values.size > 0) {
             values.sortedBy { it.date }.forEach {
-                if (date < it.date!!) {
+                if (date < it.date) {
                     return it
                 }
                 price = it
@@ -47,12 +48,13 @@ open class PriceHistory(
         return price
     }
 
-    fun getPriceString(date: Date, withCurrency: Boolean, amount: Float = 1f): String {
-        val price = getPriceForDate(date)
+    fun getPriceString(date: Date, withCurrency: Boolean, amount: Float = 1f, convertToDefaultCurrency: Boolean = false): String {
+        var price = getPriceForDate(date)
+        if (convertToDefaultCurrency) price = price.convertedTo(MainPrefs.defaultCurrency)
         if (price.value == null) {
             return getString(R.string.price_unknown)
-        } else if (withCurrency && price.currency != null) {
-            return getString(R.string.price_with_currency_fmt, price.currency!!.sign, price.value!! * amount)
+        } else if (withCurrency) {
+            return getString(R.string.price_with_currency_fmt, price.currency.symbol, price.value!! * amount)
         } else {
             return getString(R.string.price_no_currency_fmt, price.value!! * amount)
         }

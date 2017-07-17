@@ -1,6 +1,6 @@
 package com.github.s0nerik.shoppingassistant.model
 
-import com.github.s0nerik.shoppingassistant.randomUuidString
+import com.github.s0nerik.shoppingassistant.Db
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -10,6 +10,6 @@ import io.realm.annotations.PrimaryKey
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 open class Shop(
-        @PrimaryKey open var id: String = randomUuidString(),
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var name: String = ""
 ) : RealmObject()

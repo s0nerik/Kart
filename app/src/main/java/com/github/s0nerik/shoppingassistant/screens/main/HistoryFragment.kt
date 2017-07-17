@@ -10,6 +10,7 @@ import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.adapter_items.HistoryHeader
 import com.github.s0nerik.shoppingassistant.adapter_items.MoneySpent
@@ -56,8 +57,8 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
 
-        LastAdapter.with(historyItems, BR.item)
-                .type {
+        LastAdapter(historyItems, BR.item)
+                .type { item, _ ->
                     when (item) {
                         is Purchase -> Type<ItemHistoryBinding>(R.layout.item_history)
                         is HistoryHeader -> Type<ItemHistoryHeaderBinding>(R.layout.item_history_header)
@@ -80,7 +81,7 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
                 .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
 
         purchases.forEach {
-            historyItems.add(HistoryHeader(it.key.toDate(), MoneySpent(it.value.sumByDouble { (it.amount * it.priceLocal).toDouble() }.toFloat(), it.value[0].price.currency!!)))
+            historyItems.add(HistoryHeader(it.key.toDate(), MoneySpent(it.value.sumByDouble { (it.amount * it.priceInDefaultCurrency).toDouble() }.toFloat(), MainPrefs.defaultCurrency)))
             historyItems.addAll(it.value)
         }
     }
