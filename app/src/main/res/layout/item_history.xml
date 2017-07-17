@@ -12,10 +12,17 @@
         android:layout_height="wrap_content"
         android:background="@color/material_color_white"
         android:elevation="2dp"
+        android:orientation="vertical"
         >
         <include
             layout="@layout/item_purchase"
             app:item="@{item}"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_horizontal_gradient_left"
+            android:layout_gravity="bottom"
             />
     </FrameLayout>
 </layout>
