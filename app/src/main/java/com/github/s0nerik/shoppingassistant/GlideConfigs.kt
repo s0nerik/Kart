@@ -1,7 +1,7 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.graphics.Color
-import com.github.s0nerik.glide_bindingadapter.GlideBindingConfig
+import com.github.s0nerik.shoppingassistant.glide_binding.GlideBindingConfig
 import jp.wasabeef.glide.transformations.ColorFilterTransformation
 
 /**

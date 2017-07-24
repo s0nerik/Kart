@@ -22,7 +22,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="24dp"
             android:tint="@color/textColorPrimaryLight"
-            app:glideImageSrc='@{item.iconUrl}'
+            app:glideSrc='@{item.iconUrl}'
             app:glideConfig='@{"purchase_icon"}'
             tools:src="@drawable/product_cat_food"
             />

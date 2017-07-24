@@ -66,5 +66,11 @@
                 />
 
         </com.daimajia.swipe.SwipeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_horizontal_gradient_left"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 </layout>

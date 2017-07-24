@@ -57,7 +57,7 @@ val animatedBackgrounds = WeakHashMap<CardView, WeakReference<ValueAnimator>>()
 fun setAnimateBackgroundColor(card: CardView, animate: Boolean) {
     val evaluator = ArgbEvaluator()
     val animator = ValueAnimator()
-    animator.setIntValues(card.backgroundColor, Color.parseColor("#22000000"))
+    animator.setIntValues(card.cardBackgroundColor.defaultColor, Color.parseColor("#22000000"))
     animator.setEvaluator(evaluator)
     animator.duration = 250
     animator.repeatCount = ValueAnimator.INFINITE
@@ -72,7 +72,7 @@ fun setAnimateBackgroundColor(card: CardView, animate: Boolean) {
 
         }
     }
-    card.backgroundColor
+    card.cardBackgroundColor.defaultColor
 }
 
 @BindingAdapter("applyNavBarMargin")

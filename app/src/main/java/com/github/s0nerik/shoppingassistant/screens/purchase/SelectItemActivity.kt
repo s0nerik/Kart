@@ -142,10 +142,10 @@ class SelectItemActivityAnimator(val a: SelectItemActivity, val binding: Activit
 class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout.activity_select_item) {
 
     private val itemAdapterType = Type<ItemPurchaseItemBinding>(R.layout.item_purchase_item)
-            .onClick { finishWithResult(it.binding.item) }
+            .onClick { finishWithResult(it.binding.item!!) }
 
     private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
-            .onClick { finishWithResult(it.binding.item) }
+            .onClick { finishWithResult(it.binding.item!!) }
 
     private lateinit var animator: SelectItemActivityAnimator
     private var selectedItem: Item? = null
@@ -241,7 +241,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
                     .filter { it.resultCode() == Activity.RESULT_OK }
                     .map {
                         val itemId = it.data().getStringExtra(SelectItemActivity.SELECTED_ITEM_ID)
-                        Item().queryFirst { it.equalTo("id", itemId) }
+                        Item().queryFirst { it.equalTo("id", itemId) }!!
                     }
         }
     }

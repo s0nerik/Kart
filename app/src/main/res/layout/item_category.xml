@@ -23,7 +23,7 @@
             android:layout_marginLeft="16dp"
             android:src="@drawable/product_cat_food"
             android:tint="@color/material_color_black"
-            app:glideImageSrc='@{item.iconUrl}'
+            app:glideSrc='@{item.iconUrl}'
             app:glideConfig='@{"category_icon"}'
             />
         <TextView
