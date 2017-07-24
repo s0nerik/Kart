@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".screens.product.EditProductActivity"
+    >
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.Action" />
+        <variable
+            name="vm"
+            type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
+            />
+    </data>
+    <RelativeLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/bgSemiTransparent"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <include
+                layout="@layout/view_create_product"
+                app:vm='@{vm}'
+                />
+        </FrameLayout>
+    </RelativeLayout>
+</layout>
