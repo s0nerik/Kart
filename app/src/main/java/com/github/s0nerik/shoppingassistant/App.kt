@@ -14,7 +14,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import rx_activity_result2.RxActivityResult
 import timber.log.Timber
-
+import java.lang.ref.WeakReference
 
 
 /**
@@ -24,15 +24,15 @@ import timber.log.Timber
  */
 open class App : Application() {
     companion object {
-        private lateinit var ctx: Context
+        private lateinit var ctx: WeakReference<Context>
 
         val context: Context
-            get() = ctx
+            get() = ctx.get()!!
     }
 
     override fun onCreate() {
         super.onCreate()
-        ctx = this
+        ctx = WeakReference(this)
 
         RxActivityResult.register(this)
 
