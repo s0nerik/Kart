@@ -10,7 +10,7 @@ buildscript {
         retrofit_version = '2.2.0'
         rxbinding_version = '2.0.0'
         rxlifecycle_version = '2.0.1'
-        android_plugin_version = '3.0.0-alpha8'
+        android_plugin_version = '3.0.0-alpha9'
         kotpref_version = '2.1.2'
     }
 
