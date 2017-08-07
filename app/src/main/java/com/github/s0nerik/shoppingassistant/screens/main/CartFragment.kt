@@ -17,10 +17,9 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.anim.Scale
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentCartBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
+import com.github.s0nerik.shoppingassistant.databinding.ItemCartBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
-import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
@@ -158,12 +157,10 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
 
     fun initCart() {
         LastAdapter(Cart.purchases, BR.item)
-                .type { _, _ -> Type<ItemPurchaseBinding>(R.layout.item_purchase) }
+                .type { _, _ -> Type<ItemCartBinding>(R.layout.item_cart) }
                 .into(recycler)
 
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
-
-        recycler.addItemDecoration(RecyclerDivider.horizontal)
     }
 }

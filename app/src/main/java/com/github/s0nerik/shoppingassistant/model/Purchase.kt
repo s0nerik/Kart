@@ -54,6 +54,9 @@ open class Purchase(
         get() = price.currencyCode == MainPrefs.defaultCurrencyCode
     val priceInDefaultCurrency: Float
         get() = price.convertedTo(MainPrefs.defaultCurrency).value ?: 0f
+
+    fun confirm() = save()
+    fun remove() = delete { it.equalTo("id", id) }
 }
 
 open class FuturePurchase(

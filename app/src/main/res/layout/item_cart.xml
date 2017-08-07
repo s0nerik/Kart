@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <import type="com.github.s0nerik.shoppingassistant.model.Cart" />
+        <variable
+            name="item"
+            type="com.github.s0nerik.shoppingassistant.model.Purchase"
+            />
+    </data>
+    <FrameLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:outlineProvider="bounds"
+        >
+        <com.daimajia.swipe.SwipeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:drag_edge="right"
+            app:show_mode="lay_down"
+            app:onSwipeOpenRight='@{(x) -> Cart.remove(item)}'
+            app:elevateViewOnSwipe='@{root}'
+            >
+            <LinearLayout
+                android:id="@+id/right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:background="@color/material_color_red_primary"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="16dp"
+                    android:drawableTop="@drawable/delete"
+                    android:drawableTint="@color/material_color_white"
+                    android:textColor="@color/material_color_white"
+                    android:text="Remove"
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/material_color_white"
+                >
+                <include
+                    layout="@layout/item_purchase"
+                    app:item='@{item}'
+                    />
+            </FrameLayout>
+        </com.daimajia.swipe.SwipeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_horizontal_gradient_left"
+            android:layout_gravity="top"
+            />
+    </FrameLayout>
+</layout>

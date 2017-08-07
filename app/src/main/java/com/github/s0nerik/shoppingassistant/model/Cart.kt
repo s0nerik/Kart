@@ -26,6 +26,7 @@ open class Cart(
         fun add(item: Item, date: Date = Date()) {
             add(Purchase(item = item, date = date))
         }
+        @JvmStatic
         fun remove(purchase: Purchase) {
             purchases.remove(purchase)
         }
