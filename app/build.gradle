@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 25
@@ -62,6 +63,10 @@ dependencies {
     compile "com.android.support:percent:$support_version"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android:flexbox:0.3.0-alpha3'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true
+    }
 
     // Anko
     compile "org.jetbrains.anko:anko-sdk21:$anko_version"

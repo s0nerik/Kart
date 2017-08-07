@@ -7,9 +7,11 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 import com.facebook.stetho.Stetho
 import com.github.s0nerik.shoppingassistant.jobs.UpdateExchangeRatesJob
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider
+import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import rx_activity_result2.RxActivityResult
@@ -59,6 +61,8 @@ open class App : Application() {
         configureTimber()
 
         UpdateExchangeRatesJob.schedule(this)
+
+        Fabric.with(this, Crashlytics())
     }
 
     private fun configureTimber() {
@@ -76,16 +80,15 @@ open class App : Application() {
                 return
             }
 
-// TODO: uncomment this when Crashlytics added
-//                FakeCrashLibrary.log(priority, tag, message)
-//
-//                if (t != null) {
-//                    if (priority == Log.ERROR) {
-//                        FakeCrashLibrary.logError(t)
-//                    } else if (priority == Log.WARN) {
-//                        FakeCrashLibrary.logWarning(t)
-//                    }
-//                }
+            Crashlytics.log(priority, tag, message)
+
+            if (t != null) {
+                if (priority == Log.ERROR) {
+                    Crashlytics.logException(t)
+                } else if (priority == Log.WARN) {
+                    Crashlytics.logException(t)
+                }
+            }
         }
     }
 }

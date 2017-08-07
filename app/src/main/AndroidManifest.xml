@@ -52,6 +52,11 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"
             />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="08edadb9fc2e12e9e70668f355d12942ec4181b2"
+            />
     </application>
 
 </manifest>
