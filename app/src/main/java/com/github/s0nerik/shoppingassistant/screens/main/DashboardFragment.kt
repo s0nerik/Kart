@@ -117,7 +117,7 @@ class DashboardFragment : BaseBoundFragment<FragmentDashboardBinding>(R.layout.f
 
     private val statsAdapter: PagerAdapter
         get() = object : FragmentPagerAdapter(childFragmentManager) {
-            val fragments = listOf(statsDistributionFragment, statsExpensesFragment)
+            val fragments = listOf(statsDistributionFragment)
 
             val names = listOf("Purchases distribution", "Expenses")
 
