@@ -26,6 +26,7 @@ import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpenses
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
+import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.dip
@@ -53,6 +54,9 @@ class DashboardViewModel: BaseObservable() {
 
     val expensesLimitString: String
         @Bindable("dataPeriod") get() = MainPrefs.formattedShortExpensesLimitOrEmpty
+
+    val showDistribution: Boolean
+        @Bindable("dataPeriod") get() = Db.statsDistribution(Realm.getDefaultInstance()).keys.size > 2
 
     fun onCreateNewPurchase() {
         SelectItemActivity.startForResult(f.act)

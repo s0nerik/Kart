@@ -30,9 +30,6 @@ import org.jetbrains.anko.support.v4.act
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBinding>(R.layout.fragment_stats_distribution) {
-    val purchases
-        get() = Db.purchases(realm)
-
     override fun onViewCreated(view: android.view.View?, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDistributionChart(DashboardFragment.vm.dataPeriod)
@@ -55,12 +52,13 @@ class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBin
                 R.color.material_color_deep_orange_500
         )
 
-        val entries = purchases
-                .filter { it.date!! >= period.startDate }
-                .groupBy { it.item?.category }
+        val entries = Db.statsDistribution(realm, period.startDate)
                 .map { PieEntry(it.value.size.toFloat(), it.key?.name) }
                 .sortedByDescending { it.value }
                 .limit(10)
+
+        if (entries.isEmpty()) return
+
         val legendItems = entries.mapIndexed { i, entry -> DistributionLegendItem(getColor(colors[i % colors.size]), entry.label) }
 
         rvLegend.layoutManager = FlexboxLayoutManager()

@@ -84,6 +84,12 @@ object Db {
         return query.findAllSorted("date", Sort.DESCENDING)
     }
 
+    fun statsDistribution(realm: Realm, fromDate: Date = Date(0)): Map<Category?, List<Purchase>> {
+        return purchases(realm)
+                .filter { it.date!! >= fromDate }
+                .groupBy { it.item?.category }
+    }
+
     fun randomUuidString(): String {
         return UUID.randomUUID().toString()
     }
