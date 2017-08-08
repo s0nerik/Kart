@@ -49,7 +49,7 @@ class DashboardViewModel: BaseObservable() {
 
     val moneySpentAmountString: String
         @Bindable("dataPeriod") get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
-                Db.recentPurchases(f.realm, dataPeriod.startDate).sumByDouble { it.fullPrice.toDouble() }
+                Db.moneySpent(f.realm, dataPeriod.startDate)
         )}"
 
     val expensesLimitString: String
@@ -57,6 +57,12 @@ class DashboardViewModel: BaseObservable() {
 
     val showDistribution: Boolean
         @Bindable("dataPeriod") get() = Db.statsDistribution(Realm.getDefaultInstance()).keys.size > 2
+
+    val showRecents: Boolean
+        @Bindable("dataPeriod") get() = Db.recentPurchases(Realm.getDefaultInstance()).isNotEmpty()
+
+    val showMoneySpent: Boolean
+        @Bindable("dataPeriod") get() = Db.moneySpent(Realm.getDefaultInstance()) > 0
 
     fun onCreateNewPurchase() {
         SelectItemActivity.startForResult(f.act)

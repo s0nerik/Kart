@@ -9,6 +9,7 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
 import org.json.JSONArray
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -82,6 +83,10 @@ object Db {
         var query = realm.where(Purchase::class.java)
         fromDate?.let { query = query.greaterThan("date", it) }
         return query.findAllSorted("date", Sort.DESCENDING)
+    }
+
+    fun moneySpent(realm: Realm, fromDate: Date = Date(0)): Double {
+        return Db.recentPurchases(realm, fromDate).sumByDouble { it.fullPrice.toDouble() }
     }
 
     fun statsDistribution(realm: Realm, fromDate: Date = Date(0)): Map<Category?, List<Purchase>> {

@@ -35,6 +35,7 @@
                     android:id="@+id/moneySpentCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility='@{vm.showMoneySpent ? View.VISIBLE : View.GONE}'
                     app:cardCornerRadius="1dp"
                     >
                     <RelativeLayout
@@ -139,6 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/statsCard"
                     android:layout_marginTop="16dp"
+                    android:visibility='@{vm.showRecents ? View.VISIBLE : View.GONE}'
                     app:cardCornerRadius="1dp"
                     >
 
