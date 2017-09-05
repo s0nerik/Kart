@@ -1,4 +1,4 @@
-package com.github.s0nerik.shoppingassistant.screens.main
+package com.github.s0nerik.shoppingassistant.screens.main.fragments
 
 import android.os.Bundle
 import android.support.v4.view.animation.FastOutSlowInInterpolator

@@ -8,7 +8,7 @@
     <data>
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.main.CartViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.main.fragments.CartViewModel"
             />
     </data>
 

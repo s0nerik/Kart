@@ -8,7 +8,7 @@
         <import type="android.view.View" />
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.main.PurchaseListsViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.main.fragments.PurchaseListsViewModel"
             />
     </data>
     <RelativeLayout

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
-        <variable name="item" type="com.github.s0nerik.shoppingassistant.screens.main.PurchasesListHeaderViewModel" />
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.screens.main.fragments.PurchasesListHeaderViewModel" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"

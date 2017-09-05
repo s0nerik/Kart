@@ -9,7 +9,7 @@
         <import type="com.github.s0nerik.shoppingassistant.MainPrefs" />
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.main.DashboardViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardViewModel"
             />
     </data>
     <RelativeLayout

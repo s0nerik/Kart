@@ -17,7 +17,7 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemStatsDistributionBin
 import com.github.s0nerik.shoppingassistant.ext.getColor
 import com.github.s0nerik.shoppingassistant.ext.limit
 import com.github.s0nerik.shoppingassistant.ext.observeChanges
-import com.github.s0nerik.shoppingassistant.screens.main.DashboardFragment
+import com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardFragment
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent

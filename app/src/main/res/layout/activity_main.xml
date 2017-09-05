@@ -8,7 +8,7 @@
     <data>
         <import type="com.github.s0nerik.shoppingassistant.R" />
         <import type="android.view.View" />
-        <import type="com.github.s0nerik.shoppingassistant.screens.main.DashboardFragment" />
+        <import type="com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardFragment" />
         <variable name="vm" type="com.github.s0nerik.shoppingassistant.screens.main.MainActivityViewModel" />
     </data>
     <RelativeLayout
