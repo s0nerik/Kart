@@ -20,6 +20,7 @@
             android:layout_height="match_parent"
             android:paddingBottom="8dp"
             android:clipToPadding="false"
+            android:layoutAnimation="@anim/layout_animation_rise_up"
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_purchase"
             />
