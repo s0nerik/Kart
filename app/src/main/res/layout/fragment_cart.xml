@@ -31,28 +31,16 @@
             />
         <LinearLayout
             android:id="@+id/emptyCart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_above="@+id/bottomButtons"
-            android:orientation="vertical"
-            android:gravity="center"
+            style="@style/AppTheme.EmptyScreen.Layout"
             >
             <ImageView
-                android:layout_width="128dp"
-                android:layout_height="128dp"
                 android:src="@drawable/cart_outline"
-                android:tint="@color/material_color_grey_900"
+                style="@style/AppTheme.EmptyScreen.Image"
                 />
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:paddingTop="16dp"
-                android:gravity="center"
                 android:text='Cart is empty. Click at the button below to add a new purchase.'
-                android:fontFamily="sans-serif"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/AppTheme.EmptyScreen.Text"
                 />
         </LinearLayout>
         <android.support.design.widget.FloatingActionButton

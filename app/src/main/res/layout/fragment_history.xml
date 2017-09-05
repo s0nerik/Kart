@@ -6,7 +6,11 @@
     >
 
     <data>
-
+        <import type="android.view.View" />
+        <variable
+            name="vm"
+            type="com.github.s0nerik.shoppingassistant.screens.main.fragments.history.HistoryViewModel"
+            />
     </data>
 
     <RelativeLayout
@@ -24,5 +28,22 @@
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_purchase"
             />
+
+        <LinearLayout
+            android:visibility='@{vm.items.isEmpty() ? View.VISIBLE : View.GONE}'
+            tools:visibility="visible"
+            style="@style/AppTheme.EmptyScreen.Layout"
+            >
+
+            <ImageView
+                android:src="@drawable/history"
+                style="@style/AppTheme.EmptyScreen.Image"
+                />
+
+            <TextView
+                android:text='Purchase history is empty.\nItems will appear here as you use the app.'
+                style="@style/AppTheme.EmptyScreen.Text"
+                />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

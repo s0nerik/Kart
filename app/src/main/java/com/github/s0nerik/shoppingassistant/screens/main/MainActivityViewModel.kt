@@ -10,8 +10,8 @@ import com.github.s0nerik.shoppingassistant.DashboardDataPeriod
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.CartFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardFragment
-import com.github.s0nerik.shoppingassistant.screens.main.fragments.HistoryFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.PurchaseListsFragment
+import com.github.s0nerik.shoppingassistant.screens.main.fragments.history.HistoryFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivityViewModel(private val activity: MainActivity) {

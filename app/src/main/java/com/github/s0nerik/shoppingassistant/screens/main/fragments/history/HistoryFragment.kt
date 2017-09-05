@@ -1,4 +1,4 @@
-package com.github.s0nerik.shoppingassistant.screens.main.fragments
+package com.github.s0nerik.shoppingassistant.screens.main.fragments.history
 
 import android.os.Bundle
 import android.view.View
@@ -14,7 +14,6 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
-import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
@@ -25,14 +24,16 @@ import kotlinx.android.synthetic.main.fragment_history.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragment_history) {
-    private val historyItems = observableListOf<Any>()
+    private val vm = HistoryViewModel()
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.vm = vm
+
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
 
-        LastAdapter(historyItems, BR.item)
+        LastAdapter(vm.items, BR.item)
                 .type { item, _ ->
                     when (item) {
                         is Purchase -> Type<ItemHistoryBinding>(R.layout.item_history)
@@ -49,15 +50,15 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     }
 
     private fun initHistory() {
-        historyItems.clear()
+        vm.items.clear()
 
         val purchases = realm.where(Purchase::class.java)
                 .findAllSorted("date", Sort.DESCENDING)
                 .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
 
         purchases.forEach {
-            historyItems.add(HistoryHeader(it.key.toDate(), MoneySpent(it.value.sumByDouble { (it.amount * it.priceInDefaultCurrency).toDouble() }.toFloat(), MainPrefs.defaultCurrency)))
-            historyItems.addAll(it.value)
+            vm.items.add(HistoryHeader(it.key.toDate(), MoneySpent(it.value.sumByDouble { (it.amount * it.priceInDefaultCurrency).toDouble() }.toFloat(), MainPrefs.defaultCurrency)))
+            vm.items.addAll(it.value)
         }
     }
 }
