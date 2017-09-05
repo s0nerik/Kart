@@ -1,10 +1,7 @@
 package com.github.s0nerik.shoppingassistant.screens.main
 
-import android.databinding.ObservableList
 import android.os.Bundle
 import android.view.View
-import com.daimajia.swipe.SimpleSwipeListener
-import com.daimajia.swipe.SwipeLayout
 import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
@@ -26,7 +23,6 @@ import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.jetbrains.anko.support.v4.act
-import org.jetbrains.anko.support.v4.dip
 import java.util.*
 
 /**
@@ -37,25 +33,6 @@ import java.util.*
 class PurchasesListHeaderViewModel(val date: Date) {
     val readableDate: String
         get() = date.toDateTime().withTimeAtStartOfDay().toString("MMMM d")
-}
-
-class PurchasesListItemViewModel(
-        val items: ObservableList<Any>,
-        val futurePurchase: FuturePurchase
-) {
-    val item
-        get() = futurePurchase.item
-
-    fun confirm() {
-        futurePurchase.confirm()
-        items.remove(this)
-    }
-
-    // TODO: add 'undo' logic
-    fun remove() {
-        futurePurchase.remove()
-        items.remove(this)
-    }
 }
 
 class PurchaseListsViewModel {
@@ -88,38 +65,7 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
         LastAdapter(listItems, BR.item)
                 .type { item, _ ->
                     when (item) {
-                        is PurchasesListItemViewModel -> Type<ItemListsItemBinding>(R.layout.item_lists_item)
-                                .onBind {
-                                    val vm = item as PurchasesListItemViewModel
-
-                                    with(it) {
-                                        binding.swipeLayout.close(false)
-                                        binding.swipeLayout.removeSwipeListener(binding.swipeListener)
-                                        binding.swipeListener = object : SimpleSwipeListener() {
-                                            var startElevation: Float = 0f
-
-                                            override fun onStartOpen(layout: SwipeLayout) {
-                                                startElevation = binding.root.elevation
-                                                binding.root.elevation = startElevation + dip(1)
-                                            }
-
-                                            override fun onOpen(layout: SwipeLayout) {
-                                                when (layout.dragEdge) {
-                                                    SwipeLayout.DragEdge.Left -> vm.confirm()
-                                                    SwipeLayout.DragEdge.Right -> vm.remove()
-                                                }
-                                                // TODO: remove header if needed
-                                                listItems.remove(item)
-                                                binding.root.elevation = startElevation
-                                            }
-
-                                            override fun onClose(layout: SwipeLayout) {
-                                                binding.root.elevation = startElevation
-                                            }
-                                        }
-                                        binding.swipeLayout.addSwipeListener(binding.swipeListener)
-                                    }
-                                }
+                        is FuturePurchase -> Type<ItemListsItemBinding>(R.layout.item_lists_item)
                         is PurchasesListHeaderViewModel -> Type<ItemListsHeaderBinding>(R.layout.item_lists_header)
                         else -> Type<ItemHistoryBinding>(R.layout.item_lists_item)
                     }
@@ -138,7 +84,7 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
 
             futurePurchases.forEach {
                 listItems.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
-                listItems.addAll(it.value.map { PurchasesListItemViewModel(listItems, it) })
+                listItems.addAll(it.value)
             }
         }
 

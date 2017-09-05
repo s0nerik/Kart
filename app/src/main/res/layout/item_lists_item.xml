@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
-        <variable name="item" type="com.github.s0nerik.shoppingassistant.screens.main.PurchasesListItemViewModel" />
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.model.FuturePurchase" />
         <variable name="swipeListener" type="com.daimajia.swipe.SwipeLayout.SwipeListener" />
     </data>
     <RelativeLayout
@@ -20,6 +20,8 @@
             android:layout_height="match_parent"
             app:drag_edge="left|right"
             app:show_mode="lay_down"
+            app:onSwipeOpenLeft='@{() -> item.confirm()}'
+            app:onSwipeOpenRight='@{() -> item.remove()}'
             >
 
             <LinearLayout

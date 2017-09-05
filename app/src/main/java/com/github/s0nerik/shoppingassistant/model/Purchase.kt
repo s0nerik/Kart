@@ -68,9 +68,10 @@ open class FuturePurchase(
 ) : RealmObject() {
     fun confirm() {
         Purchase(id, item, Date(), amount).save()
+        remove()
     }
 
     fun remove() {
-        this.delete { it.equalTo("id", id) }
+        delete { it.equalTo("id", id) }
     }
 }
