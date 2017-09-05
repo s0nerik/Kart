@@ -85,6 +85,7 @@ fun applyNavBarMargin(view: View, apply: Boolean) {
     }
 }
 
+// TODO: Add windowSystemUiVisibility listener to handle System UI changes
 @BindingAdapter("applyNavBarPadding")
 fun applyNavBarPadding(view: View, apply: Boolean) {
     if (!apply) return
@@ -155,7 +156,10 @@ private fun getNavBarHeight(c: Context): Int {
     val hasMenuKey = ViewConfiguration.get(c).hasPermanentMenuKey()
     val hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK)
 
-    if (!hasMenuKey && !hasBackKey || isEmulator()) {
+    val hasNavBarId = c.resources.getIdentifier("config_showNavigationBar", "bool", "android")
+    val hasNavBar = hasNavBarId > 0 && c.resources.getBoolean(hasNavBarId)
+
+    if (!hasMenuKey && !hasBackKey || isEmulator() || hasNavBar) {
         //The device has a navigation bar
         val resources = c.resources
 
