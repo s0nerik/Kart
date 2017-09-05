@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
+        <import type="android.view.View" />
         <variable
             name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.main.PurchaseListsViewModel"
@@ -21,6 +22,37 @@
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_lists_item"
             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility='@{vm.items.isEmpty() ? View.VISIBLE : View.GONE}'
+            android:gravity="center"
+            tools:visibility="visible"
+            >
+
+            <ImageView
+                android:id="@+id/emptyIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/format_list_bulleted"
+                android:tint="@color/material_color_grey_600"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emptyIcon"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:text='The shopping list is empty.
+You can add more items using a "+" button.'
+                />
+        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"

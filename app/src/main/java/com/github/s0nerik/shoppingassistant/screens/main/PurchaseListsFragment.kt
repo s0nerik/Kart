@@ -37,6 +37,7 @@ class PurchasesListHeaderViewModel(val date: Date) {
 
 class PurchaseListsViewModel {
     lateinit var f: PurchaseListsFragment
+    val items = observableListOf<Any>()
 
     fun addNewItem() {
         SelectItemActivity.startForResult(f.act)
@@ -46,7 +47,6 @@ class PurchaseListsViewModel {
 }
 
 class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.fragment_lists) {
-    private val listItems = observableListOf<Any>()
     private val vm = PurchaseListsViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +62,7 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
         recycler.isNestedScrollingEnabled = false
         recycler.setHasFixedSize(true)
 
-        LastAdapter(listItems, BR.item)
+        LastAdapter(vm.items, BR.item)
                 .type { item, _ ->
                     when (item) {
                         is FuturePurchase -> Type<ItemListsItemBinding>(R.layout.item_lists_item)
@@ -78,13 +78,13 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
                 .findAllSortedAsync("lastUpdate", Sort.DESCENDING)
 
         val listener = RealmChangeListener<RealmResults<FuturePurchase>> { it ->
-            listItems.clear()
+            vm.items.clear()
 
             val futurePurchases = it.groupBy { it.lastUpdate!!.toDateTime().withTimeAtStartOfDay() }
 
             futurePurchases.forEach {
-                listItems.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
-                listItems.addAll(it.value)
+                vm.items.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
+                vm.items.addAll(it.value)
             }
         }
 
