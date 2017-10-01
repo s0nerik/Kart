@@ -12,6 +12,7 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsExpensesBinding
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_stats_expenses.*
 import org.jetbrains.anko.support.v4.act
 
@@ -20,9 +21,20 @@ import org.jetbrains.anko.support.v4.act
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.layout.fragment_stats_expenses) {
+class ExpensesViewModel(
+        private val realm: Realm
+) {
     val purchases
         get() = Db.purchases(realm)
+}
+
+class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.layout.fragment_stats_expenses) {
+    private lateinit var vm : ExpensesViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        vm = ExpensesViewModel(realm)
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +45,7 @@ class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.
         val colors = intArrayOf(R.color.colorAccent)
 
         var i = 0
-        val entries = purchases
+        val entries = vm.purchases
                 .groupBy { it.date?.toDateTime()?.startOfDay() }
                 .toSortedMap(compareBy { it })
                 .map {

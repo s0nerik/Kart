@@ -29,6 +29,10 @@ import org.jetbrains.anko.support.v4.act
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+class StatsDistributionViewModel(
+
+)
+
 class StatsDistributionFragment : BaseBoundFragment<FragmentStatsDistributionBinding>(R.layout.fragment_stats_distribution) {
     override fun onViewCreated(view: android.view.View?, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
