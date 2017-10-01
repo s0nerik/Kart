@@ -12,31 +12,17 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 data class Price(
-        val id: String,
-        val value: Float?,
-        val currencyCode: String,
-        val date: Date,
-        val quantityQualifierName: String
+        val id: String = Db.randomUuidString(),
+        val value: Float? = null,
+        val date: Date = Date(),
+        private var currencyCode: String = MainPrefs.defaultCurrencyCode,
+        private var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
 ) {
-    companion object {
-        fun from(e: RealmPrice): Price {
-            return Price(e.id, e.value, e.currencyCode, e.date, e.quantityQualifierName)
-        }
-    }
-}
-
-open class RealmPrice(
-        @PrimaryKey open var id: String = Db.randomUuidString(),
-        open var value: Float? = null,
-        open var currencyCode: String = MainPrefs.defaultCurrencyCode,
-        open var date: Date = Date(),
-        open var quantityQualifierName: String = RealmPrice.QuantityQualifier.ITEM.name
-) : RealmObject() {
     enum class QuantityQualifier { ITEM, KG }
 
-    fun convertedTo(currency: Currency): RealmPrice {
+    fun convertedTo(currency: Currency): Price {
         if (currencyCode == MainPrefs.defaultCurrencyCode) return this
-        return RealmPrice(id, Db.exchangedValue(value!!, this.currency, currency, date), currency.currencyCode, date, quantityQualifierName)
+        return Price(id, Db.exchangedValue(value!!, this.currency, currency, date), date, currency.currencyCode, quantityQualifierName)
     }
 
     var currency: Currency
@@ -50,4 +36,24 @@ open class RealmPrice(
         set(value) {
             quantityQualifierName = value.name
         }
+
+    companion object {
+        fun from(e: RealmPrice): Price {
+            return Price(e.id, e.value, e.date, e.currencyCode, e.quantityQualifierName)
+        }
+    }
+}
+
+open class RealmPrice(
+        @PrimaryKey var id: String = Db.randomUuidString(),
+        var value: Float? = null,
+        var date: Date = Date(),
+        var currencyCode: String = "",
+        var quantityQualifierName: String = ""
+) : RealmObject() {
+    companion object {
+        fun from(e: Price): RealmPrice {
+            return RealmPrice(e.id, e.value, e.date, e.currency.currencyCode, e.quantityQualifier.name)
+        }
+    }
 }

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="com.github.s0nerik.shoppingassistant.model.RealmCategory"
+            type="com.github.s0nerik.shoppingassistant.model.Category"
             />
     </data>
     <RelativeLayout

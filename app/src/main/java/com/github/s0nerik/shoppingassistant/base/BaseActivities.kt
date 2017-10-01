@@ -24,7 +24,7 @@ abstract class BaseActivity(
                 .replace(containerId, this)
 
         if (addToBackStack)
-            transaction = transaction.addToBackStack(backStackTag)
+            transaction = transaction.addToBackStack(null)
 
         if (addToBackStack)
             transaction.commit()

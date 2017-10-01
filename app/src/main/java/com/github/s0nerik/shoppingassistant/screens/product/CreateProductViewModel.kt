@@ -12,6 +12,7 @@ import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.getDrawablePath
 import com.github.s0nerik.shoppingassistant.model.*
+import com.github.s0nerik.shoppingassistant.model.price.RealmPrice
 import com.jakewharton.rxbinding2.view.focusChanges
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.ActivityEvent
@@ -37,17 +38,17 @@ class CreateProductViewModel(
     val pendingCurrency = ObservableField<Currency>(MainPrefs.defaultCurrency)
     val pendingPriceText = ObservableField<String>("")
 
-    private var itemCategory = RealmCategory()
-    private var itemShop = RealmShop()
-    private val itemPrice by lazy { RealmPriceHistory() }
+    private var itemCategory = Category()
+    private var itemShop = Shop()
+    private val itemPrice by lazy { PriceHistory() }
     val itemPriceChange by lazy {
-        val priceChange = RealmPrice()
+        val priceChange = Price()
         priceChange.date = Date()
         priceChange
     }
 
     private val purchase by lazy { RealmPurchase() }
-    private var pendingItem = RealmItem()
+    private var pendingItem = Item()
     private var action: Action = Action.CREATE_PRODUCT
 
     private var bottomSheet: BottomSheetDialogFragment? = null
@@ -208,30 +209,31 @@ class CreateProductViewModel(
     }
 
     fun confirmPendingPrice() {
-        val priceText = pendingPriceText.get()
-        if (priceText.isBlank()) {
-            activity.toast("RealmPriceHistory can't be blank!")
-            return
-        }
-
-        val priceValue: Float
-        try {
-            priceValue = priceText.toFloat()
-        } catch (e: NumberFormatException) {
-            activity.toast("Wrong priceHistory format!")
-            return
-        }
-
-        itemPriceChange.currency = pendingCurrency.get()
-        itemPriceChange.date = Date()
-        itemPriceChange.value = priceValue
-
-        itemPrice.values.clear()
-        itemPrice.values.add(itemPriceChange)
-        setPrice(itemPrice)
-
-        // TODO: create RealmPriceHistory if doesn't exist
-        setAction(Action.CREATE_PRODUCT)
+        TODO()
+//        val priceText = pendingPriceText.get()
+//        if (priceText.isBlank()) {
+//            activity.toast("RealmPriceHistory can't be blank!")
+//            return
+//        }
+//
+//        val priceValue: Float
+//        try {
+//            priceValue = priceText.toFloat()
+//        } catch (e: NumberFormatException) {
+//            activity.toast("Wrong priceHistory format!")
+//            return
+//        }
+//
+//        itemPriceChange.currency = pendingCurrency.get()
+//        itemPriceChange.date = Date()
+//        itemPriceChange.value = priceValue
+//
+//        itemPrice.values.clear()
+//        itemPrice.values.add(itemPriceChange)
+//        setPrice(itemPrice)
+//
+//        // TODO: create RealmPriceHistory if doesn't exist
+//        setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 
@@ -249,21 +251,22 @@ class CreateProductViewModel(
     }
 
     fun confirmCategoryCreation() {
-        val name = bottomSheet!!.etNewCategoryName.text.toString()
-        if (name.isEmpty()) {
-            activity.toast("RealmCategory name can't be empty!")
-            return
-        }
-        if (realm.where(RealmCategory::class.java).equalTo("name", name).findFirst() != null) {
-            activity.toast("RealmCategory with the same name already exists!")
-            return
-        }
-
-        itemCategory.name = name
-        val cat = itemCategory.saveManaged(realm)
-        setCategory(cat)
-
-        setAction(Action.CREATE_PRODUCT)
+        TODO()
+//        val name = bottomSheet!!.etNewCategoryName.text.toString()
+//        if (name.isEmpty()) {
+//            activity.toast("RealmCategory name can't be empty!")
+//            return
+//        }
+//        if (realm.where(RealmCategory::class.java).equalTo("name", name).findFirst() != null) {
+//            activity.toast("RealmCategory with the same name already exists!")
+//            return
+//        }
+//
+//        itemCategory.name = name
+//        val cat = itemCategory.saveManaged(realm)
+//        setCategory(cat)
+//
+//        setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 
@@ -281,24 +284,25 @@ class CreateProductViewModel(
     }
 
     fun confirmShopCreation() {
-        val name = bottomSheet!!.etNewShopName.text.toString()
-        if (name.isEmpty()) {
-            activity.toast("RealmShop name can't be empty!")
-            return
-        }
-        if (realm.where(RealmShop::class.java).equalTo("name", name).findFirst() != null) {
-            activity.toast("RealmShop with the same name already exists!")
-            return
-        }
-
-        itemShop.name = name
-        realm.executeTransaction {
-            itemShop = realm.copyToRealm(itemShop)
-        }
-
-        setShop(itemShop)
-
-        setAction(Action.CREATE_PRODUCT)
+        TODO()
+//        val name = bottomSheet!!.etNewShopName.text.toString()
+//        if (name.isEmpty()) {
+//            activity.toast("RealmShop name can't be empty!")
+//            return
+//        }
+//        if (realm.where(RealmShop::class.java).equalTo("name", name).findFirst() != null) {
+//            activity.toast("RealmShop with the same name already exists!")
+//            return
+//        }
+//
+//        itemShop.name = name
+//        realm.executeTransaction {
+//            itemShop = realm.copyToRealm(itemShop)
+//        }
+//
+//        setShop(itemShop)
+//
+//        setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 

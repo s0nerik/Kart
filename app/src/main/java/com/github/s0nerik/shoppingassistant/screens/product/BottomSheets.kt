@@ -11,7 +11,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
 import com.github.s0nerik.shoppingassistant.model.RealmCategory
-import com.github.s0nerik.shoppingassistant.model.RealmPrice
+import com.github.s0nerik.shoppingassistant.model.price.RealmPrice
 import com.github.s0nerik.shoppingassistant.model.RealmShop
 import com.jakewharton.rxbinding2.widget.itemSelections
 import com.jakewharton.rxbinding2.widget.textChanges

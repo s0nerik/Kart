@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
-        <variable name="item" type="com.github.s0nerik.shoppingassistant.model.RealmPurchase" />
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.model.Purchase" />
     </data>
     <RelativeLayout
         android:layout_width="120dp"

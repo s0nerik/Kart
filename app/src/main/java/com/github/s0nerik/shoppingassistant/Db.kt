@@ -1,6 +1,8 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
+import com.github.s0nerik.shoppingassistant.FakeDataProvider.createDummyPurchases
+import com.github.s0nerik.shoppingassistant.FakeDataProvider.createDummyShops
 import com.github.s0nerik.shoppingassistant.model.*
 import io.realm.Realm
 import io.realm.RealmModel
@@ -30,8 +32,8 @@ object Db {
             createBasicCategories()
 
             if (isDebug) {
-                if (dummyShops) createDummyShops(ctx, it)
-                if (dummyPurchases && dummyShops && dummyCategories) createDummyPurchases(ctx, it)
+                if (dummyShops) createDummyShops(it)
+                if (dummyPurchases && dummyShops && dummyCategories) createDummyPurchases(it)
             }
         }
     }
@@ -91,7 +93,7 @@ object Db {
     }
 
     fun moneySpent(fromDate: Date = Date(0)): Double {
-        return Db.recentPurchases(fromDate).sumByDouble { it.fullPrice.toDouble() }
+        return Db.recentPurchases(fromDate).map { Purchase.from(it) }.sumByDouble { it.fullPrice.toDouble() }
     }
 
     fun statsDistribution(fromDate: Date = Date(0)): Map<Category?, List<Purchase>> {

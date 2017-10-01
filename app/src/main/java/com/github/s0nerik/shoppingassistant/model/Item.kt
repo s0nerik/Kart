@@ -11,12 +11,25 @@ import io.realm.annotations.PrimaryKey
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 data class Item(
-        val id: String,
-        val name: String,
-        val category: Category?,
-        val priceHistory: PriceHistory?,
+        val id: String = Db.randomUuidString(),
+        val name: String = "",
+        val category: Category,
+        val priceHistory: PriceHistory,
         val isFavorite: Boolean
 ) {
+    val readableNamePreview: String
+        get() = if (name.isNotBlank()) name else ""
+    val readableName: String
+        get() = if (name.isNotBlank()) name else "Unnamed"
+    val readablePrice: String
+        get() = priceHistory.currentValueString
+    val readableCategory: String
+        get() = category.name
+    val readableShop: String
+        get() = if (priceHistory.shop != null) priceHistory.shop.name else "Unknown shop"
+    val iconUrl: String
+        get() = category.iconUrl
+
     companion object {
         fun from(i: RealmItem): Item {
             return Item(i.id, i.name, Category.from(i.category!!), PriceHistory.from(i.priceHistory!!), i.isFavorite)
@@ -31,16 +44,9 @@ open class RealmItem(
         open var priceHistory: RealmPriceHistory? = null,
         open var isFavorite: Boolean = false
 ) : RealmObject() {
-    val readableNamePreview: String
-        get() = if (name.isNotBlank()) name else ""
-    val readableName: String
-        get() = if (name.isNotBlank()) name else "Unnamed"
-    val readablePrice: String
-        get() = if (priceHistory != null) priceHistory!!.currentValueString else "Unknown priceHistory"
-    val readableCategory: String
-        get() = if (category != null) category!!.name else "Uncategorized"
-    val readableShop: String
-        get() = if (priceHistory != null && priceHistory!!.shop != null) priceHistory!!.shop!!.name else "Unknown shop"
-    val iconUrl: String
-        get() = if (category != null) category!!.iconUrl else ""
+    companion object {
+        fun from(i: Item): RealmItem {
+            return RealmItem(i.id, i.name, RealmCategory.from(i.category), RealmPriceHistory.from(i.priceHistory), i.isFavorite)
+        }
+    }
 }

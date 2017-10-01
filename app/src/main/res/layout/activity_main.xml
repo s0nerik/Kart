@@ -8,8 +8,8 @@
     <data>
         <import type="com.github.s0nerik.shoppingassistant.R" />
         <import type="android.view.View" />
-        <import type="com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardFragment" />
-        <variable name="vm" type="com.github.s0nerik.shoppingassistant.screens.main.MainActivityViewModel" />
+        <import type="com.github.s0nerik.shoppingassistant.screens.main.State" />
+        <variable name="vm" type="com.github.s0nerik.shoppingassistant.screens.main.MainViewModel" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                         android:onClick='@{() -> vm.selectDashboardPeriod()}'
                         android:clipChildren="false"
                         android:clipToPadding="false"
-                        android:visibility='@{vm.currentFragment instanceof DashboardFragment ? View.VISIBLE: View.GONE}'
+                        android:visibility='@{vm.state == State.DASHBOARD ? View.VISIBLE : View.GONE}'
                         >
                         <ImageView
                             android:layout_width="16dp"
@@ -113,7 +113,7 @@
                             android:layout_marginLeft="6dp"
                             android:layout_marginRight="4dp"
                             android:gravity="center"
-                            android:text='@{DashboardFragment.vm.dataPeriod.toString()}'
+                            android:text='@{vm.dashboardDataPeriod.toString()}'
                             android:textColor="@color/colorPrimaryDark"
                             tools:text="Last week"
                             />

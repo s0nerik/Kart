@@ -11,9 +11,9 @@ import io.realm.annotations.PrimaryKey
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 data class Category(
-        val id: String,
-        val name: String,
-        val iconUrl: String
+        val id: String = Db.randomUuidString(),
+        val name: String = "",
+        val iconUrl: String = ""
 ) {
     companion object {
         fun from(e: RealmCategory): Category {
@@ -23,7 +23,13 @@ data class Category(
 }
 
 open class RealmCategory(
-        @PrimaryKey open var id: String = Db.randomUuidString(),
-        open var name: String = "",
-        open var iconUrl: String = ""
-) : RealmObject()
+        @PrimaryKey open var id: String,
+        open var name: String,
+        open var iconUrl: String
+) : RealmObject() {
+    companion object {
+        fun from(e: Category): RealmCategory {
+            return RealmCategory(e.id, e.name, e.iconUrl)
+        }
+    }
+}

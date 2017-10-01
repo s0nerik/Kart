@@ -1,8 +1,13 @@
 package com.github.s0nerik.shoppingassistant.ext
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.ObservableField
+import android.os.Bundle
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import rx_activity_result2.RxActivityResult
 
 
 /**
@@ -48,4 +53,15 @@ fun android.databinding.Observable.observeChanges(brId: Int? = null): Observable
         addOnPropertyChangedCallback(callback)
         emitter.setCancellable { removeOnPropertyChangedCallback(callback) }
     }
+}
+
+inline fun <reified TActivity: Activity, TResult> Activity.startForResult(resultKey: String, extras: Bundle = Bundle.EMPTY): Maybe<TResult> {
+    return RxActivityResult.on(this)
+            .startIntent(Intent(this, TActivity::class.java).putExtras(extras))
+            .firstElement()
+            .filter { it.resultCode() == Activity.RESULT_OK }
+            .map {
+                @Suppress("UNCHECKED_CAST")
+                it.data().extras[resultKey] as TResult
+            }
 }

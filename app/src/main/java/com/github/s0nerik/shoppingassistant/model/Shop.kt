@@ -23,4 +23,10 @@ data class Shop(
 open class RealmShop(
         @PrimaryKey open var id: String = Db.randomUuidString(),
         open var name: String = ""
-) : RealmObject()
+) : RealmObject() {
+    companion object {
+        fun from(e: Shop): RealmShop {
+            return RealmShop(e.id, e.name)
+        }
+    }
+}

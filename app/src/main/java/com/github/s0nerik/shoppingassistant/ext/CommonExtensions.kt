@@ -4,6 +4,8 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import android.view.View
 import com.github.s0nerik.shoppingassistant.SUPPORTED_CURRENCIES
+import io.realm.RealmList
+import io.realm.RealmObject
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -19,6 +21,12 @@ fun <T> WeakReference<T>.safe(action: T.() -> Unit) {
 
 fun <T> observableListOf(collection: Collection<T> = emptyList()): ObservableList<T> {
     val list = ObservableArrayList<T>()
+    list.addAll(collection)
+    return list
+}
+
+fun <T : RealmObject> realmListOf(collection: Collection<T> = emptyList()): RealmList<T> {
+    val list = RealmList<T>()
     list.addAll(collection)
     return list
 }

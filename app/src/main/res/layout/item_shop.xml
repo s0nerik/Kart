@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="com.github.s0nerik.shoppingassistant.model.RealmShop"
+            type="com.github.s0nerik.shoppingassistant.model.Shop"
             />
     </data>
     <RelativeLayout
