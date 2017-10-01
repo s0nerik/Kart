@@ -20,7 +20,7 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.scales
-import com.github.s0nerik.shoppingassistant.model.Cart
+import com.github.s0nerik.shoppingassistant.model.RealmCart
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
@@ -67,7 +67,7 @@ class DashboardViewModel: BaseObservable() {
     fun onCreateNewPurchase() {
         SelectItemActivity.startForResult(f.act)
                 .bindUntilEvent(f, FragmentEvent.DESTROY)
-                .subscribe { Cart.add(it) }
+                .subscribe { RealmCart.add(it) }
     }
 }
 

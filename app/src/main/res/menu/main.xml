@@ -25,7 +25,7 @@
         />
     <!--<item-->
         <!--android:id="@+id/cart"-->
-        <!--android:title="Cart"-->
+        <!--android:titRealmCartCart"-->
         <!--android:icon="@drawable/cart"-->
         <!--android:actionLayout="@layout/icon_menu_cart"-->
         <!--app:actionLayout="@layout/icon_menu_cart"-->

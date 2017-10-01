@@ -15,9 +15,22 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-open class Purchase(
+data class Purchase(
+        val id: String,
+        val item: Item?,
+        val date: Date?,
+        val amount: Float
+) {
+    companion object {
+        fun from(p: RealmPurchase): Purchase {
+            return Purchase(p.id, Item.from(p.item!!), p.date, p.amount)
+        }
+    }
+}
+
+open class RealmPurchase(
         @PrimaryKey open var id: String = Db.randomUuidString(),
-        open var item: Item? = null,
+        open var item: RealmItem? = null,
         open var date: Date? = null,
         open var amount: Float = 1f
 ) : RealmObject() {
@@ -39,14 +52,14 @@ open class Purchase(
             val priceChange = item!!.priceHistory!!.getPriceChangeForDate(date!!)
             return if (amount > 1f && priceChange != null)
                 when (priceChange.quantityQualifier) {
-                    Price.QuantityQualifier.ITEM -> "%.0f".format(amount)
-                    Price.QuantityQualifier.KG -> "${"%.1f".format(amount)} kg"
+                    RealmPrice.QuantityQualifier.ITEM -> "%.0f".format(amount)
+                    RealmPrice.QuantityQualifier.KG -> "${"%.1f".format(amount)} kg"
                 }
             else ""
         }
     val iconUrl: String
         get() = item!!.iconUrl
-    val price: Price
+    val price: RealmPrice
         get() = item!!.priceHistory!!.getPriceForDate(date!!)
     val fullPrice: Float
         get() = amount.times(price.value ?: 0f)
@@ -61,13 +74,13 @@ open class Purchase(
 
 open class FuturePurchase(
         @PrimaryKey open var id: String = Db.randomUuidString(),
-        open var item: Item? = null,
+        open var item: RealmItem? = null,
         open var creationDate: Date? = null,
         open var lastUpdate: Date? = null,
         open var amount: Float = 1f
 ) : RealmObject() {
     fun confirm() {
-        Purchase(id, item, Date(), amount).save()
+        RealmPurchase(id, item, Date(), amount).save()
         remove()
     }
 

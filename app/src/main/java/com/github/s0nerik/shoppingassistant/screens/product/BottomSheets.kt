@@ -10,9 +10,9 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
 import com.github.s0nerik.shoppingassistant.databinding.*
 import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
-import com.github.s0nerik.shoppingassistant.model.Category
-import com.github.s0nerik.shoppingassistant.model.Price
-import com.github.s0nerik.shoppingassistant.model.Shop
+import com.github.s0nerik.shoppingassistant.model.RealmCategory
+import com.github.s0nerik.shoppingassistant.model.RealmPrice
+import com.github.s0nerik.shoppingassistant.model.RealmShop
 import com.jakewharton.rxbinding2.widget.itemSelections
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.FragmentEvent
@@ -32,11 +32,11 @@ class SelectCategoryBottomSheet(
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectCategoryBinding>(vm, R.layout.sheet_select_category) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LastAdapter(realm.where(Category::class.java).findAll(), BR.item)
+        LastAdapter(realm.where(RealmCategory::class.java).findAll(), BR.item)
                 .type { item, _ ->
                     Type<ItemCategoryBinding>(R.layout.item_category)
                             .onClick {
-                                vm.setCategory(item as Category)
+                                vm.setCategory(item as RealmCategory)
                                 dismiss()
                             }
                 }
@@ -66,9 +66,9 @@ class SelectPriceBottomSheet(
                     .bindUntilEvent(this@SelectPriceBottomSheet, FragmentEvent.DESTROY)
                     .subscribe { i ->
                         itemPriceChange.quantityQualifier = when (i) {
-                            0 -> Price.QuantityQualifier.ITEM
-                            1 -> Price.QuantityQualifier.KG
-                            else -> Price.QuantityQualifier.ITEM
+                            0 -> RealmPrice.QuantityQualifier.ITEM
+                            1 -> RealmPrice.QuantityQualifier.KG
+                            else -> RealmPrice.QuantityQualifier.ITEM
                         }
                     }
         }
@@ -97,11 +97,11 @@ class SelectShopBottomSheet(
 ) : BaseBottomSheet<CreateProductViewModel, SheetSelectShopBinding>(vm, R.layout.sheet_select_shop) {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LastAdapter(realm.where(Shop::class.java).findAll(), BR.item)
+        LastAdapter(realm.where(RealmShop::class.java).findAll(), BR.item)
                 .type { item, _ ->
                     Type<ItemCurrencyBinding>(R.layout.item_shop)
                             .onClick {
-                                vm.setShop(item as Shop)
+                                vm.setShop(item as RealmShop)
                                 dismiss()
                             }
                 }

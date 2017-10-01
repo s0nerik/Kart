@@ -9,8 +9,8 @@ import berlin.volders.badger.CountBadge
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
-import com.github.s0nerik.shoppingassistant.model.Cart
-import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.RealmCart
+import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import com.github.s0nerik.shoppingassistant.screens.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
@@ -19,15 +19,15 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
     private lateinit var badge: CountBadge
 
     // TODO: clear all listeners of the list in cart when cart gets saved.
-    private val cartChangeListener = object : ObservableList.OnListChangedCallback<ObservableList<Purchase>>() {
-        override fun onItemRangeMoved(p0: ObservableList<Purchase>, p1: Int, p2: Int, p3: Int) = onCartChanged(p0)
-        override fun onItemRangeChanged(p0: ObservableList<Purchase>, p1: Int, p2: Int) = onCartChanged(p0)
-        override fun onChanged(p0: ObservableList<Purchase>) = onCartChanged(p0)
-        override fun onItemRangeInserted(p0: ObservableList<Purchase>, p1: Int, p2: Int) = onCartChanged(p0)
-        override fun onItemRangeRemoved(p0: ObservableList<Purchase>, p1: Int, p2: Int) = onCartChanged(p0)
+    private val cartChangeListener = object : ObservableList.OnListChangedCallback<ObservableList<RealmPurchase>>() {
+        override fun onItemRangeMoved(p0: ObservableList<RealmPurchase>, p1: Int, p2: Int, p3: Int) = onCartChanged(p0)
+        override fun onItemRangeChanged(p0: ObservableList<RealmPurchase>, p1: Int, p2: Int) = onCartChanged(p0)
+        override fun onChanged(p0: ObservableList<RealmPurchase>) = onCartChanged(p0)
+        override fun onItemRangeInserted(p0: ObservableList<RealmPurchase>, p1: Int, p2: Int) = onCartChanged(p0)
+        override fun onItemRangeRemoved(p0: ObservableList<RealmPurchase>, p1: Int, p2: Int) = onCartChanged(p0)
     }
 
-    private fun onCartChanged(cart: List<Purchase>) {
+    private fun onCartChanged(cart: List<RealmPurchase>) {
         badge.count = cart.size
     }
 
@@ -43,11 +43,11 @@ class MainActivity : BaseBoundActivity<ActivityMainBinding>(R.layout.activity_ma
         }
 
         badge = Badger.sett(binding.bottomNavigation.menu.getItem(3), CountBadge.Factory(this, BadgeShape.circle(0.5f, Gravity.RIGHT.or(Gravity.TOP))))
-        Cart.purchases.addOnListChangedCallback(cartChangeListener)
+        RealmCart.purchases.addOnListChangedCallback(cartChangeListener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Cart.purchases.removeOnListChangedCallback(cartChangeListener)
+        RealmCart.purchases.removeOnListChangedCallback(cartChangeListener)
     }
 }

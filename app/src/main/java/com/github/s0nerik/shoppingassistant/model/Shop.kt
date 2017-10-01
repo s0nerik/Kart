@@ -9,7 +9,18 @@ import io.realm.annotations.PrimaryKey
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-open class Shop(
+data class Shop(
+        val id: String,
+        val name: String
+) {
+    companion object {
+        fun from(e: RealmShop): Shop {
+            return Shop(e.id, e.name)
+        }
+    }
+}
+
+open class RealmShop(
         @PrimaryKey open var id: String = Db.randomUuidString(),
         open var name: String = ""
 ) : RealmObject()

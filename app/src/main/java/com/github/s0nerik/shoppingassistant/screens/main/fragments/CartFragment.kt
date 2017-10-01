@@ -20,8 +20,8 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentCartBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemCartBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
-import com.github.s0nerik.shoppingassistant.model.Cart
-import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.RealmCart
+import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
@@ -37,21 +37,21 @@ class CartViewModel(val f: CartFragment) {
     fun createNewPurchase() {
         SelectItemActivity.startForResult(f.act)
                 .bindUntilEvent(f, FragmentEvent.DESTROY)
-                .subscribe { Cart.add(it) }
+                .subscribe { RealmCart.add(it) }
     }
 
     fun saveCart() {
-        Cart.save()
+        RealmCart.save()
     }
 
     fun clearCart() {
-        Cart.clear()
+        RealmCart.clear()
     }
 }
 
 class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_cart) {
-    private val cartChangedListener = object : ObservableList.OnListChangedCallback<ObservableList<Purchase>>() {
-        private val changeBottomButtonsVisibility = { list: ObservableList<Purchase> ->
+    private val cartChangedListener = object : ObservableList.OnListChangedCallback<ObservableList<RealmPurchase>>() {
+        private val changeBottomButtonsVisibility = { list: ObservableList<RealmPurchase> ->
             if (list.size == 0) {
                 if (bottomButtons.visibility == View.VISIBLE) {
                     TransitionManager.beginDelayedTransition(root, KTransitionSet.new {
@@ -81,11 +81,11 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
             }
         }
 
-        override fun onItemRangeMoved(p0: ObservableList<Purchase>?, p1: Int, p2: Int, p3: Int) = changeBottomButtonsVisibility(p0!!)
-        override fun onChanged(p0: ObservableList<Purchase>?) = changeBottomButtonsVisibility(p0!!)
-        override fun onItemRangeChanged(p0: ObservableList<Purchase>?, p1: Int, p2: Int) = changeBottomButtonsVisibility(p0!!)
-        override fun onItemRangeInserted(p0: ObservableList<Purchase>?, p1: Int, p2: Int) = changeBottomButtonsVisibility(p0!!)
-        override fun onItemRangeRemoved(p0: ObservableList<Purchase>?, p1: Int, p2: Int) = changeBottomButtonsVisibility(p0!!)
+        override fun onItemRangeMoved(p0: ObservableList<RealmPurchase>?, p1: Int, p2: Int, p3: Int) = changeBottomButtonsVisibility(p0!!)
+        override fun onChanged(p0: ObservableList<RealmPurchase>?) = changeBottomButtonsVisibility(p0!!)
+        override fun onItemRangeChanged(p0: ObservableList<RealmPurchase>?, p1: Int, p2: Int) = changeBottomButtonsVisibility(p0!!)
+        override fun onItemRangeInserted(p0: ObservableList<RealmPurchase>?, p1: Int, p2: Int) = changeBottomButtonsVisibility(p0!!)
+        override fun onItemRangeRemoved(p0: ObservableList<RealmPurchase>?, p1: Int, p2: Int) = changeBottomButtonsVisibility(p0!!)
     }
 
     init {
@@ -106,7 +106,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                     transition(Slide(Gravity.BOTTOM))
                     transition(Fade(Fade.IN))
                 }
-                if (Cart.isEmpty()) {
+                if (RealmCart.isEmpty()) {
                     transition(Fade(Fade.IN)) { view(R.id.emptyCart); duration(200) }
                 } else {
                     transitionSet {
@@ -121,7 +121,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                 transitionSet {
                     view(R.id.fab)
                     duration(200)
-                    delay(if (Cart.isEmpty()) 100 else 300)
+                    delay(if (RealmCart.isEmpty()) 100 else 300)
                     interpolator(FastOutSlowInInterpolator())
                     transition(Scale(0.7f))
                     transition(Fade(Fade.IN))
@@ -135,7 +135,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
         super.onViewCreated(view, savedInstanceState)
         binding.vm = CartViewModel(this)
 
-        if (Cart.isEmpty()) {
+        if (RealmCart.isEmpty()) {
             bottomButtons.visibility = View.GONE
             emptyCart.visibility = View.VISIBLE
         } else {
@@ -147,16 +147,16 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Cart.purchases.addOnListChangedCallback(cartChangedListener)
+        RealmCart.purchases.addOnListChangedCallback(cartChangedListener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Cart.purchases.removeOnListChangedCallback(cartChangedListener)
+        RealmCart.purchases.removeOnListChangedCallback(cartChangedListener)
     }
 
     fun initCart() {
-        LastAdapter(Cart.purchases, BR.item)
+        LastAdapter(RealmCart.purchases, BR.item)
                 .type { _, _ -> Type<ItemCartBinding>(R.layout.item_cart) }
                 .into(recycler)
 

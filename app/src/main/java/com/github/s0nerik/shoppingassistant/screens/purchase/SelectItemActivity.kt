@@ -26,8 +26,8 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
-import com.github.s0nerik.shoppingassistant.model.Cart
-import com.github.s0nerik.shoppingassistant.model.Item
+import com.github.s0nerik.shoppingassistant.model.RealmCart
+import com.github.s0nerik.shoppingassistant.model.RealmItem
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.ActivityEvent
@@ -51,7 +51,7 @@ class SelectItemViewModel(
     val favorites by lazy { observableListOf(Db.favoriteItems(realm)) }
     val items by lazy { observableListOf(Db.items(realm)) }
 
-    val filteredSearchResults = ObservableArrayList<Item>()
+    val filteredSearchResults = ObservableArrayList<RealmItem>()
 
     init {
         activity.apply {
@@ -148,7 +148,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
             .onClick { finishWithResult(it.binding.item!!) }
 
     private lateinit var animator: SelectItemActivityAnimator
-    private var selectedItem: Item? = null
+    private var selectedItem: RealmItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,7 +169,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
         }
     }
 
-    private fun finishWithResult(item: Item) {
+    private fun finishWithResult(item: RealmItem) {
         selectedItem = item
         finish()
     }
@@ -218,7 +218,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
                         if (item!!.isFavorite)
                             binding.vm!!.favorites.add(item)
                     }
-                    Cart.add(it)
+                    RealmCart.add(it)
                 }
     }
 
@@ -234,14 +234,14 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     companion object {
         private val SELECTED_ITEM_ID = "SELECTED_ITEM_ID"
 
-        fun startForResult(a: Activity): Maybe<Item> {
+        fun startForResult(a: Activity): Maybe<RealmItem> {
             return RxActivityResult.on(a)
                     .startIntent(Intent(a, SelectItemActivity::class.java))
                     .firstElement()
                     .filter { it.resultCode() == Activity.RESULT_OK }
                     .map {
                         val itemId = it.data().getStringExtra(SelectItemActivity.SELECTED_ITEM_ID)
-                        Item().queryFirst { it.equalTo("id", itemId) }!!
+                        RealmItem().queryFirst { it.equalTo("id", itemId) }!!
                     }
         }
     }

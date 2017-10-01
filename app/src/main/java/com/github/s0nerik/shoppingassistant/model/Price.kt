@@ -1,7 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
-import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.Db
+import com.github.s0nerik.shoppingassistant.MainPrefs
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -11,18 +11,32 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-open class Price(
+data class Price(
+        val id: String,
+        val value: Float?,
+        val currencyCode: String,
+        val date: Date,
+        val quantityQualifierName: String
+) {
+    companion object {
+        fun from(e: RealmPrice): Price {
+            return Price(e.id, e.value, e.currencyCode, e.date, e.quantityQualifierName)
+        }
+    }
+}
+
+open class RealmPrice(
         @PrimaryKey open var id: String = Db.randomUuidString(),
         open var value: Float? = null,
         open var currencyCode: String = MainPrefs.defaultCurrencyCode,
         open var date: Date = Date(),
-        open var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
+        open var quantityQualifierName: String = RealmPrice.QuantityQualifier.ITEM.name
 ) : RealmObject() {
     enum class QuantityQualifier { ITEM, KG }
 
-    fun convertedTo(currency: Currency): Price {
+    fun convertedTo(currency: Currency): RealmPrice {
         if (currencyCode == MainPrefs.defaultCurrencyCode) return this
-        return Price(id, Db.exchangedValue(value!!, this.currency, currency, date), currency.currencyCode, date, quantityQualifierName)
+        return RealmPrice(id, Db.exchangedValue(value!!, this.currency, currency, date), currency.currencyCode, date, quantityQualifierName)
     }
 
     var currency: Currency

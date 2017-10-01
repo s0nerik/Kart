@@ -1,45 +1,62 @@
 package com.github.s0nerik.shoppingassistant.base
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.annotation.IdRes
+import android.support.v4.app.Fragment
+import com.github.s0nerik.shoppingassistant.BR
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
-import io.realm.Realm
+import kotlin.reflect.KClass
 
-abstract class BaseActivity : RxAppCompatActivity() {
-    protected open val layoutId: Int?
-        get() = null
-
-    protected val realm: Realm by lazy { Realm.getDefaultInstance() }
-
+abstract class BaseActivity(
+        private val layoutId: Int? = null
+) : RxAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (layoutId != null) setContentView(layoutId!!)
+        layoutId?.let { setContentView(it) }
     }
 
-    override fun onDestroy() {
-        realm.close()
-        super.onDestroy()
+    fun Fragment.replaceAndCommit(@IdRes containerId: Int, addToBackStack: Boolean = false, backStackTag: String? = null) {
+        var transaction = supportFragmentManager.beginTransaction()
+                .replace(containerId, this)
+
+        if (addToBackStack)
+            transaction = transaction.addToBackStack(backStackTag)
+
+        if (addToBackStack)
+            transaction.commit()
+        else
+            transaction.commitNow()
     }
 }
 
-abstract class BaseBoundActivity<out T : ViewDataBinding>(
-        protected val layoutId: Int,
-        protected val disableTransitions: Boolean = true
-) : RxAppCompatActivity() {
-    private lateinit var innerBinding: T
-    protected val binding: T by lazy { innerBinding }
-
-    protected val realm: Realm by lazy { Realm.getDefaultInstance() }
+abstract class BaseBoundActivity<out TBinding : ViewDataBinding>(
+        private val layoutId: Int,
+        private val disableTransitions: Boolean = false
+) : BaseActivity(layoutId) {
+    private lateinit var innerBinding: TBinding
+    protected val binding: TBinding by lazy { innerBinding }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (disableTransitions) overridePendingTransition(0, 0)
         innerBinding = DataBindingUtil.setContentView(this, layoutId)
     }
+}
 
-    override fun onDestroy() {
-        realm.close()
-        super.onDestroy()
+abstract class BaseBoundVmActivity<out TBinding : ViewDataBinding, out TViewModel : ViewModel>(
+        layoutId: Int,
+        private val vmClass: KClass<TViewModel>,
+        private val autoBindVm: Boolean = true,
+        disableTransitions: Boolean = false
+) : BaseBoundActivity<TBinding>(layoutId, disableTransitions) {
+    protected val vm: TViewModel by lazy { ViewModelProviders.of(this).get(vmClass.java) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (autoBindVm) binding.setVariable(BR.vm, vm)
     }
 }

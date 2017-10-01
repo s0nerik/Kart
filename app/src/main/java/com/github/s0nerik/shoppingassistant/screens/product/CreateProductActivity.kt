@@ -7,7 +7,7 @@ import android.os.Bundle
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
-import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import com.vicpin.krealmextensions.queryFirst
 import io.reactivex.Maybe
 import rx_activity_result2.RxActivityResult
@@ -28,12 +28,12 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
             return intent
         }
 
-        fun startForResult(a: Activity, searchQuery: String = ""): Maybe<Purchase> {
+        fun startForResult(a: Activity, searchQuery: String = ""): Maybe<RealmPurchase> {
             return RxActivityResult.on(a)
                     .startIntent(intent(a, searchQuery))
                     .firstElement()
                     .filter { it.resultCode() == Activity.RESULT_OK }
-                    .map { result -> Purchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!! }
+                    .map { result -> RealmPurchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!! }
         }
     }
 

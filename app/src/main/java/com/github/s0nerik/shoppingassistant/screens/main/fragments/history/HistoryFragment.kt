@@ -2,7 +2,6 @@ package com.github.s0nerik.shoppingassistant.screens.main.fragments.history
 
 import android.os.Bundle
 import android.view.View
-import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
@@ -14,7 +13,7 @@ import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
-import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
 
@@ -36,7 +35,7 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
         LastAdapter(vm.items, BR.item)
                 .type { item, _ ->
                     when (item) {
-                        is Purchase -> Type<ItemHistoryBinding>(R.layout.item_history)
+                        is RealmPurchase -> Type<ItemHistoryBinding>(R.layout.item_history)
                         is HistoryHeader -> Type<ItemHistoryHeaderBinding>(R.layout.item_history_header)
                         else -> Type<ItemHistoryBinding>(R.layout.item_history)
                     }
@@ -52,7 +51,7 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     private fun initHistory() {
         vm.items.clear()
 
-        val purchases = realm.where(Purchase::class.java)
+        val purchases = realm.where(RealmPurchase::class.java)
                 .findAllSorted("date", Sort.DESCENDING)
                 .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
 

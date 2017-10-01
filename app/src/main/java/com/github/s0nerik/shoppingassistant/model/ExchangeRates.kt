@@ -11,22 +11,44 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+data class ExchangeRates(
+        val date: Date,
+        val sourceCurrencyCode: String,
+        val rates: List<ExchangeRate>
+) {
+    companion object {
+        fun from(e: RealmExchangeRates): ExchangeRates {
+            return ExchangeRates(e.date, e.sourceCurrencyCode, e.rates.map { ExchangeRate.from(it) })
+        }
+    }
+}
 
-open class ExchangeRates(
+data class ExchangeRate(
+        val currencyCode: String,
+        val value: Float
+) {
+    companion object {
+        fun from(e: RealmExchangeRate): ExchangeRate {
+            return ExchangeRate(e.currencyCode, e.value)
+        }
+    }
+}
+
+open class RealmExchangeRates(
         open var date: Date = Date(),
         open var sourceCurrencyCode: String = MainPrefs.defaultCurrencyCode,
-        open var rates: RealmList<ExchangeRate> = RealmList()
+        open var rates: RealmList<RealmExchangeRate> = RealmList()
 ) : RealmObject()
 
-open class ExchangeRate(
+open class RealmExchangeRate(
         open var currencyCode: String = MainPrefs.defaultCurrencyCode,
         open var value: Float = 0f
 ) : RealmObject()
 
 data class RemoteExchangeRates(val timestamp: Long, val source: String, val rates: List<RemoteExchangeRate>) {
     fun saveToDatabase() {
-        val exchangeRates = ExchangeRates(Date(timestamp * 1000), source)
-        exchangeRates.rates.addAll(rates.map { ExchangeRate(it.currency, it.value) })
+        val exchangeRates = RealmExchangeRates(Date(timestamp * 1000), source)
+        exchangeRates.rates.addAll(rates.map { RealmExchangeRate(it.currency, it.value) })
 
         exchangeRates.save()
     }

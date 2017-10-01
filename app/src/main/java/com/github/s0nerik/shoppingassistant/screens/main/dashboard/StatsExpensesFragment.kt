@@ -2,8 +2,6 @@ package com.github.s0nerik.shoppingassistant.screens.main.dashboard
 
 import android.os.Bundle
 import android.view.View
-import com.github.debop.kodatimes.startOfDay
-import com.github.debop.kodatimes.toDateTime
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -11,7 +9,7 @@ import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsExpensesBinding
-import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_stats_expenses.*
 import org.jetbrains.anko.support.v4.act
@@ -51,7 +49,7 @@ class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.
                 .map {
                     BarEntry(
                             i++.toFloat(),
-                            it.value.map(Purchase::priceInDefaultCurrency).sum()
+                            it.value.map(RealmPurchase::priceInDefaultCurrency).sum()
                     )
                 }
 

@@ -37,17 +37,17 @@ class CreateProductViewModel(
     val pendingCurrency = ObservableField<Currency>(MainPrefs.defaultCurrency)
     val pendingPriceText = ObservableField<String>("")
 
-    private var itemCategory = Category()
-    private var itemShop = Shop()
-    private val itemPrice by lazy { PriceHistory() }
+    private var itemCategory = RealmCategory()
+    private var itemShop = RealmShop()
+    private val itemPrice by lazy { RealmPriceHistory() }
     val itemPriceChange by lazy {
-        val priceChange = Price()
+        val priceChange = RealmPrice()
         priceChange.date = Date()
         priceChange
     }
 
-    private val purchase by lazy { Purchase() }
-    private var pendingItem = Item()
+    private val purchase by lazy { RealmPurchase() }
+    private var pendingItem = RealmItem()
     private var action: Action = Action.CREATE_PRODUCT
 
     private var bottomSheet: BottomSheetDialogFragment? = null
@@ -70,7 +70,7 @@ class CreateProductViewModel(
     //region Bindable properties
     @Bindable
     fun getCategory() = pendingItem.category
-    fun setCategory(c: Category) {
+    fun setCategory(c: RealmCategory) {
         pendingItem.category = c
         notifyPropertyChanged(BR.category)
         notifyPropertyChanged(BR.categoryIconUrl)
@@ -79,7 +79,7 @@ class CreateProductViewModel(
 
     @Bindable
     fun getShop() = pendingItem.priceHistory?.shop
-    fun setShop(s: Shop) {
+    fun setShop(s: RealmShop) {
         pendingItem.priceHistory?.shop = s
 
         if (pendingItem.priceHistory == null) {
@@ -96,7 +96,7 @@ class CreateProductViewModel(
 
     @Bindable
     fun getPrice() = pendingItem.priceHistory
-    fun setPrice(p: PriceHistory) {
+    fun setPrice(p: RealmPriceHistory) {
         pendingItem.priceHistory = p
         notifyPropertyChanged(BR.price)
         notifyPropertyChanged(BR.priceIconUrl)
@@ -152,7 +152,7 @@ class CreateProductViewModel(
 
     @Bindable
     fun getItem() = pendingItem
-    fun setItem(i: Item) {
+    fun setItem(i: RealmItem) {
         pendingItem = i
         notifyPropertyChanged(BR._all)
     }
@@ -198,7 +198,7 @@ class CreateProductViewModel(
         activity.finish()
     }
 
-    //region PriceHistory methods
+    //region RealmPriceHistory methods
     fun selectPrice() {
         setAction(Action.CREATE_PRICE)
     }
@@ -210,7 +210,7 @@ class CreateProductViewModel(
     fun confirmPendingPrice() {
         val priceText = pendingPriceText.get()
         if (priceText.isBlank()) {
-            activity.toast("PriceHistory can't be blank!")
+            activity.toast("RealmPriceHistory can't be blank!")
             return
         }
 
@@ -230,12 +230,12 @@ class CreateProductViewModel(
         itemPrice.values.add(itemPriceChange)
         setPrice(itemPrice)
 
-        // TODO: create PriceHistory if doesn't exist
+        // TODO: create RealmPriceHistory if doesn't exist
         setAction(Action.CREATE_PRODUCT)
     }
     //endregion
 
-    //region Category methods
+    //region RealmCategory methods
     fun selectCategory() {
         setAction(Action.SELECT_CATEGORY)
     }
@@ -251,11 +251,11 @@ class CreateProductViewModel(
     fun confirmCategoryCreation() {
         val name = bottomSheet!!.etNewCategoryName.text.toString()
         if (name.isEmpty()) {
-            activity.toast("Category name can't be empty!")
+            activity.toast("RealmCategory name can't be empty!")
             return
         }
-        if (realm.where(Category::class.java).equalTo("name", name).findFirst() != null) {
-            activity.toast("Category with the same name already exists!")
+        if (realm.where(RealmCategory::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("RealmCategory with the same name already exists!")
             return
         }
 
@@ -267,7 +267,7 @@ class CreateProductViewModel(
     }
     //endregion
 
-    //region Shop methods
+    //region RealmShop methods
     fun selectShop() {
         setAction(Action.SELECT_SHOP)
     }
@@ -283,11 +283,11 @@ class CreateProductViewModel(
     fun confirmShopCreation() {
         val name = bottomSheet!!.etNewShopName.text.toString()
         if (name.isEmpty()) {
-            activity.toast("Shop name can't be empty!")
+            activity.toast("RealmShop name can't be empty!")
             return
         }
-        if (realm.where(Shop::class.java).equalTo("name", name).findFirst() != null) {
-            activity.toast("Shop with the same name already exists!")
+        if (realm.where(RealmShop::class.java).equalTo("name", name).findFirst() != null) {
+            activity.toast("RealmShop with the same name already exists!")
             return
         }
 
@@ -322,16 +322,16 @@ class CreateProductViewModel(
             activity.toast("Can't create a product without a name!")
             return
         }
-        if (Item().query { it.equalTo("name", name) }.isNotEmpty()) {
+        if (RealmItem().query { it.equalTo("name", name) }.isNotEmpty()) {
             activity.toast("Product with the same name already exists!")
             return
         }
         if (pendingItem.category == null) {
-            activity.toast("Category must be selected!")
+            activity.toast("RealmCategory must be selected!")
             return
         }
         if (pendingItem.priceHistory?.shop == null) {
-            activity.toast("Shop must be selected!")
+            activity.toast("RealmShop must be selected!")
             return
         }
 

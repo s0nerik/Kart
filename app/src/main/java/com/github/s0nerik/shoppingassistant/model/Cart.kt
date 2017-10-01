@@ -13,25 +13,37 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-open class Cart(
+data class Cart(
+        val id: String,
+        val date: Date,
+        var purchases: List<Purchase>
+) {
+    companion object {
+        fun from(c: RealmCart): Cart {
+            return Cart(c.id, c.date, c.purchases.map { Purchase.from(it) })
+        }
+    }
+}
+
+open class RealmCart(
         @PrimaryKey open var id: String = Db.randomUuidString(),
         open var date: Date = Date(),
-        open var purchases: RealmList<Purchase> = RealmList()
+        open var purchases: RealmList<RealmPurchase> = RealmList()
 ) : RealmObject() {
     companion object {
-        val purchases = observableListOf<Purchase>()
-        fun add(purchase: Purchase) {
+        val purchases = observableListOf<RealmPurchase>()
+        fun add(purchase: RealmPurchase) {
             purchases.add(purchase)
         }
-        fun add(item: Item, date: Date = Date()) {
-            add(Purchase(item = item, date = date))
+        fun add(item: RealmItem, date: Date = Date()) {
+            add(RealmPurchase(item = item, date = date))
         }
         @JvmStatic
-        fun remove(purchase: Purchase) {
+        fun remove(purchase: RealmPurchase) {
             purchases.remove(purchase)
         }
         fun save() {
-            val cart = Cart()
+            val cart = RealmCart()
             cart.purchases.addAll(purchases)
             cart.save()
             purchases.clear()

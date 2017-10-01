@@ -40,8 +40,8 @@ private fun createPurchases(realm: Realm, category: String, vararg names: String
 }
 
 private fun createPurchaseLists(realm: Realm) {
-    val items = mutableListOf<Item>()
-    items += realm.where(Item::class.java).findAll()
+    val items = mutableListOf<RealmItem>()
+    items += realm.where(RealmItem::class.java).findAll()
     for (i in 0..10) {
         Collections.shuffle(items)
         items.take(Random().nextInt(10)+5).forEach {
@@ -57,8 +57,8 @@ private fun createPurchaseLists(realm: Realm) {
 private fun providePurchase(realm: Realm, name: String, category: String) {
     val currencies = SUPPORTED_CURRENCIES.toList()
 
-    val shopsNum = realm.where(Shop::class.java).count().toInt()
-    val shops = realm.where(Shop::class.java).findAll()
+    val shopsNum = realm.where(RealmShop::class.java).count().toInt()
+    val shops = realm.where(RealmShop::class.java).findAll()
 
     val rand = Random().nextInt(1_000_000)
     val randShopNum = rand % shopsNum
@@ -78,25 +78,25 @@ private fun providePurchase(realm: Realm, name: String, category: String) {
     )
 }
 
-private fun providePriceHistory(realm: Realm, shop: Shop, date: DateTime, value: Float, currency: Currency): PriceHistory {
-    val price = Price()
+private fun providePriceHistory(realm: Realm, shop: RealmShop, date: DateTime, value: Float, currency: Currency): RealmPriceHistory {
+    val price = RealmPrice()
     price.date = (date - 1.minutes().minutes).toDate()
     price.value = value
     price.currency = currency
 
-    val priceHistory = realm.createObject(PriceHistory::class)
+    val priceHistory = realm.createObject(RealmPriceHistory::class)
     priceHistory.shop = shop
     priceHistory.values = RealmList(realm.copyToRealmOrUpdate(price))
 
     return priceHistory
 }
 
-private fun providePurchase(realm: Realm, shop: Shop, date: DateTime, name: String, category: Category, price: Float, currency: Currency): Purchase {
-    val purchase = realm.createObject(Purchase::class)
+private fun providePurchase(realm: Realm, shop: RealmShop, date: DateTime, name: String, category: RealmCategory, price: Float, currency: Currency): RealmPurchase {
+    val purchase = realm.createObject(RealmPurchase::class)
     purchase.amount = 1f + Random().nextInt(2)
     purchase.date = date.toDate()
 
-    val item = realm.createObject(Item::class)
+    val item = realm.createObject(RealmItem::class)
     item.name = name
     item.category = category
     item.priceHistory = providePriceHistory(realm, shop, date, price, currency)
@@ -109,10 +109,10 @@ private fun providePurchase(realm: Realm, shop: Shop, date: DateTime, name: Stri
 
 fun createDummyShops(ctx: Context, realm: Realm) {
     realm.executeTransaction {
-        val silpo = it.createObject(Shop::class)
+        val silpo = it.createObject(RealmShop::class)
         silpo.name = "Сильпо"
 
-        val atb = it.createObject(Shop::class)
+        val atb = it.createObject(RealmShop::class)
         atb.name = "АТБ"
     }
 }

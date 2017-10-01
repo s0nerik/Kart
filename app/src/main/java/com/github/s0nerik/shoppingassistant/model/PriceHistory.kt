@@ -14,15 +14,27 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-open class PriceHistory(
+data class PriceHistory(
+        val id: String,
+        val shop: Shop?,
+        val values: List<Price>
+) {
+    companion object {
+        fun from(e: RealmPriceHistory): PriceHistory {
+            return PriceHistory(e.id, Shop.from(e.shop!!), e.values.map { Price.from(it) })
+        }
+    }
+}
+
+open class RealmPriceHistory(
         @PrimaryKey open var id: String = Db.randomUuidString(),
-        open var shop: Shop? = null,
-        open var values: RealmList<Price> = RealmList()
+        open var shop: RealmShop? = null,
+        open var values: RealmList<RealmPrice> = RealmList()
 ) : RealmObject() {
     val currentValueString: String
         get() = getPriceString(Date(), true)
 
-    fun getPriceChangeForDate(date: Date): Price? {
+    fun getPriceChangeForDate(date: Date): RealmPrice? {
         if (values.size == 1) {
             return values[0]
         } else if (values.size > 0) {
@@ -35,8 +47,8 @@ open class PriceHistory(
         return null
     }
 
-    fun getPriceForDate(date: Date): Price {
-        var price: Price = Price()
+    fun getPriceForDate(date: Date): RealmPrice {
+        var price: RealmPrice = RealmPrice()
         if (values.size > 0) {
             values.sortedBy { it.date }.forEach {
                 if (date < it.date) {

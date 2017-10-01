@@ -1,15 +1,11 @@
 package com.github.s0nerik.shoppingassistant
 
 import android.content.Context
-import com.github.s0nerik.shoppingassistant.model.Category
-import com.github.s0nerik.shoppingassistant.model.ExchangeRates
-import com.github.s0nerik.shoppingassistant.model.Item
-import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.model.*
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
 import org.json.JSONArray
-import java.text.DecimalFormat
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -20,12 +16,18 @@ import kotlin.reflect.KClass
  */
 
 object Db {
+    private val ctx: Context
+        get() = App.context
+
+    private val realm: Realm
+        get() = Realm.getDefaultInstance()
+
     fun initDatabase(ctx: Context, isDebug: Boolean = false, removeOldData: Boolean = false, dummyShops: Boolean = false, dummyCategories: Boolean = false, dummyPurchases: Boolean = false) {
-        Realm.getDefaultInstance().use {
+        realm.use {
             if (isDebug && removeOldData)
                 it.executeTransaction(Realm::deleteAll)
 
-            createBasicCategories(ctx, it)
+            createBasicCategories()
 
             if (isDebug) {
                 if (dummyShops) createDummyShops(ctx, it)
@@ -34,63 +36,66 @@ object Db {
         }
     }
 
-    private fun createBasicCategories(ctx: Context, realm: Realm) {
-        realm.executeTransaction {
-            val categories = JSONArray(ctx.resources.openRawResource(R.raw.categories).bufferedReader().use { it.readText() })
-            for (i in 0..(categories.length() - 1)) {
-                val category = categories.getJSONObject(i)
-                val name = category.getString("name")
-                val iconId = ctx.resources.getIdentifier(category.getString("icon"), "drawable", ctx.packageName)
-                createOrReturnCategory(it, name, iconId.getDrawablePath(ctx))
+    private fun createBasicCategories() {
+        realm.use {
+            it.executeTransaction {
+                val categories = JSONArray(ctx.resources.openRawResource(R.raw.categories).bufferedReader().use { it.readText() })
+                for (i in 0..(categories.length() - 1)) {
+                    val category = categories.getJSONObject(i)
+                    val name = category.getString("name")
+                    val iconId = ctx.resources.getIdentifier(category.getString("icon"), "drawable", ctx.packageName)
+                    createOrReturnCategory(it, name, iconId.getDrawablePath(ctx))
+                }
             }
         }
     }
 
-    fun createOrReturnCategory(realm: Realm, name: String, iconUrl: String? = null): Category {
-        val presentCategory = realm.where(Category::class.java).equalTo("name", name).findFirst()
+    fun createOrReturnCategory(realm: Realm, name: String, iconUrl: String? = null): RealmCategory {
+        val presentCategory = realm.where(RealmCategory::class.java).equalTo("name", name).findFirst()
         if (presentCategory != null) return presentCategory
 
-        val category = realm.createObject(Category::class)
+        val category = realm.createObject(RealmCategory::class)
         category.name = name
         if (iconUrl != null) category.iconUrl = iconUrl
 
         return category
     }
 
-    fun purchases(realm: Realm): List<Purchase> {
-        return realm.where(Purchase::class.java).findAll()
-    }
+    val purchases: List<Purchase>
+        get() = realm.where(RealmPurchase::class.java).findAll().map { Purchase.from(it) }
 
-    fun items(realm: Realm): List<Item> {
-        return realm.where(Item::class.java).findAll()
-    }
+    val items: List<Item>
+        get() = realm.where(RealmItem::class.java).findAll().map { Item.from(it) }
 
-    fun favoriteItems(realm: Realm): List<Item> {
-        return realm.where(Item::class.java).equalTo("isFavorite", true).findAll()
-    }
+    val favoriteItems: List<Item>
+        get() = realm.where(RealmItem::class.java)
+                .equalTo("isFavorite", true)
+                .findAll()
+                .map { Item.from(it) }
 
-    fun frequentItems(realm: Realm): List<Item> {
-        val purchases = realm.where(Purchase::class.java).findAll()
+    val frequentItems: List<Item>
+        get() {
+            val purchases = realm.where(RealmPurchase::class.java).findAll()
 
-        return purchases
-                .map { it.item!! }
-                .distinct()
-                .sortedByDescending { purchases.where().equalTo("item.id", it.id).count() }
-                .take(10)
-    }
+            return purchases
+                    .map { Item.from(it.item!!) }
+                    .distinct()
+                    .sortedByDescending { purchases.where().equalTo("item.id", it.id).count() }
+                    .take(10)
+        }
 
-    fun recentPurchases(realm: Realm, fromDate: Date? = null): List<Purchase> {
-        var query = realm.where(Purchase::class.java)
+    fun recentPurchases(fromDate: Date? = null): List<RealmPurchase> {
+        var query = realm.where(RealmPurchase::class.java)
         fromDate?.let { query = query.greaterThan("date", it) }
         return query.findAllSorted("date", Sort.DESCENDING)
     }
 
-    fun moneySpent(realm: Realm, fromDate: Date = Date(0)): Double {
-        return Db.recentPurchases(realm, fromDate).sumByDouble { it.fullPrice.toDouble() }
+    fun moneySpent(fromDate: Date = Date(0)): Double {
+        return Db.recentPurchases(fromDate).sumByDouble { it.fullPrice.toDouble() }
     }
 
-    fun statsDistribution(realm: Realm, fromDate: Date = Date(0)): Map<Category?, List<Purchase>> {
-        return purchases(realm)
+    fun statsDistribution(fromDate: Date = Date(0)): Map<Category?, List<Purchase>> {
+        return purchases
                 .filter { it.date!! >= fromDate }
                 .groupBy { it.item?.category }
     }
@@ -100,8 +105,8 @@ object Db {
     }
 
     fun exchangedValue(sourceValue: Float, sourceCurrency: Currency, targetCurrency: Currency, date: Date): Float? {
-        Realm.getDefaultInstance().use {
-            val ratesContainer = it.where(ExchangeRates::class.java).findAll().minBy { date.time - it.date.time } ?: return null
+        realm.use {
+            val ratesContainer = it.where(RealmExchangeRates::class.java).findAll().minBy { date.time - it.date.time } ?: return null
 
             val sourceRate = if (sourceCurrency.currencyCode == ratesContainer.sourceCurrencyCode) {
                 1f

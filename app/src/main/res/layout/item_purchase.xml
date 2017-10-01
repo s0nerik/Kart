@@ -6,7 +6,7 @@
     >
     <data>
         <import type="android.view.View" />
-        <variable name="item" type="com.github.s0nerik.shoppingassistant.model.Purchase" />
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.model.RealmPurchase" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
