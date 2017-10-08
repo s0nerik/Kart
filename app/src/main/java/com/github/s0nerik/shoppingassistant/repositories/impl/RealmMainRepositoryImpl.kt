@@ -97,12 +97,14 @@ class RealmMainRepositoryImpl : IMainRepository {
 
     override fun getFrequentItems(page: Int, perPage: Int): Single<List<Item>> {
         return Single.fromCallable {
+            if (page >= 0) TODO("Implement paging")
+
             val purchases = realm.where(RealmPurchase::class.java).findAll()
 
             purchases.map { Item.from(it.item!!) }
                     .distinct()
                     .sortedByDescending { purchases.where().equalTo("item.id", it.id).count() }
-                    .slice(page*perPage..((page+1)*perPage - 1))
+//                    .slice(page*perPage..((page+1)*perPage - 1))
         }
     }
 

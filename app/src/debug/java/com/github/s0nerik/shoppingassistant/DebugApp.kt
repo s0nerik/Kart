@@ -6,13 +6,12 @@ import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 
 class DebugApp : App() {
     override fun onCreate() {
-        initStrictMode()
+//        initStrictMode()
         super.onCreate()
-        initStetho()
+//        initStetho()
     }
 
     override fun initDatabase() {
-//        Db.initDatabase(this, false, true, true, true, true)
         Db.initDatabase(this, true, true, true, true, true)
     }
 

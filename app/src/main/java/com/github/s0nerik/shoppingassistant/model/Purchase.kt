@@ -5,10 +5,10 @@ import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
 import com.github.s0nerik.shoppingassistant.repositories.MainRepository
-import com.vicpin.krealmextensions.delete
-import com.vicpin.krealmextensions.save
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import paperparcel.PaperParcel
+import paperparcel.PaperParcelable
 import java.util.*
 
 /**
@@ -16,12 +16,13 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+@PaperParcel
 data class Purchase(
         val id: String = Db.randomUuidString(),
         val item: Item,
         val date: Date,
         val amount: Float = 1f
-) {
+) : PaperParcelable {
     val readableName: String
         get() = item.readableName
     val readablePrice: String
@@ -60,6 +61,9 @@ data class Purchase(
     fun remove() = MainRepository.delete(this)
 
     companion object {
+        @JvmField
+        val CREATOR = PaperParcelPurchase.CREATOR
+
         fun from(p: RealmPurchase): Purchase {
             return Purchase(p.id, Item.from(p.item!!), p.date!!, p.amount)
         }
@@ -79,19 +83,42 @@ open class RealmPurchase(
     }
 }
 
+@PaperParcel
 open class FuturePurchase(
         @PrimaryKey open var id: String = Db.randomUuidString(),
         open var item: Item? = null,
         open var creationDate: Date? = null,
         open var lastUpdate: Date? = null,
         open var amount: Float = 1f
-) : RealmObject() {
+) : PaperParcelable {
+    companion object {
+        @JvmField
+        val CREATOR = PaperParcelPurchase.CREATOR
+
+        fun from(p: RealmFuturePurchase): FuturePurchase {
+            return FuturePurchase(p.id, Item.from(p.item!!), p.creationDate, p.lastUpdate, p.amount)
+        }
+    }
+
     fun confirm() {
-        RealmPurchase(id, RealmItem.from(item!!), Date(), amount).save()
-        remove()
+        TODO()
     }
 
     fun remove() {
-        delete { it.equalTo("id", id) }
+        TODO()
+    }
+}
+
+open class RealmFuturePurchase(
+        @PrimaryKey open var id: String = Db.randomUuidString(),
+        open var item: RealmItem? = null,
+        open var creationDate: Date? = null,
+        open var lastUpdate: Date? = null,
+        open var amount: Float = 1f
+) : RealmObject() {
+    companion object {
+        fun from(p: FuturePurchase): RealmFuturePurchase {
+            return RealmFuturePurchase(p.id, RealmItem.from(p.item!!), p.creationDate, p.lastUpdate, p.amount)
+        }
     }
 }

@@ -5,7 +5,6 @@ import com.github.debop.kodatimes.days
 import com.github.debop.kodatimes.minutes
 import com.github.debop.kodatimes.now
 import com.github.s0nerik.shoppingassistant.model.*
-import com.github.s0nerik.shoppingassistant.model.price.RealmPrice
 import io.realm.Realm
 import io.realm.RealmList
 import org.joda.time.DateTime
@@ -56,7 +55,7 @@ object FakeDataProvider {
         for (i in 0..10) {
             Collections.shuffle(items)
             items.take(Random().nextInt(10)+5).forEach {
-                val futurePurchase = realm.createObject(FuturePurchase::class)
+                val futurePurchase = realm.createObject(RealmFuturePurchase::class)
                 futurePurchase.creationDate = now().minusDays(i).toDate()
                 futurePurchase.lastUpdate = futurePurchase.creationDate
                 futurePurchase.item = it
@@ -93,7 +92,7 @@ object FakeDataProvider {
         val price = RealmPrice()
         price.date = (date - 1.minutes().minutes).toDate()
         price.value = value
-        price.currency = currency
+        price.currencyCode = currency.currencyCode
 
         val priceHistory = realm.createObject(RealmPriceHistory::class)
         priceHistory.shop = shop

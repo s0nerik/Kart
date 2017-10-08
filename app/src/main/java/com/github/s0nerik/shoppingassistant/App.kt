@@ -56,6 +56,7 @@ open class App : Application() {
         configureGlide()
         configureTimber()
 
+        // TODO: add back
         UpdateExchangeRatesJob.schedule(this)
 
         Fabric.with(this, Crashlytics())

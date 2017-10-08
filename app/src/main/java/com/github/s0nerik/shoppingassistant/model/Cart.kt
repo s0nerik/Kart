@@ -1,5 +1,6 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import android.databinding.ObservableList
 import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.ext.realmListOf
@@ -7,6 +8,8 @@ import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import paperparcel.PaperParcel
+import paperparcel.PaperParcelable
 import java.util.*
 
 /**
@@ -14,34 +17,40 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+@PaperParcel
 data class Cart(
         val id: String = Db.randomUuidString(),
         val date: Date = Date(),
-        var purchases: MutableList<Purchase> = mutableListOf()
-) {
+        val purchases: List<Purchase>
+) : PaperParcelable {
     companion object {
-        val purchases = observableListOf<Purchase>()
+        @JvmField
+        val CREATOR = PaperParcelCart.CREATOR
+
+        private val _purchases = observableListOf<Purchase>()
+
+        fun get(): ObservableList<Purchase> = _purchases
+
         fun add(purchase: Purchase) {
-            purchases.add(purchase)
+            _purchases.add(purchase)
         }
         fun add(item: Item, date: Date = Date()) {
             add(Purchase(item = item, date = date))
         }
         @JvmStatic
         fun remove(purchase: Purchase) {
-            purchases.remove(purchase)
+            _purchases.remove(purchase)
         }
         fun save() {
-            val cart = Cart()
-            cart.purchases.addAll(purchases)
+            val cart = Cart(purchases = _purchases)
             MainRepository.save(cart)
-            purchases.clear()
+            _purchases.clear()
         }
         fun clear() {
-            purchases.clear()
+            _purchases.clear()
         }
         fun isEmpty(): Boolean {
-            return purchases.size == 0
+            return _purchases.size == 0
         }
 
         fun from(c: RealmCart): Cart {
@@ -51,8 +60,8 @@ data class Cart(
 }
 
 open class RealmCart(
-        @PrimaryKey open var id: String,
-        open var date: Date,
+        @PrimaryKey open var id: String = Db.randomUuidString(),
+        open var date: Date = Date(),
         open var purchases: RealmList<RealmPurchase> = RealmList()
 ) : RealmObject() {
     companion object {

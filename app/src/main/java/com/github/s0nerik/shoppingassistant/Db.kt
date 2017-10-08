@@ -46,7 +46,7 @@ object Db {
                     val category = categories.getJSONObject(i)
                     val name = category.getString("name")
                     val iconId = ctx.resources.getIdentifier(category.getString("icon"), "drawable", ctx.packageName)
-                    createOrReturnCategory(it, name, iconId.getDrawablePath(ctx))
+                    createOrReturnCategory(it, name, iconId.getDrawablePath())
                 }
             }
         }

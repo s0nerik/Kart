@@ -8,6 +8,8 @@ import com.github.s0nerik.shoppingassistant.ext.realmListOf
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import paperparcel.PaperParcel
+import paperparcel.PaperParcelable
 import java.util.*
 
 /**
@@ -15,11 +17,12 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+@PaperParcel
 data class PriceHistory(
         val id: String = Db.randomUuidString(),
         val shop: Shop? = null,
         val values: List<Price> = emptyList()
-) {
+) : PaperParcelable {
     val currentValueString: String
         get() = getPriceString(Date(), true)
 
@@ -62,6 +65,9 @@ data class PriceHistory(
     }
 
     companion object {
+        @JvmField
+        val CREATOR = PaperParcelPriceHistory.CREATOR
+
         fun from(e: RealmPriceHistory): PriceHistory {
             return PriceHistory(e.id, Shop.from(e.shop!!), e.values.map { Price.from(it) })
         }
@@ -69,7 +75,7 @@ data class PriceHistory(
 }
 
 open class RealmPriceHistory(
-        @PrimaryKey open var id: String,
+        @PrimaryKey open var id: String = Db.randomUuidString(),
         open var shop: RealmShop? = null,
         open var values: RealmList<RealmPrice> = RealmList()
 ) : RealmObject() {

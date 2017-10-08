@@ -17,10 +17,6 @@ import com.github.s0nerik.shoppingassistant.model.FuturePurchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
-import com.vicpin.krealmextensions.save
-import io.realm.RealmChangeListener
-import io.realm.RealmResults
-import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_history.*
 import org.jetbrains.anko.support.v4.act
 import java.util.*
@@ -42,7 +38,9 @@ class PurchaseListsViewModel {
     fun addNewItem() {
         SelectItemActivity.startForResult(f.act)
                 .bindUntilEvent(f, FragmentEvent.DESTROY)
-                .subscribe { FuturePurchase(item = it, creationDate = Date(), lastUpdate = Date()).save() }
+                .subscribe {
+                    TODO()
+                }
     }
 }
 
@@ -74,24 +72,25 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
     }
 
     private fun prepareList() {
-        val results = realm.where(FuturePurchase::class.java)
-                .findAllSortedAsync("lastUpdate", Sort.DESCENDING)
-
-        val listener = RealmChangeListener<RealmResults<FuturePurchase>> { it ->
-            vm.items.clear()
-
-            val futurePurchases = it.groupBy { it.lastUpdate!!.toDateTime().withTimeAtStartOfDay() }
-
-            futurePurchases.forEach {
-                vm.items.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
-                vm.items.addAll(it.value)
-            }
-        }
-
-        results.addChangeListener(listener)
-
-        lifecycle().filter { it == FragmentEvent.DESTROY }
-                .firstElement()
-                .subscribe { results.removeChangeListener(listener) }
+        // TODO
+//        val results = realm.where(FuturePurchase::class.java)
+//                .findAllSortedAsync("lastUpdate", Sort.DESCENDING)
+//
+//        val listener = RealmChangeListener<RealmResults<FuturePurchase>> { it ->
+//            vm.items.clear()
+//
+//            val futurePurchases = it.groupBy { it.lastUpdate!!.toDateTime().withTimeAtStartOfDay() }
+//
+//            futurePurchases.forEach {
+//                vm.items.add(PurchasesListHeaderViewModel(it.value[0].lastUpdate!!))
+//                vm.items.addAll(it.value)
+//            }
+//        }
+//
+//        results.addChangeListener(listener)
+//
+//        lifecycle().filter { it == FragmentEvent.DESTROY }
+//                .firstElement()
+//                .subscribe { results.removeChangeListener(listener) }
     }
 }

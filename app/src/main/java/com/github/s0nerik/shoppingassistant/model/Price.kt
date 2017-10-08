@@ -6,6 +6,8 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import paperparcel.PaperParcel
+import paperparcel.PaperParcelable
 import java.util.*
 
 /**
@@ -13,13 +15,14 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+@PaperParcel
 data class Price(
         val id: String = Db.randomUuidString(),
         val value: Float? = null,
         val date: Date = Date(),
-        private var currencyCode: String = MainPrefs.defaultCurrencyCode,
-        private var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
-) {
+        var currencyCode: String = MainPrefs.defaultCurrencyCode,
+        var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
+) : PaperParcelable {
     enum class QuantityQualifier { ITEM, KG }
 
     fun convertedTo(currency: Currency): Price {
@@ -44,6 +47,9 @@ data class Price(
     }
 
     companion object {
+        @JvmField
+        val CREATOR = PaperParcelPrice.CREATOR
+
         fun from(e: RealmPrice): Price {
             return Price(e.id, e.value, e.date, e.currencyCode, e.quantityQualifierName)
         }

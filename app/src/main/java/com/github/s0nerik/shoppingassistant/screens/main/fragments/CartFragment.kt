@@ -20,7 +20,7 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentCartBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemCartBinding
 import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
-import com.github.s0nerik.shoppingassistant.model.RealmCart
+import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
@@ -37,15 +37,15 @@ class CartViewModel(val f: CartFragment) {
     fun createNewPurchase() {
         SelectItemActivity.startForResult(f.act)
                 .bindUntilEvent(f, FragmentEvent.DESTROY)
-                .subscribe { RealmCart.add(it) }
+                .subscribe { Cart.add(it) }
     }
 
     fun saveCart() {
-        RealmCart.save()
+        Cart.save()
     }
 
     fun clearCart() {
-        RealmCart.clear()
+        Cart.clear()
     }
 }
 
@@ -106,7 +106,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                     transition(Slide(Gravity.BOTTOM))
                     transition(Fade(Fade.IN))
                 }
-                if (RealmCart.isEmpty()) {
+                if (Cart.isEmpty()) {
                     transition(Fade(Fade.IN)) { view(R.id.emptyCart); duration(200) }
                 } else {
                     transitionSet {
@@ -121,7 +121,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
                 transitionSet {
                     view(R.id.fab)
                     duration(200)
-                    delay(if (RealmCart.isEmpty()) 100 else 300)
+                    delay(if (Cart.isEmpty()) 100 else 300)
                     interpolator(FastOutSlowInInterpolator())
                     transition(Scale(0.7f))
                     transition(Fade(Fade.IN))
@@ -135,7 +135,7 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
         super.onViewCreated(view, savedInstanceState)
         binding.vm = CartViewModel(this)
 
-        if (RealmCart.isEmpty()) {
+        if (Cart.isEmpty()) {
             bottomButtons.visibility = View.GONE
             emptyCart.visibility = View.VISIBLE
         } else {
@@ -145,18 +145,18 @@ class CartFragment : BaseBoundFragment<FragmentCartBinding>(R.layout.fragment_ca
         initCart()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        RealmCart.purchases.addOnListChangedCallback(cartChangedListener)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        RealmCart.purchases.removeOnListChangedCallback(cartChangedListener)
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        RealmCart.purchases.addOnListChangedCallback(cartChangedListener)
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        RealmCart.purchases.removeOnListChangedCallback(cartChangedListener)
+//    }
 
     fun initCart() {
-        LastAdapter(RealmCart.purchases, BR.item)
+        LastAdapter(Cart.get(), BR.item)
                 .type { _, _ -> Type<ItemCartBinding>(R.layout.item_cart) }
                 .into(recycler)
 

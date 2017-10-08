@@ -1,18 +1,9 @@
 package com.github.s0nerik.shoppingassistant.screens.main.dashboard
 
-import android.os.Bundle
-import android.view.View
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsExpensesBinding
-import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import io.realm.Realm
-import kotlinx.android.synthetic.main.fragment_stats_expenses.*
-import org.jetbrains.anko.support.v4.act
 
 /**
  * Created by Alex on 3/19/2017.
@@ -22,58 +13,58 @@ import org.jetbrains.anko.support.v4.act
 class ExpensesViewModel(
         private val realm: Realm
 ) {
-    val purchases
-        get() = Db.purchases(realm)
+//    val purchases
+//        get() = Db.purchases(realm)
 }
 
 class StatsExpensesFragment : BaseBoundFragment<FragmentStatsExpensesBinding>(R.layout.fragment_stats_expenses) {
     private lateinit var vm : ExpensesViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        vm = ExpensesViewModel(realm)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initChart()
-    }
-
-    private fun initChart() {
-        val colors = intArrayOf(R.color.colorAccent)
-
-        var i = 0
-        val entries = vm.purchases
-                .groupBy { it.date?.toDateTime()?.startOfDay() }
-                .toSortedMap(compareBy { it })
-                .map {
-                    BarEntry(
-                            i++.toFloat(),
-                            it.value.map(RealmPurchase::priceInDefaultCurrency).sum()
-                    )
-                }
-
-        val dataSet = BarDataSet(entries, null)
-        dataSet.apply {
-            setColors(colors, act)
-            valueTextSize = 16f
-        }
-
-        chart.apply {
-            data = BarData(dataSet)
-            description = null
-
-            axisLeft.setDrawGridLines(false)
-            axisLeft.setDrawAxisLine(false)
-            axisLeft.setDrawLabels(false)
-
-            axisRight.setDrawGridLines(false)
-            axisRight.setDrawAxisLine(false)
-            axisRight.setDrawLabels(false)
-
-            xAxis.setDrawGridLines(false)
-            xAxis.setDrawAxisLine(false)
-            xAxis.setDrawLabels(false)
-        }
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        vm = ExpensesViewModel(realm)
+//    }
+//
+//    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        initChart()
+//    }
+//
+//    private fun initChart() {
+//        val colors = intArrayOf(R.color.colorAccent)
+//
+//        var i = 0
+//        val entries = vm.purchases
+//                .groupBy { it.date?.toDateTime()?.startOfDay() }
+//                .toSortedMap(compareBy { it })
+//                .map {
+//                    BarEntry(
+//                            i++.toFloat(),
+//                            it.value.map(RealmPurchase::priceInDefaultCurrency).sum()
+//                    )
+//                }
+//
+//        val dataSet = BarDataSet(entries, null)
+//        dataSet.apply {
+//            setColors(colors, act)
+//            valueTextSize = 16f
+//        }
+//
+//        chart.apply {
+//            data = BarData(dataSet)
+//            description = null
+//
+//            axisLeft.setDrawGridLines(false)
+//            axisLeft.setDrawAxisLine(false)
+//            axisLeft.setDrawLabels(false)
+//
+//            axisRight.setDrawGridLines(false)
+//            axisRight.setDrawAxisLine(false)
+//            axisRight.setDrawLabels(false)
+//
+//            xAxis.setDrawGridLines(false)
+//            xAxis.setDrawAxisLine(false)
+//            xAxis.setDrawLabels(false)
+//        }
+//    }
 }

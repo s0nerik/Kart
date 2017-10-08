@@ -6,7 +6,6 @@ import android.animation.AnimatorSet
 import android.app.Activity
 import android.content.Intent
 import android.databinding.BaseObservable
-import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -17,7 +16,6 @@ import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
-import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.applyWrongNestedScrollWorkaround
 import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
@@ -28,7 +26,6 @@ import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
-import com.github.s0nerik.shoppingassistant.model.RealmCart
 import com.github.s0nerik.shoppingassistant.model.RealmItem
 import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
@@ -37,7 +34,6 @@ import com.trello.rxlifecycle2.android.ActivityEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import com.vicpin.krealmextensions.queryFirst
 import io.reactivex.Maybe
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_select_item.*
 import org.jetbrains.anko.dip
 import rx_activity_result2.RxActivityResult
@@ -215,10 +211,10 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
                 .bindUntilEvent(this, ActivityEvent.DESTROY)
                 .subscribe {
                     with(it) {
-                        binding.vm!!.frequents.add(item!!)
-                        binding.vm!!.items.add(item!!)
-                        if (item!!.isFavorite)
-                            binding.vm!!.favorites.add(item)
+                        binding.vm!!.frequents.add(it)
+                        binding.vm!!.items.add(it)
+                        if (it.isFavorite)
+                            binding.vm!!.favorites.add(it)
                     }
                     Cart.add(it)
                 }
@@ -236,14 +232,14 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
     companion object {
         private val SELECTED_ITEM_ID = "SELECTED_ITEM_ID"
 
-        fun startForResult(a: Activity): Maybe<RealmItem> {
+        fun startForResult(a: Activity): Maybe<Item> {
             return RxActivityResult.on(a)
                     .startIntent(Intent(a, SelectItemActivity::class.java))
                     .firstElement()
                     .filter { it.resultCode() == Activity.RESULT_OK }
                     .map {
                         val itemId = it.data().getStringExtra(SelectItemActivity.SELECTED_ITEM_ID)
-                        RealmItem().queryFirst { it.equalTo("id", itemId) }!!
+                        Item.from(RealmItem().queryFirst { it.equalTo("id", itemId) }!!)
                     }
         }
     }

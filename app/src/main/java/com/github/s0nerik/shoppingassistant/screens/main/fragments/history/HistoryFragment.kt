@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.screens.main.fragments.history
 
 import android.os.Bundle
 import android.view.View
+import com.github.debop.kodatimes.toDateTime
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
@@ -14,7 +15,7 @@ import com.github.s0nerik.shoppingassistant.databinding.FragmentHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemHistoryHeaderBinding
 import com.github.s0nerik.shoppingassistant.model.RealmPurchase
-import io.realm.Sort
+import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import kotlinx.android.synthetic.main.fragment_history.*
 
 /**
@@ -51,9 +52,13 @@ class HistoryFragment : BaseBoundFragment<FragmentHistoryBinding>(R.layout.fragm
     private fun initHistory() {
         vm.items.clear()
 
-        val purchases = realm.where(RealmPurchase::class.java)
-                .findAllSorted("date", Sort.DESCENDING)
-                .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
+//        val purchases = realm.where(RealmPurchase::class.java)
+//                .findAllSorted("date", Sort.DESCENDING)
+//                .groupBy { it.date!!.toDateTime().withTimeAtStartOfDay() }
+
+        val purchases = MainRepository.getPurchases()
+                .blockingGet()
+                .groupBy { it.date.toDateTime().withTimeAtStartOfDay() }
 
         purchases.forEach {
             vm.items.add(HistoryHeader(it.key.toDate(), MoneySpent(it.value.sumByDouble { (it.amount * it.priceInDefaultCurrency).toDouble() }.toFloat(), MainPrefs.defaultCurrency)))

@@ -23,12 +23,12 @@
         <!--&gt;-->
         <!--<com.github.mikephil.charting.charts.BarChart-->
             <!--android:id="@+id/chart"-->
-            <!--android:visibility='@{vm.purchases.isEmpty() ? View.GONE : View.VISIBLE}'-->
+            <!--android:visibility='@_purchasesases.isEmpty() ? View.GONE : View.VISIBLE}'-->
             <!--app:layout_widthPercent="100%"-->
             <!--app:layout_aspectRatio="200%"-->
             <!--/>-->
         <!--<LinearLayout-->
-            <!--android:visibility='@{vm.purchases.isEmpty() ? View.VISIBLE : View.GONE}'-->
+            <!--android:visibility='@_purchasesases.isEmpty() ? View.VISIBLE : View.GONE}'-->
             <!--style="@style/AppTheme.EmptyScreen.Layout"-->
             <!--&gt;-->
             <!--<ImageView-->

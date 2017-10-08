@@ -37,7 +37,7 @@ class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val extraName = intent.getStringExtra(EXTRA_NAME)
-        extraName?.let { vm.setName(it.capitalize()) }
+        extraName?.let { vm.name = it.capitalize() }
 
         animator.appear()
     }
