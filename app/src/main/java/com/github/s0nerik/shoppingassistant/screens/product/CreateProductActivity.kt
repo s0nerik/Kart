@@ -1,16 +1,18 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
+import com.github.s0nerik.shoppingassistant.base.BaseBoundVmActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBinding
-import com.github.s0nerik.shoppingassistant.model.RealmPurchase
-import com.vicpin.krealmextensions.queryFirst
+import com.github.s0nerik.shoppingassistant.ext.startForResult
+import com.github.s0nerik.shoppingassistant.model.Category
+import com.github.s0nerik.shoppingassistant.model.Item
+import com.github.s0nerik.shoppingassistant.model.Price
+import com.github.s0nerik.shoppingassistant.model.Shop
 import io.reactivex.Maybe
-import rx_activity_result2.RxActivityResult
+import org.jetbrains.anko.bundleOf
 
 /**
  * Created by Alex on 1/25/2017.
@@ -18,22 +20,15 @@ import rx_activity_result2.RxActivityResult
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.layout.activity_create_product) {
+class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, CreateProductViewModel>(
+        R.layout.activity_create_product, CreateProductViewModel::class
+), CreateProductViewModelInteractor {
     companion object {
-        const val EXTRA_ID = "id"
+        private val EXTRA_NAME = "EXTRA_NAME"
+        private val EXTRA_ITEM = "EXTRA_ITEM"
 
-        private fun intent(ctx: Context, productName: String? = null): Intent {
-            val intent = Intent(ctx, CreateProductActivity::class.java)
-            intent.putExtra("name", productName)
-            return intent
-        }
-
-        fun startForResult(a: Activity, searchQuery: String = ""): Maybe<RealmPurchase> {
-            return RxActivityResult.on(a)
-                    .startIntent(intent(a, searchQuery))
-                    .firstElement()
-                    .filter { it.resultCode() == Activity.RESULT_OK }
-                    .map { result -> RealmPurchase().queryFirst { it.equalTo("id", result.data().getStringExtra(EXTRA_ID)) }!! }
+        fun startForResult(a: Activity, searchQuery: String = ""): Maybe<Item> {
+            return a.startForResult<CreateProductActivity, Item>(EXTRA_ITEM, bundleOf(EXTRA_NAME to searchQuery))
         }
     }
 
@@ -41,12 +36,31 @@ class CreateProductActivity : BaseBoundActivity<ActivityCreateProductBinding>(R.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.vm = CreateProductViewModel(this, realm)
-
-        val extraName = intent.getStringExtra("name")
-        extraName?.let { binding.vm!!.setName(it.capitalize()) }
+        val extraName = intent.getStringExtra(EXTRA_NAME)
+        extraName?.let { vm.setName(it.capitalize()) }
 
         animator.appear()
+    }
+
+    override fun selectPrice(): Maybe<Price> {
+//        SelectShopBottomSheet(this)
+        TODO("not implemented")
+    }
+
+    override fun selectCategory(): Maybe<Category> {
+//        SelectCategoryBottomSheet(this)
+        TODO("not implemented")
+    }
+
+    override fun selectShop(): Maybe<Shop> {
+//        SelectShopBottomSheet(this)
+        TODO("not implemented")
+    }
+
+    override fun finishWithResult(item: Item?) {
+        if (item != null)
+            setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_ITEM, item))
+        finish()
     }
 
     override fun finish() {

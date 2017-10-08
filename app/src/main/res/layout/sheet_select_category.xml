@@ -6,7 +6,7 @@
     >
     <data>
         <import type="android.view.View"/>
-        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.Action"/>
+        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.State"/>
         <variable
             name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
@@ -31,7 +31,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:src='@{vm.action == Action.SELECT_CATEGORY ? @drawable/ic_add_black_24dp : @drawable/ic_arrow_back}'
+                android:src='@{vm.state == Action.SELECT_CATEGORY ? @drawable/ic_add_black_24dp : @drawable/ic_arrow_back}'
                 tools:src="@drawable/ic_add_black_24dp"
                 />
             <TextView
@@ -47,14 +47,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility='@{vm.action == Action.SELECT_CATEGORY ? View.VISIBLE : View.GONE}'
+            android:visibility='@{vm.state == Action.SELECT_CATEGORY ? View.VISIBLE : View.GONE}'
             app:layoutManager="@string/rv_layout_manager_linear"
             tools:listitem="@layout/item_category"
             />
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility='@{vm.action == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
+            android:visibility='@{vm.state == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
             layout="@layout/view_create_category"
             app:vm='@{vm}'
             />

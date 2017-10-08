@@ -26,8 +26,8 @@ fun Int.getDrawableUri(context: Context): Uri {
     return imageUri
 }
 
-fun Int.getDrawablePath(context: Context): String {
-    return getDrawableUri(context).toString()
+fun Int.getDrawablePath(): String {
+    return getDrawableUri(App.context).toString()
 }
 
 fun Context.showKeyboard(view: View) {

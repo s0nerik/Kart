@@ -7,27 +7,209 @@
     >
     <data>
         <import type="android.view.View"/>
-        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.Action" />
         <variable
             name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
             />
     </data>
-    <RelativeLayout
+    <android.support.percent.PercentRelativeLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:gravity="center"
         android:fitsSystemWindows="true"
         android:background="@color/bgSemiTransparent"
+        tools:visibility="visible"
         >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+
+        <LinearLayout
+            android:id="@+id/groupProductData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/preview"
+            android:layout_alignTop="@+id/preview"
+            android:layout_marginLeft="-6dp"
+            android:layout_toRightOf="@+id/preview"
+            android:animateLayoutChanges="true"
+            android:clipChildren="false"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
             >
+
+            <!--<include-->
+                <!--android:id="@+id/btnSelectName"-->
+                <!--layout="@layout/view_btn_icon"-->
+                <!--app:selected='@{!vm.item.name.isEmpty()}'-->
+                <!--app:showSideIcon='@{!vm.item.name.isEmpty()}'-->
+                <!--app:glideConfig='@{"product_name_icon"}'-->
+                <!--app:iconColor='@{@color/material_color_white}'-->
+                <!--app:iconUrl='@{vm.priceIconUrl}'-->
+                <!--app:onClick='@{() -> vm.editName()}'-->
+                <!--app:unselectedColor='@{@color/newProductButtonUnselected}'-->
+                <!--app:selectedColor='@{@color/newProductButtonSelected}'-->
+                <!--app:sideIconTint='@{@color/newProductSideIconColor}'-->
+                <!--tools:visibility="visible"-->
+                <!--/>-->
+
             <include
-                layout="@layout/view_create_product"
-                app:vm='@{vm}'
+                android:id="@+id/btnSelectPrice"
+                layout="@layout/view_btn_icon"
+                app:selected='@{vm.isPriceSet}'
+                app:showSideIcon='@{vm.isPriceSet}'
+                app:glideConfig='@{"product_price_icon"}'
+                app:iconColor='@{@color/material_color_white}'
+                app:iconUrl='@{vm.priceIconUrl}'
+                app:marginTop='@{8}'
+                app:onClick='@{() -> vm.selectPrice()}'
+                app:unselectedColor='@{@color/newProductButtonUnselected}'
+                app:selectedColor='@{@color/newProductButtonSelected}'
+                app:sideIconTint='@{@color/newProductSideIconColor}'
+                tools:visibility="visible"
                 />
-        </FrameLayout>
-    </RelativeLayout>
+
+            <include
+                android:id="@+id/btnSelectCategory"
+                layout="@layout/view_btn_icon"
+                app:selected='@{vm.category != null}'
+                app:showSideIcon='@{vm.category != null}'
+                app:glideConfig='@{"product_category_icon"}'
+                app:iconColor='@{@color/material_color_white}'
+                app:iconUrl='@{vm.categoryIconUrl}'
+                app:marginTop='@{8}'
+                app:onClick='@{() -> vm.selectCategory()}'
+                app:unselectedColor='@{@color/newProductButtonUnselected}'
+                app:selectedColor='@{@color/newProductButtonSelected}'
+                app:sideIconTint='@{@color/newProductSideIconColor}'
+                tools:visibility="visible"
+                />
+
+            <include
+                android:id="@+id/btnSelectShop"
+                layout="@layout/view_btn_icon"
+                app:selected='@{vm.shop != null}'
+                app:showSideIcon='@{vm.shop != null}'
+                app:glideConfig='@{"shop_category_icon"}'
+                app:marginTop='@{8}'
+                app:onClick='@{() -> vm.selectShop()}'
+                app:unselectedColor='@{@color/newProductButtonUnselected}'
+                app:selectedColor='@{@color/newProductButtonSelected}'
+                app:sideIconTint='@{@color/newProductSideIconColor}'
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/groupAdditionalActions"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_alignBottom="@+id/preview"
+            android:layout_alignTop="@+id/preview"
+            android:layout_marginRight="-6dp"
+            android:layout_toLeftOf="@+id/preview"
+            android:animateLayoutChanges="true"
+            android:clipChildren="false"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
+
+            <!--<include-->
+                <!--android:id="@+id/btnScanBarcode"-->
+                <!--layout="@layout/view_btn_icon"-->
+                <!--app:glideConfig='@{"scan_barcode_icon"}'-->
+                <!--app:iconUrl='@{vm.priceIconUrl}'-->
+                <!--app:unselectedColor='@{@color/newProductButtonUnselected}'-->
+                <!--app:selectedColor='@{@color/newProductButtonSelected}'-->
+                <!--android:visibility="gone"-->
+                <!--tools:visibility="visible"-->
+                <!--/>-->
+
+            <include
+                android:id="@+id/btnFavorite"
+                layout="@layout/view_btn_icon"
+                app:glideConfig='@{"product_favorite_icon"}'
+                app:iconUrl='@{vm.favoriteIconUrl}'
+                app:selected='@{vm.isFavorite}'
+                app:marginTop='@{8}'
+                app:onClick='@{() -> vm.toggleFavorite()}'
+                app:unselectedColor='@{@color/newProductButtonUnselected}'
+                app:selectedColor='@{@color/newProductButtonSelected}'
+                tools:visibility="visible"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/preview"
+            android:layout_alignRight="@+id/preview"
+            android:layout_below="@+id/preview"
+            android:layout_marginTop="-8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <include
+                android:id="@+id/btnCancelPurchase"
+                layout="@layout/view_btn_icon"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
+                app:bgColor='@{@color/material_color_red_400}'
+                app:glideConfig='@{"cancel_purchase_icon"}'
+                app:marginRight='@{12}'
+                app:onClick='@{() -> vm.cancel()}'
+                />
+
+            <include
+                android:id="@+id/btnPurchaseNewProduct"
+                layout="@layout/view_btn_icon"
+                android:layout_width="64dp"
+                android:layout_height="36dp"
+                app:bgColor='@{@color/material_color_green_400}'
+                app:glideConfig='@{"create_purchase_icon"}'
+                app:onClick='@{() -> vm.save()}'
+                />
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:cardBackgroundColor="@color/material_color_white"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/material_color_grey_100"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:text="Preview"
+                    android:textAppearance="@style/MaterialTypography.Regular.Body2"
+                    />
+
+                <include
+                    layout="@layout/item_purchase_preview"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    app:iconUrl='@{vm.categoryIconUrl}'
+                    app:name='@{vm.name}'
+                    app:category='@{vm.readableCategory}'
+                    app:price='@{vm.readablePrice}'
+                    app:shop='@{vm.readableShop}'
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </android.support.percent.PercentRelativeLayout>
 </layout>

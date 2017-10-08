@@ -2,6 +2,8 @@ package com.github.s0nerik.shoppingassistant.model
 
 import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.MainPrefs
+import com.github.s0nerik.shoppingassistant.R
+import com.github.s0nerik.shoppingassistant.ext.getString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -36,6 +38,10 @@ data class Price(
         set(value) {
             quantityQualifierName = value.name
         }
+
+    override fun toString(): String {
+        return value?.let { getString(R.string.price_with_currency_fmt, currency.displayName, it) } ?: "Unknown price"
+    }
 
     companion object {
         fun from(e: RealmPrice): Price {
