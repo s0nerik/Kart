@@ -11,29 +11,34 @@
             type="com.github.s0nerik.shoppingassistant.screens.main.dashboard.ExpensesViewModel"
             />
     </data>
-    <android.support.percent.PercentRelativeLayout
+    <View
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        >
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart"
-            android:visibility='@{vm.purchases.isEmpty() ? View.GONE : View.VISIBLE}'
-            app:layout_widthPercent="100%"
-            app:layout_aspectRatio="200%"
-            />
-        <LinearLayout
-            android:visibility='@{vm.purchases.isEmpty() ? View.VISIBLE : View.GONE}'
-            style="@style/AppTheme.EmptyScreen.Layout"
-            >
-            <ImageView
-                android:src="@drawable/chart_arc"
-                style="@style/AppTheme.EmptyScreen.Image"
-                />
-            <TextView
-                android:text="Not enough data is available.\nCharts will appear here as you use the app."
-                style="@style/AppTheme.EmptyScreen.Text"
-                />
-        </LinearLayout>
-    </android.support.percent.PercentRelativeLayout>
+        />
+
+    <!--<android.support.percent.PercentRelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="16dp"-->
+        <!--&gt;-->
+        <!--<com.github.mikephil.charting.charts.BarChart-->
+            <!--android:id="@+id/chart"-->
+            <!--android:visibility='@{vm.purchases.isEmpty() ? View.GONE : View.VISIBLE}'-->
+            <!--app:layout_widthPercent="100%"-->
+            <!--app:layout_aspectRatio="200%"-->
+            <!--/>-->
+        <!--<LinearLayout-->
+            <!--android:visibility='@{vm.purchases.isEmpty() ? View.VISIBLE : View.GONE}'-->
+            <!--style="@style/AppTheme.EmptyScreen.Layout"-->
+            <!--&gt;-->
+            <!--<ImageView-->
+                <!--android:src="@drawable/chart_arc"-->
+                <!--style="@style/AppTheme.EmptyScreen.Image"-->
+                <!--/>-->
+            <!--<TextView-->
+                <!--android:text="Not enough data is available.\nCharts will appear here as you use the app."-->
+                <!--style="@style/AppTheme.EmptyScreen.Text"-->
+                <!--/>-->
+        <!--</LinearLayout>-->
+    <!--</android.support.percent.PercentRelativeLayout>-->
 </layout>

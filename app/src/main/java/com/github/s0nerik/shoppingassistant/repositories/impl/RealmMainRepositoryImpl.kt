@@ -31,7 +31,7 @@ class RealmMainRepositoryImpl : IMainRepository {
                 val category = categories.getJSONObject(i)
                 val name = category.getString("name")
                 val iconId = ctx.resources.getIdentifier(category.getString("icon"), "drawable", ctx.packageName)
-                createOrReturnCategory(it, name, iconId.getDrawablePath(ctx))
+                createOrReturnCategory(it, name, iconId.getDrawablePath())
             }
         }
     }
@@ -103,6 +103,12 @@ class RealmMainRepositoryImpl : IMainRepository {
                     .distinct()
                     .sortedByDescending { purchases.where().equalTo("item.id", it.id).count() }
                     .slice(page*perPage..((page+1)*perPage - 1))
+        }
+    }
+
+    override fun getShops(page: Int, perPage: Int): Single<List<Shop>> {
+        return Single.fromCallable {
+            realm.where(RealmShop::class.java).findAll().map { Shop.from(it) }
         }
     }
 

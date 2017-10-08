@@ -26,8 +26,11 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
+import com.github.s0nerik.shoppingassistant.model.Cart
+import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.RealmCart
 import com.github.s0nerik.shoppingassistant.model.RealmItem
+import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.ActivityEvent
@@ -40,18 +43,17 @@ import org.jetbrains.anko.dip
 import rx_activity_result2.RxActivityResult
 
 class SelectItemViewModel(
-        private val activity: SelectItemActivity,
-        private val realm: Realm
+        private val activity: SelectItemActivity
 ) : BaseObservable() {
     val VOICE_SEARCH_REQ_CODE = 672
 
     val isSearching = ObservableBoolean(false)
 
-    val frequents by lazy { observableListOf(Db.frequentItems(realm)) }
-    val favorites by lazy { observableListOf(Db.favoriteItems(realm)) }
-    val items by lazy { observableListOf(Db.items(realm)) }
+    val frequents by lazy { observableListOf(MainRepository.getFrequentItems().blockingGet()) }
+    val favorites by lazy { observableListOf(MainRepository.getFavoriteItems().blockingGet()) }
+    val items by lazy { observableListOf(MainRepository.getItems().blockingGet()) }
 
-    val filteredSearchResults = ObservableArrayList<RealmItem>()
+    val filteredSearchResults = observableListOf<Item>()
 
     init {
         activity.apply {
@@ -148,12 +150,12 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
             .onClick { finishWithResult(it.binding.item!!) }
 
     private lateinit var animator: SelectItemActivityAnimator
-    private var selectedItem: RealmItem? = null
+    private var selectedItem: Item? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        binding.vm = SelectItemViewModel(this, realm)
+        binding.vm = SelectItemViewModel(this)
         initData()
         animator = SelectItemActivityAnimator(this, binding)
         animator.appear()
@@ -169,7 +171,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
         }
     }
 
-    private fun finishWithResult(item: RealmItem) {
+    private fun finishWithResult(item: Item) {
         selectedItem = item
         finish()
     }
@@ -218,7 +220,7 @@ class SelectItemActivity : BaseBoundActivity<ActivitySelectItemBinding>(R.layout
                         if (item!!.isFavorite)
                             binding.vm!!.favorites.add(item)
                     }
-                    RealmCart.add(it)
+                    Cart.add(it)
                 }
     }
 

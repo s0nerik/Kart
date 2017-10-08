@@ -92,6 +92,10 @@ class CreateProductViewModel : BaseViewModel() {
         TODO()
     }
 
+    fun toggleFavorite() {
+        TODO()
+    }
+
     fun save() {
         TODO()
     }

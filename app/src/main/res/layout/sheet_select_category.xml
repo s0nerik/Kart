@@ -6,57 +6,61 @@
     >
     <data>
         <import type="android.view.View"/>
-        <import type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel.State"/>
         <variable
             name="vm"
             type="com.github.s0nerik.shoppingassistant.screens.product.CreateProductViewModel"
             />
     </data>
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
-            android:background="@color/material_color_black_06_percent"
-            android:foreground="?selectableItemBackground"
-            android:onClick='@{() -> vm.toggleCategoryCreation()}'
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:src='@{vm.state == Action.SELECT_CATEGORY ? @drawable/ic_add_black_24dp : @drawable/ic_arrow_back}'
-                tools:src="@drawable/ic_add_black_24dp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="Add new category"
-                android:textAppearance="@style/MaterialTypography.Regular.Body2"
-                />
-        </LinearLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility='@{vm.state == Action.SELECT_CATEGORY ? View.VISIBLE : View.GONE}'
-            app:layoutManager="@string/rv_layout_manager_linear"
-            tools:listitem="@layout/item_category"
-            />
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility='@{vm.state == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'
-            layout="@layout/view_create_category"
-            app:vm='@{vm}'
-            />
-    </LinearLayout>
+        />
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@color/material_color_black_06_percent"-->
+            <!--android:foreground="?selectableItemBackground"-->
+            <!--android:onClick='@{() -> vm.toggleCategoryCreation()}'-->
+            <!--&gt;-->
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:src='@{vm.state == Action.SELECT_CATEGORY ? @drawable/ic_add_black_24dp : @drawable/ic_arrow_back}'-->
+                <!--tools:src="@drawable/ic_add_black_24dp"-->
+                <!--/>-->
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:text="Add new category"-->
+                <!--android:textAppearance="@style/MaterialTypography.Regular.Body2"-->
+                <!--/>-->
+        <!--</LinearLayout>-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recycler"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility='@{vm.state == Action.SELECT_CATEGORY ? View.VISIBLE : View.GONE}'-->
+            <!--app:layoutManager="@string/rv_layout_manager_linear"-->
+            <!--tools:listitem="@layout/item_category"-->
+            <!--/>-->
+        <!--<include-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility='@{vm.state == Action.CREATE_CATEGORY ? View.VISIBLE : View.GONE}'-->
+            <!--layout="@layout/view_create_category"-->
+            <!--app:vm='@{vm}'-->
+            <!--/>-->
+    <!--</LinearLayout>-->
 </layout>
