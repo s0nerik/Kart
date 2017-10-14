@@ -85,7 +85,9 @@ class CreateProductViewModel : BaseViewModel() {
     }
 
     fun selectCategory() {
-        TODO()
+        interactor!!.selectCategory()
+                .takeUntilCleared()
+                .subscribe { category = it }
     }
 
     fun selectShop() {

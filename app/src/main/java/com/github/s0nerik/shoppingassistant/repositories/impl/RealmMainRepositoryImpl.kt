@@ -114,6 +114,12 @@ class RealmMainRepositoryImpl : IMainRepository {
         }
     }
 
+    override fun getCategories(page: Int, perPage: Int): Single<List<Category>> {
+        return Single.fromCallable {
+            realm.where(RealmCategory::class.java).findAll().map { Category.from(it) }
+        }
+    }
+
     override fun getMoneySpent(fromDate: Date): Single<Double> {
         return getRecentPurchases(fromDate).map { it.sumByDouble { it.fullPrice.toDouble() } }
     }

@@ -47,6 +47,7 @@
             android:parentActivityName=".screens.main.MainActivity"
             />
         <activity android:name=".screens.product.select_shop.SelectShopActivity" />
+        <activity android:name=".screens.product.select_category.SelectCategoryActivity" />
 
         <service
             android:name=".jobs.UpdateExchangeRatesJob"

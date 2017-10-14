@@ -1,42 +1,11 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
-import android.os.Bundle
-import android.view.View
-import com.github.nitrico.lastadapter.LastAdapter
-import com.github.nitrico.lastadapter.Type
-import com.github.s0nerik.shoppingassistant.BR
-import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
-import com.github.s0nerik.shoppingassistant.databinding.*
-import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
-import com.github.s0nerik.shoppingassistant.model.RealmCategory
-import com.github.s0nerik.shoppingassistant.model.RealmShop
-import kotlinx.android.synthetic.main.sheet_select_category.*
-import java.util.*
-
 /**
  * Created by Alex on 1/26/2017.
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-//class SelectCategoryBottomSheet(
-//        vm: CreateProductViewModel
-//) : BaseBottomSheet<CreateProductViewModel, SheetSelectCategoryBinding>(vm, R.layout.sheet_select_category) {
-//    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        LastAdapter(realm.where(RealmCategory::class.java).findAll(), BR.item)
-//                .type { item, _ ->
-//                    Type<ItemCategoryBinding>(R.layout.item_category)
-//                            .onClick {
-//                                vm.setCategory(item as RealmCategory)
-//                                dismiss()
-//                            }
-//                }
-//                .into(recycler)
-//    }
-//}
-//
 //class SelectPriceBottomSheet(
 //        vm: CreateProductViewModel
 //) : BaseBottomSheet<CreateProductViewModel, SheetSelectPriceBinding>(vm, R.layout.sheet_select_price) {

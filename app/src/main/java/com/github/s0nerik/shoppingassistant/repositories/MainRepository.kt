@@ -1,9 +1,6 @@
 package com.github.s0nerik.shoppingassistant.repositories
 
-import com.github.s0nerik.shoppingassistant.model.Cart
-import com.github.s0nerik.shoppingassistant.model.Item
-import com.github.s0nerik.shoppingassistant.model.Purchase
-import com.github.s0nerik.shoppingassistant.model.Shop
+import com.github.s0nerik.shoppingassistant.model.*
 import com.github.s0nerik.shoppingassistant.repositories.impl.RealmMainRepositoryImpl
 import io.reactivex.Single
 import java.util.*
@@ -25,6 +22,7 @@ interface IMainRepository {
     fun getFrequentItems(page: Int = -1, perPage: Int = 10) : Single<List<Item>>
 
     fun getShops(page: Int = -1, perPage: Int = 10) : Single<List<Shop>>
+    fun getCategories(page: Int = -1, perPage: Int = 10) : Single<List<Category>>
 
     fun getMoneySpent(fromDate: Date = Date(0)): Single<Double>
 

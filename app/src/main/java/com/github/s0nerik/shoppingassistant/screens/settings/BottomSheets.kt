@@ -22,7 +22,7 @@ import com.github.s0nerik.shoppingassistant.databinding.SheetSelectExpensesLimit
 import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
 import com.jakewharton.rxbinding2.widget.textChanges
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.sheet_select_category.*
+import kotlinx.android.synthetic.main.activity_select_category.*
 import kotlinx.android.synthetic.main.sheet_select_expenses_limit.*
 import java.text.DecimalFormat
 import java.util.*
