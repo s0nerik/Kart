@@ -46,6 +46,7 @@
             android:launchMode="singleTop"
             android:parentActivityName=".screens.main.MainActivity"
             />
+        <activity android:name=".screens.product.select_shop.SelectShopActivity" />
 
         <service
             android:name=".jobs.UpdateExchangeRatesJob"

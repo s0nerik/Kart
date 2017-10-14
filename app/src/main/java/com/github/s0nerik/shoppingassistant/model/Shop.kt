@@ -13,7 +13,7 @@ import paperparcel.PaperParcelable
  */
 @PaperParcel
 data class Shop(
-        val id: String,
+        val id: String = Db.randomUuidString(),
         val name: String
 ) : PaperParcelable {
    companion object {

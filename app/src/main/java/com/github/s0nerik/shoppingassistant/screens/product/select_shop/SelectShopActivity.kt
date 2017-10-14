@@ -1,7 +1,6 @@
 package com.github.s0nerik.shoppingassistant.screens.product.select_shop
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import com.github.s0nerik.shoppingassistant.R
@@ -23,14 +22,13 @@ class SelectShopActivity : BaseBoundVmActivity<ActivitySelectShopBinding, Select
 ), SelectShopViewModelInteractor {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.interactor = this
+        vm.init(this, this)
         vm.initRecycler(recycler)
-        vm.shops.observe(this, Observer {  })
     }
 
     override fun finishWithResult(shop: Shop?) {
         if (shop != null)
-            setResult(Activity.RESULT_OK, Intent())
+            setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_SHOP, shop))
         finish()
     }
 

@@ -33,6 +33,11 @@ fun <T : RealmObject> realmListOf(collection: Collection<T> = emptyList()): Real
 
 fun <T> List<T>.limit(count: Int): List<T> = this.subList(0, if (count < size) count else size)
 
+fun <T> MutableCollection<T>.replaceWith(iterable: Iterable<T>) {
+    clear()
+    this += iterable
+}
+
 var View.scales: Float
     get() = throw IllegalAccessError()
     set(value) {

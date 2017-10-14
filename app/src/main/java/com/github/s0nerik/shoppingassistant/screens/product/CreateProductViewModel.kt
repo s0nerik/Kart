@@ -89,7 +89,9 @@ class CreateProductViewModel : BaseViewModel() {
     }
 
     fun selectShop() {
-        TODO()
+        interactor!!.selectShop()
+                .takeUntilCleared()
+                .subscribe { shop = it }
     }
 
     fun toggleFavorite() {

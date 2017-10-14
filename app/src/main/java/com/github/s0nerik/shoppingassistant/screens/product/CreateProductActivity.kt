@@ -11,6 +11,7 @@ import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Price
 import com.github.s0nerik.shoppingassistant.model.Shop
+import com.github.s0nerik.shoppingassistant.screens.product.select_shop.SelectShopActivity
 import io.reactivex.Maybe
 import org.jetbrains.anko.bundleOf
 
@@ -36,6 +37,8 @@ class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        vm.interactor = this
+
         val extraName = intent.getStringExtra(EXTRA_NAME)
         extraName?.let { vm.name = it.capitalize() }
 
@@ -52,10 +55,7 @@ class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, 
         TODO("not implemented")
     }
 
-    override fun selectShop(): Maybe<Shop> {
-//        SelectShopBottomSheet(this)
-        TODO("not implemented")
-    }
+    override fun selectShop(): Maybe<Shop> = SelectShopActivity.startForResult(this)
 
     override fun finishWithResult(item: Item?) {
         if (item != null)

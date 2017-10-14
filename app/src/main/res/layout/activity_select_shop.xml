@@ -76,6 +76,7 @@
                     android:hint="Shop name"
                     android:maxLength="32"
                     android:textAppearance="@style/MaterialTypography.Dense.Body2"
+                    android:text='@={vm.newShopName}'
                     tools:text="ATB"
                     />
             </android.support.design.widget.TextInputLayout>
