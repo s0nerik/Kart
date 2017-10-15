@@ -27,11 +27,13 @@ class SettingsActivityViewModel(val a: SettingsActivity) {
     }
 
     fun selectDefaultCurrency() {
-        SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
+        TODO()
+//        SelectDefaultCurrencyBottomSheet(this).show(a.supportFragmentManager, null)
     }
 
     fun selectExpensesLimit() {
-        SelectExpensesLimitBottomSheet(SelectExpensesLimitViewModel(defaultCurrency.get().symbol)).show(a.supportFragmentManager, null)
+        TODO()
+//        SelectExpensesLimitBottomSheet(SelectExpensesLimitViewModel(defaultCurrency.get().symbol)).show(a.supportFragmentManager, null)
     }
 }
 

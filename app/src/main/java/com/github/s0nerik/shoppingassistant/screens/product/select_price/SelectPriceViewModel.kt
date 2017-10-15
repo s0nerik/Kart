@@ -76,4 +76,8 @@ class SelectPriceViewModel : BaseViewModel() {
         // TODO: save to db
         interactor!!.finishWithResult(Price(value = valueFloat))
     }
+
+    fun cancel() {
+        interactor!!.finishWithResult(null)
+    }
 }

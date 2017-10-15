@@ -18,8 +18,7 @@ import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import io.realm.Realm
-
+import kotlin.reflect.KClass
 
 
 /**
@@ -27,12 +26,16 @@ import io.realm.Realm
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-open class BaseBottomSheet<out T, V : ViewDataBinding>(val vm: T, @LayoutRes val layout: Int) : BottomSheetDialogFragment(), LifecycleProvider<FragmentEvent> {
-    val realm: Realm by lazy { Realm.getDefaultInstance() }
-    lateinit var binding: V
+abstract class BaseBottomSheet<TBinding : ViewDataBinding, out TViewModel : ViewModel>(
+        @LayoutRes val layout: Int,
+        private val vmClass: KClass<TViewModel>
+) : BottomSheetDialogFragment(), LifecycleProvider<FragmentEvent> {
+    val vm by lazy { ViewModelProviders.of(this).get(vmClass.java) }
+
+    lateinit var binding: TBinding
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<V>(inflater, layout, container, false)
+        binding = DataBindingUtil.inflate(inflater, layout, container, false)
         binding.setVariable(BR.vm, vm)
         return binding.root
     }

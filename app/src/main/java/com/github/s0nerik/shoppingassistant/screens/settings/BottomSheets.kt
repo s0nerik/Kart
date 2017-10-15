@@ -1,41 +1,14 @@
 package com.github.s0nerik.shoppingassistant.screens.settings
 
-import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.CoordinatorLayout
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import com.github.nitrico.lastadapter.LastAdapter
-import com.github.nitrico.lastadapter.Type
-import com.github.s0nerik.shoppingassistant.BR
-import com.github.s0nerik.shoppingassistant.ExpensesLimitPeriod
-import com.github.s0nerik.shoppingassistant.MainPrefs
-import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
-import com.github.s0nerik.shoppingassistant.databinding.ActivitySettingsBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemCurrencyBinding
-import com.github.s0nerik.shoppingassistant.databinding.SheetSelectExpensesLimitBinding
-import com.github.s0nerik.shoppingassistant.ext.currenciesSorted
-import com.jakewharton.rxbinding2.widget.textChanges
-import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.activity_select_category.*
-import kotlinx.android.synthetic.main.sheet_select_expenses_limit.*
-import java.text.DecimalFormat
-import java.util.*
-
 /**
  * Created by Alex on 3/23/2017.
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-class SelectDefaultCurrencyBottomSheet(
-        vm: SettingsActivityViewModel
-) : BaseBottomSheet<SettingsActivityViewModel, ActivitySettingsBinding>(vm, R.layout.sheet_select_currency) {
+//class SelectDefaultCurrencyBottomSheet(
+//        vm: SettingsActivityViewModel
+//) : BaseBottomSheet<SettingsActivityViewModel, ActivitySettingsBinding>(vm, R.layout.sheet_select_currency) {
 //    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
 //        LastAdapter(currenciesSorted, BR.item)
@@ -50,7 +23,7 @@ class SelectDefaultCurrencyBottomSheet(
 //                }
 //                .into(recycler)
 //    }
-}
+//}
 
 class SelectExpensesLimitViewModel(val currencySign: String) {
 //    lateinit var f: SelectExpensesLimitBottomSheet
@@ -64,9 +37,9 @@ class SelectExpensesLimitViewModel(val currencySign: String) {
 //    }
 }
 
-class SelectExpensesLimitBottomSheet(
-        vm: SelectExpensesLimitViewModel
-) : BaseBottomSheet<SelectExpensesLimitViewModel, SheetSelectExpensesLimitBinding>(vm, R.layout.sheet_select_expenses_limit) {
+//class SelectExpensesLimitBottomSheet(
+//        vm: SelectExpensesLimitViewModel
+//) : BaseBottomSheet<SelectExpensesLimitViewModel, SheetSelectExpensesLimitBinding>(vm, R.layout.sheet_select_expenses_limit) {
 //    private lateinit var limitTextDisposable: Disposable
 //
 //    var expensesLimit: Float? = MainPrefs.expensesLimit
@@ -119,4 +92,4 @@ class SelectExpensesLimitBottomSheet(
 //        super.onPause()
 //        limitTextDisposable.dispose()
 //    }
-}
+//}

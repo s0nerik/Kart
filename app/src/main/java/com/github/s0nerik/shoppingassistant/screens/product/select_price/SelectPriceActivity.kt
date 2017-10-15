@@ -3,13 +3,13 @@ package com.github.s0nerik.shoppingassistant.screens.product.select_price
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.base.BaseBoundVmActivity
+import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySelectShopBinding
 import com.github.s0nerik.shoppingassistant.ext.startForResult
 import com.github.s0nerik.shoppingassistant.model.Price
 import io.reactivex.Maybe
-import kotlinx.android.synthetic.main.activity_select_price.*
 import java.util.*
 
 
@@ -18,13 +18,20 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class SelectPriceActivity : BaseBoundVmActivity<ActivitySelectShopBinding, SelectPriceViewModel>(
-        R.layout.activity_select_price, SelectPriceViewModel::class
+class SelectPriceActivity : BaseBoundActivity<ActivitySelectShopBinding>(
+        R.layout.activity_select_price
 ), SelectPriceViewModelInteractor {
+    private val fragment = SelectPriceBottomSheet()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.init(this)
-        vm.initQuantityQualifierSpinner(spinnerQuantityQualifier)
+        fragment.show(supportFragmentManager, null)
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+        if (fragment is SelectPriceBottomSheet)
+            fragment.vm.init(this@SelectPriceActivity)
     }
 
     override fun selectCurrency(current: Currency): Maybe<Currency> {
