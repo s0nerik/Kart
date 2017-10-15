@@ -25,6 +25,14 @@ data class Price(
 ) : PaperParcelable {
     enum class QuantityQualifier { ITEM, KG }
 
+//    constructor(
+//            id: String = Db.randomUuidString(),
+//            value: Float? = null,
+//            date: Date = Date(),
+//            currency: Currency = MainPrefs.defaultCurrency,
+//            quantityQualifier: QuantityQualifier = Price.QuantityQualifier.ITEM
+//    ) : this(id, value, date, currency.currencyCode, quantityQualifier.name)
+
     fun convertedTo(currency: Currency): Price {
         if (currencyCode == MainPrefs.defaultCurrencyCode) return this
         return Price(id, Db.exchangedValue(value!!, this.currency, currency, date), date, currency.currencyCode, quantityQualifierName)

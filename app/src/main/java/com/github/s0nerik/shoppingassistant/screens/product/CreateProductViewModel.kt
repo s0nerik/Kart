@@ -81,7 +81,9 @@ class CreateProductViewModel : BaseViewModel() {
         @Bindable("shop") get() = R.drawable.store.getDrawablePath()
 
     fun selectPrice() {
-        TODO()
+        interactor!!.selectPrice()
+                .takeUntilCleared()
+                .subscribe { price = it }
     }
 
     fun selectCategory() {
