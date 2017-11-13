@@ -12,7 +12,6 @@ import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.model.Price
 import com.github.s0nerik.shoppingassistant.model.Shop
 import com.github.s0nerik.shoppingassistant.screens.product.select_category.SelectCategoryActivity
-import com.github.s0nerik.shoppingassistant.screens.product.select_price.SelectPriceActivity
 import com.github.s0nerik.shoppingassistant.screens.product.select_shop.SelectShopActivity
 import io.reactivex.Maybe
 import org.jetbrains.anko.bundleOf
@@ -47,7 +46,7 @@ class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, 
         animator.appear()
     }
 
-    override fun selectPrice(): Maybe<Price> = SelectPriceActivity.startForResult(this)
+    override fun selectPrice(): Maybe<Price> = TODO()
     override fun selectCategory(): Maybe<Category> = SelectCategoryActivity.startForResult(this)
     override fun selectShop(): Maybe<Shop> = SelectShopActivity.startForResult(this)
 

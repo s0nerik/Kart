@@ -1,12 +1,13 @@
 package com.github.s0nerik.shoppingassistant.screens.product.select_price
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.base.BaseBottomSheet
+import com.github.s0nerik.shoppingassistant.R.id.spinnerQuantityQualifier
 import com.github.s0nerik.shoppingassistant.databinding.SheetSelectPriceBinding
-import kotlinx.android.synthetic.main.sheet_select_price.*
+import com.github.s0nerik.shoppingassistant.model.Price
+import io.reactivex.Maybe
+import java.util.*
 
 
 /**
@@ -14,16 +15,16 @@ import kotlinx.android.synthetic.main.sheet_select_price.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class SelectPriceBottomSheet : BaseBottomSheet<SheetSelectPriceBinding, SelectPriceViewModel>(
-        R.layout.sheet_select_price, SelectPriceViewModel::class
-) {
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        vm.initQuantityQualifierSpinner(spinnerQuantityQualifier)
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-        vm.cancel()
-    }
-}
+//class SelectPriceBottomSheet : BaseBottomSheet<SheetSelectPriceBinding, SelectPriceViewModel, Price>(
+//        R.layout.sheet_select_price, SelectPriceViewModel::class
+//), SelectPriceViewModelInteractor {
+//    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        vm.init(this)
+//        vm.initQuantityQualifierSpinner(spinnerQuantityQualifier)
+//    }
+//
+//    override fun selectCurrency(current: Currency): Maybe<Currency> {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
+//}
