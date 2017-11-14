@@ -11,71 +11,81 @@
             type="com.github.s0nerik.shoppingassistant.screens.product.select_price.SelectPriceViewModel"
             />
     </data>
-    <LinearLayout
-        android:id="@+id/groupEditPrice"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/material_color_white"
-        android:elevation="2dp"
-        android:clipChildren="false"
-        android:layout_gravity="bottom"
+        android:animateLayoutChanges="true"
         >
-
-        <FrameLayout
-            android:id="@+id/btnCurrency"
-            android:layout_width="56dp"
-            android:layout_height="64dp"
-            android:foreground="?selectableItemBackgroundBorderless"
-            android:onClick='@{() -> vm.selectCurrency()}'
-            >
-
-            <include
-                layout="@layout/view_currency_sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:sign='@{vm.currency != null ? vm.currency.symbol : "$"}'
-                />
-        </FrameLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/tilPriceValue"
+        <LinearLayout
+            android:id="@+id/groupEditPrice"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:visibility='@{vm.priceVisibility}'
             >
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/etNewPriceValue"
+            <FrameLayout
+                android:id="@+id/btnCurrency"
+                android:layout_width="56dp"
+                android:layout_height="64dp"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:onClick='@{() -> vm.toggleCurrencySelection()}'
+                >
+
+                <include
+                    layout="@layout/view_currency_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:sign='@{vm.currency != null ? vm.currency.symbol : "$"}'
+                    />
+            </FrameLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilPriceValue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Price"
-                android:inputType="numberDecimal"
-                android:textAppearance="@style/MaterialTypography.Dense.Body2"
-                android:text='@={vm.value}'
-                tools:text="120"
+                android:layout_weight="1"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etNewPriceValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Price"
+                    android:inputType="numberDecimal"
+                    android:textAppearance="@style/MaterialTypography.Dense.Body2"
+                    android:text='@={vm.value}'
+                    tools:text="120"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinnerQuantityQualifier"
+                android:layout_width="128dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
                 />
-        </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinnerQuantityQualifier"
-            android:layout_width="128dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
+            <ImageView
+                android:id="@+id/btnPriceOk"
+                android:layout_width="56dp"
+                android:layout_height="64dp"
+                android:layout_weight="0"
+                android:background="?selectableItemBackgroundBorderless"
+                android:onClick='@{() -> vm.confirmPriceSelection()}'
+                android:scaleType="center"
+                android:src="@drawable/ic_done_black_24dp"
+                />
+        </LinearLayout>
+        <include
+            layout="@layout/sheet_select_currency"
+            android:visibility='@{vm.currenciesVisibility}'
+            app:vm='@{vm.selectCurrencyVm}'
+            tools:visibility="gone"
             />
-
-        <ImageView
-            android:id="@+id/btnPriceOk"
-            android:layout_width="56dp"
-            android:layout_height="64dp"
-            android:layout_weight="0"
-            android:background="?selectableItemBackgroundBorderless"
-            android:onClick='@{() -> vm.confirmPriceSelection()}'
-            android:scaleType="center"
-            android:src="@drawable/ic_done_black_24dp"
-            />
-    </LinearLayout>
+    </FrameLayout>
 </layout>

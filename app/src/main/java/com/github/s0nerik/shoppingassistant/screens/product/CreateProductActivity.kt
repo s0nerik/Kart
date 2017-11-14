@@ -9,11 +9,12 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivityCreateProductBin
 import com.github.s0nerik.shoppingassistant.ext.startForResult
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Item
-import com.github.s0nerik.shoppingassistant.model.Price
 import com.github.s0nerik.shoppingassistant.model.Shop
 import com.github.s0nerik.shoppingassistant.screens.product.select_category.SelectCategoryActivity
 import com.github.s0nerik.shoppingassistant.screens.product.select_shop.SelectShopActivity
 import io.reactivex.Maybe
+import kotlinx.android.synthetic.main.sheet_select_currency.*
+import kotlinx.android.synthetic.main.sheet_select_price.*
 import org.jetbrains.anko.bundleOf
 
 /**
@@ -38,7 +39,8 @@ class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.interactor = this
+        vm.init(this)
+        vm.initViews(spinnerQuantityQualifier, recycler)
 
         val extraName = intent.getStringExtra(EXTRA_NAME)
         extraName?.let { vm.name = it.capitalize() }
@@ -46,7 +48,6 @@ class CreateProductActivity : BaseBoundVmActivity<ActivityCreateProductBinding, 
         animator.appear()
     }
 
-    override fun selectPrice(): Maybe<Price> = TODO()
     override fun selectCategory(): Maybe<Category> = SelectCategoryActivity.startForResult(this)
     override fun selectShop(): Maybe<Shop> = SelectShopActivity.startForResult(this)
 

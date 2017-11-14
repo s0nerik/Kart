@@ -1,6 +1,8 @@
 package com.github.s0nerik.shoppingassistant.screens.product.select_price
 
 import android.databinding.Bindable
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.github.s0nerik.shoppingassistant.BR
@@ -8,6 +10,8 @@ import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseViewModel
 import com.github.s0nerik.shoppingassistant.model.Price
+import com.github.s0nerik.shoppingassistant.screens.common.select_currency.SelectCurrencyViewModel
+import com.github.s0nerik.shoppingassistant.screens.common.select_currency.SelectCurrencyViewModelInteractor
 import com.github.s0nerik.shoppingassistant.utils.weak
 import com.jakewharton.rxbinding2.widget.itemSelections
 import java.util.*
@@ -18,8 +22,19 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-class SelectPriceViewModel : BaseViewModel() {
+class SelectPriceViewModel : BaseViewModel(), SelectCurrencyViewModelInteractor {
+    enum class State { PRICE, CURRENCY }
+
     private var interactor by weak<SelectPriceViewModelInteractor>()
+
+    val selectCurrencyVm = SelectCurrencyViewModel()
+
+    var state: State = State.PRICE
+        @Bindable get
+        private set(value) {
+            field = value
+            notifyPropertyChanged(BR.state)
+        }
 
     var currency: Currency = MainPrefs.defaultCurrency
         @Bindable get
@@ -51,8 +66,15 @@ class SelectPriceViewModel : BaseViewModel() {
             notifyPropertyChanged(BR.quantityQualifier)
         }
 
+    val priceVisibility
+        @Bindable("state") get() = if (state == State.PRICE) View.VISIBLE else View.GONE
+
+    val currenciesVisibility
+        @Bindable("state") get() = if (state == State.CURRENCY) View.VISIBLE else View.GONE
+
     fun init(interactor: SelectPriceViewModelInteractor) {
         this.interactor = interactor
+        selectCurrencyVm.init(this)
     }
 
     fun initQuantityQualifierSpinner(spinner: Spinner) {
@@ -68,16 +90,20 @@ class SelectPriceViewModel : BaseViewModel() {
                 }
     }
 
-    fun selectCurrency() {
-        TODO()
+    fun initCurrenciesRecycler(recycler: RecyclerView) {
+        selectCurrencyVm.initRecycler(recycler)
+    }
+
+    fun toggleCurrencySelection() {
+        state = if (state == State.CURRENCY) State.PRICE else State.CURRENCY
     }
 
     fun confirmPriceSelection() {
         // TODO: save to db
-        interactor!!.finishWithResult(Price(value = valueFloat))
+        interactor!!.onPriceSelected(Price(value = valueFloat))
     }
 
-    fun cancel() {
-        interactor!!.finishWithResult(null)
+    override fun onCurrencySelected(currency: Currency) {
+        this.currency = currency
     }
 }

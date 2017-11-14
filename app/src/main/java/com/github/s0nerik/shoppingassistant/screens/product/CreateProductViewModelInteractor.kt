@@ -13,7 +13,6 @@ import io.reactivex.Maybe
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 interface CreateProductViewModelInteractor {
-    fun selectPrice(): Maybe<Price>
     fun selectCategory(): Maybe<Category>
     fun selectShop(): Maybe<Shop>
     fun finishWithResult(item: Item?)

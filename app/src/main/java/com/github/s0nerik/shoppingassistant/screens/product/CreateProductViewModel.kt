@@ -1,6 +1,8 @@
 package com.github.s0nerik.shoppingassistant.screens.product
 
 import android.databinding.Bindable
+import android.support.v7.widget.RecyclerView
+import android.widget.Spinner
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseViewModel
@@ -8,10 +10,23 @@ import com.github.s0nerik.shoppingassistant.getDrawablePath
 import com.github.s0nerik.shoppingassistant.model.Category
 import com.github.s0nerik.shoppingassistant.model.Price
 import com.github.s0nerik.shoppingassistant.model.Shop
+import com.github.s0nerik.shoppingassistant.screens.product.select_price.SelectPriceViewModel
+import com.github.s0nerik.shoppingassistant.screens.product.select_price.SelectPriceViewModelInteractor
 import com.github.s0nerik.shoppingassistant.utils.weak
 
-class CreateProductViewModel : BaseViewModel() {
-    var interactor by weak<CreateProductViewModelInteractor>()
+class CreateProductViewModel : BaseViewModel(), SelectPriceViewModelInteractor {
+    enum class State { CREATE_PRODUCT, SELECT_PRICE }
+
+    private var interactor by weak<CreateProductViewModelInteractor>()
+
+    val selectPriceVm: SelectPriceViewModel = SelectPriceViewModel()
+
+    var state: State = State.CREATE_PRODUCT
+        @Bindable get
+        private set(value) {
+            field = value
+            notifyPropertyChanged(BR.state)
+        }
 
     var name: String = ""
         @Bindable get
@@ -80,10 +95,18 @@ class CreateProductViewModel : BaseViewModel() {
     val shopIconUrl: String
         @Bindable("shop") get() = R.drawable.store.getDrawablePath()
 
+    fun init(interactor: CreateProductViewModelInteractor) {
+        this.interactor = interactor
+        selectPriceVm.init(this)
+    }
+
+    fun initViews(quantityQualifierSpinner: Spinner, currenciesRecycler: RecyclerView) {
+        selectPriceVm.initQuantityQualifierSpinner(quantityQualifierSpinner)
+        selectPriceVm.initCurrenciesRecycler(currenciesRecycler)
+    }
+
     fun selectPrice() {
-        interactor!!.selectPrice()
-                .takeUntilCleared()
-                .subscribe { price = it }
+        state = State.SELECT_PRICE
     }
 
     fun selectCategory() {
@@ -108,5 +131,9 @@ class CreateProductViewModel : BaseViewModel() {
 
     fun cancel() {
         interactor!!.finishWithResult(null)
+    }
+
+    override fun onPriceSelected(price: Price) {
+        this.price = price
     }
 }

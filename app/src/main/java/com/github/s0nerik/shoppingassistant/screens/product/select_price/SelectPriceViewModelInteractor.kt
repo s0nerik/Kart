@@ -11,6 +11,5 @@ import java.util.*
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 interface SelectPriceViewModelInteractor {
-    fun selectCurrency(current: Currency): Maybe<Currency>
-    fun finishWithResult(price: Price?)
+    fun onPriceSelected(price: Price)
 }

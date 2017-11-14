@@ -34,7 +34,7 @@
             android:text='@{item.displayName}'
             android:textAppearance="@style/MaterialTypography.Dense.Body1"
             android:maxLines="1"
-            tools:text="Food"
+            tools:text="US Dollar"
             />
     </RelativeLayout>
 </layout>

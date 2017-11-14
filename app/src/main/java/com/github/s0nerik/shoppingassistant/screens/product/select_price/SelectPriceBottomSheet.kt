@@ -24,7 +24,7 @@ import java.util.*
 //        vm.initQuantityQualifierSpinner(spinnerQuantityQualifier)
 //    }
 //
-//    override fun selectCurrency(current: Currency): Maybe<Currency> {
+//    override fun toggleCurrencySelection(current: Currency): Maybe<Currency> {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 //    }
 //}
