@@ -21,4 +21,4 @@ fun View.disappearScaleOut(duration: Long = 200) {
     animate().scaleX(0f).scaleY(0f).setDuration(duration).start()
 }
 
-suspend fun Deferred<Boolean>.awaitPreDraw(v: View) = v.preDraws(Callable { true }).onMainThread().awaitFirst()
+suspend fun Deferred<Boolean>.awaitPreDraw(v: View) = v.preDraws(Callable { true }).observeOnMainThread().awaitFirst()

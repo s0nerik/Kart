@@ -3,6 +3,7 @@ package com.github.s0nerik.shoppingassistant.base
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.Bindable
+import android.databinding.Observable.OnPropertyChangedCallback
 import android.databinding.ObservableField
 import android.databinding.PropertyChangeRegistry
 import com.github.s0nerik.shoppingassistant.ext.asLiveData
@@ -10,12 +11,14 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.CancellationException
 
 
 /**
- * Created by Alex Isaienko on 10/8/17.
+ * Created by Alex Isaienko on 10/16/17.
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
@@ -31,15 +34,49 @@ open class BaseViewModel : ViewModel(), android.databinding.Observable {
         clearedSubject.onNext(Unit)
     }
 
-    fun <T> Flowable<T>.takeUntilCleared(): Flowable<T> = this.takeUntil(clearedProcessor)
-    fun <T> Maybe<T>.takeUntilCleared(): Maybe<T> = this.takeUntil(clearedProcessor)
-    fun <T> Single<T>.takeUntilCleared(): Single<T> = this.takeUntil(clearedProcessor)
+    //region takeUntilCleared implementations
+    fun <T> Flowable<T>.takeUntilCleared(): Flowable<T> = takeUntil(clearedProcessor)
+            .onErrorResumeNext { t: Throwable -> if (t is CancellationException) Flowable.empty() else Flowable.error(t) }
 
-    fun <T> Observable<T>.takeUntilCleared(): Observable<T> = this.takeUntil(clearedSubject)
+    fun <T> Observable<T>.takeUntilCleared(): Observable<T> = takeUntil(clearedSubject)
+            .onErrorResumeNext { t: Throwable -> if (t is CancellationException) Observable.empty() else Observable.error(t) }
+
+    fun <T> Maybe<T>.takeUntilCleared(): Maybe<T> = takeUntil(clearedProcessor)
+            .onErrorResumeNext { t: Throwable -> if (t is CancellationException) Maybe.empty() else Maybe.error(t) }
+
+    fun <T> Single<T>.takeUntilCleared(): Maybe<T> = toMaybe().takeUntil(clearedProcessor)
+            .onErrorResumeNext { t: Throwable -> if (t is CancellationException) Maybe.empty() else Maybe.error(t) }
+    //endregion
+
+    //region subscribeUntilCleared implementations
+    fun <T> Flowable<T>.subscribeUntilCleared(
+            onNext: (T) -> Unit,
+            onError: (Throwable) -> Unit = {},
+            onComplete: () -> Unit = {}
+    ): Disposable = takeUntilCleared().subscribe(onNext, onError, onComplete)
+
+    fun <T> Observable<T>.subscribeUntilCleared(
+            onNext: (T) -> Unit,
+            onError: (Throwable) -> Unit = {},
+            onComplete: () -> Unit = {}
+    ): Disposable = takeUntilCleared().subscribe(onNext, onError, onComplete)
+
+    fun <T> Maybe<T>.subscribeUntilCleared(
+            onSuccess: (T) -> Unit,
+            onError: (Throwable) -> Unit = {},
+            onComplete: () -> Unit = {}
+    ): Disposable = takeUntilCleared().subscribe(onSuccess, onError, onComplete)
+
+    fun <T> Single<T>.subscribeUntilCleared(
+            onSuccess: (T) -> Unit,
+            onError: (Throwable) -> Unit = {},
+            onComplete: () -> Unit = {}
+    ): Disposable = takeUntilCleared().subscribe(onSuccess, onError, onComplete)
+    //endregion
 
     fun <T> ObservableField<T>.asLiveData(): LiveData<T> {
         return Observable.create<T> { emitter ->
-            val callback = object : android.databinding.Observable.OnPropertyChangedCallback() {
+            val callback = object : OnPropertyChangedCallback() {
                 override fun onPropertyChanged(dataBindingObservable: android.databinding.Observable, propertyId: Int) {
                     if (dataBindingObservable === this@asLiveData) {
                         emitter.onNext(this@asLiveData.get())
@@ -52,7 +89,22 @@ open class BaseViewModel : ViewModel(), android.databinding.Observable {
         }.takeUntilCleared().asLiveData()
     }
 
-    override fun addOnPropertyChangedCallback(callback: android.databinding.Observable.OnPropertyChangedCallback) {
+    fun <T : android.databinding.Observable> T.observePropertyChanges(bindablePropertyId: Int): Observable<T> {
+        return Observable.create<T> { emitter ->
+            val callback = object : OnPropertyChangedCallback() {
+                override fun onPropertyChanged(dataBindingObservable: android.databinding.Observable, propertyId: Int) {
+                    if (dataBindingObservable === this@observePropertyChanges && propertyId == bindablePropertyId) {
+                        emitter.onNext(this@observePropertyChanges)
+                    }
+                }
+            }
+
+            this@observePropertyChanges.addOnPropertyChangedCallback(callback)
+            emitter.setCancellable { this@observePropertyChanges.removeOnPropertyChangedCallback(callback) }
+        }.takeUntilCleared()
+    }
+
+    override fun addOnPropertyChangedCallback(callback: OnPropertyChangedCallback) {
         synchronized(this) {
             if (callbacks == null) {
                 callbacks = PropertyChangeRegistry()
@@ -61,7 +113,7 @@ open class BaseViewModel : ViewModel(), android.databinding.Observable {
         callbacks!!.add(callback)
     }
 
-    override fun removeOnPropertyChangedCallback(callback: android.databinding.Observable.OnPropertyChangedCallback) {
+    override fun removeOnPropertyChangedCallback(callback: OnPropertyChangedCallback) {
         synchronized(this) {
             if (callbacks == null) {
                 return
