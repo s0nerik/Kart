@@ -53,7 +53,7 @@ class PurchaseListsFragment : BaseBoundFragment<FragmentListsBinding>(R.layout.f
         prepareList()
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = vm
 

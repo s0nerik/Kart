@@ -39,12 +39,12 @@ abstract class BaseBoundVmFragment<out TBinding : ViewDataBinding, out TViewMode
 ) : BaseBoundFragment<TBinding>(layoutId) {
     protected val vm: TViewModel by lazy { ViewModelProviders.of(this).get(vmClass.java) }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (autoBindVm) binding.setVariable(BR.vm, vm)
     }
 
     protected inline fun <reified TViewModel: ViewModel> getActivityViewModel(): TViewModel {
-        return ViewModelProviders.of(activity).get(TViewModel::class.java)
+        return ViewModelProviders.of(activity!!).get(TViewModel::class.java)
     }
 }

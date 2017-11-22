@@ -72,7 +72,7 @@ class DashboardFragment : BaseBoundVmFragment<FragmentDashboardBinding, Dashboar
 ) {
     private val animator = DashboardAnimator(this)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         vm.initRecentsRecycler(recentsRecycler, scrollView)
