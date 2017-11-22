@@ -1,25 +1,27 @@
 package com.github.s0nerik.shoppingassistant.model
 
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.github.s0nerik.shoppingassistant.Db
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import paperparcel.PaperParcel
-import paperparcel.PaperParcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by Alex on 12/27/2016.
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class Item(
         val id: String = Db.randomUuidString(),
         val name: String = "",
         val category: Category? = null,
         val priceHistory: PriceHistory = PriceHistory(),
         val isFavorite: Boolean = false
-) : PaperParcelable {
+) : Parcelable {
     val readableNamePreview: String
         get() = if (name.isNotBlank()) name else ""
     val readableName: String
@@ -34,9 +36,6 @@ data class Item(
         get() = category!!.iconUrl
 
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelItem.CREATOR
-
         fun from(i: RealmItem): Item {
             return Item(i.id, i.name, Category.from(i.category!!), PriceHistory.from(i.priceHistory!!), i.isFavorite)
         }

@@ -1,5 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
@@ -8,8 +10,7 @@ import com.github.s0nerik.shoppingassistant.ext.realmListOf
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import paperparcel.PaperParcel
-import paperparcel.PaperParcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -17,12 +18,13 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class PriceHistory(
         val id: String = Db.randomUuidString(),
         val shop: Shop? = null,
         val values: List<Price> = emptyList()
-) : PaperParcelable {
+) : Parcelable {
     val currentValueString: String
         get() = getPriceString(Date(), true)
 
@@ -65,9 +67,6 @@ data class PriceHistory(
     }
 
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelPriceHistory.CREATOR
-
         fun from(e: RealmPriceHistory): PriceHistory {
             return PriceHistory(e.id, Shop.from(e.shop!!), e.values.map { Price.from(it) })
         }

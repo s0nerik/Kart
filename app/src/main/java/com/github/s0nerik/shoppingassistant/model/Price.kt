@@ -1,13 +1,14 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.ext.getString
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import paperparcel.PaperParcel
-import paperparcel.PaperParcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -15,14 +16,15 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class Price(
         val id: String = Db.randomUuidString(),
         val value: Float? = null,
         val date: Date = Date(),
         var currencyCode: String = MainPrefs.defaultCurrencyCode,
         var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
-) : PaperParcelable {
+) : Parcelable {
     enum class QuantityQualifier { ITEM, KG }
 
 //    constructor(
@@ -55,9 +57,6 @@ data class Price(
     }
 
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelPrice.CREATOR
-
         fun from(e: RealmPrice): Price {
             return Price(e.id, e.value, e.date, e.currencyCode, e.quantityQualifierName)
         }

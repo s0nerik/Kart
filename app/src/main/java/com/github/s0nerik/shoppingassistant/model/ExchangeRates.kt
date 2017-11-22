@@ -1,11 +1,12 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.vicpin.krealmextensions.save
 import io.realm.RealmList
 import io.realm.RealmObject
-import paperparcel.PaperParcel
-import paperparcel.PaperParcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -13,31 +14,27 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class ExchangeRates(
         val date: Date,
         val sourceCurrencyCode: String,
         val rates: List<ExchangeRate>
-) : PaperParcelable {
+) : Parcelable {
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelExchangeRates.CREATOR
-
         fun from(e: RealmExchangeRates): ExchangeRates {
             return ExchangeRates(e.date, e.sourceCurrencyCode, e.rates.map { ExchangeRate.from(it) })
         }
     }
 }
 
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class ExchangeRate(
         val currencyCode: String,
         val value: Float
-) : PaperParcelable {
+) : Parcelable {
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelExchangeRate.CREATOR
-
         fun from(e: RealmExchangeRate): ExchangeRate {
             return ExchangeRate(e.currencyCode, e.value)
         }

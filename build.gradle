@@ -17,8 +17,6 @@ buildscript {
         rxbinding_version = '2.0.0'
         rxlifecycle_version = '2.2.1'
 
-        paperparcel_version = '2.0.4'
-
         retrofit_version = '2.2.0'
 
         kotpref_version = '2.1.2'

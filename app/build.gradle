@@ -160,11 +160,6 @@ dependencies {
     implementation "com.chibatching.kotpref:enum-support:$kotpref_version"
     implementation "com.chibatching.kotpref:gson-support:$kotpref_version"
 
-    // Parcelable generator
-    implementation "nz.bradcampbell:paperparcel:$paperparcel_version"
-    implementation "nz.bradcampbell:paperparcel-kotlin:$paperparcel_version"
-    kapt "nz.bradcampbell:paperparcel-compiler:$paperparcel_version"
-
     // DI
     implementation 'org.koin:koin-android:0.5.2'
 }

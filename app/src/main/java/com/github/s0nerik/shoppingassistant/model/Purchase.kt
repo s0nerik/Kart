@@ -1,5 +1,7 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.R
@@ -7,8 +9,7 @@ import com.github.s0nerik.shoppingassistant.ext.getString
 import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import paperparcel.PaperParcel
-import paperparcel.PaperParcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -16,13 +17,14 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class Purchase(
         val id: String = Db.randomUuidString(),
         val item: Item,
         val date: Date,
         val amount: Float = 1f
-) : PaperParcelable {
+) : Parcelable {
     val readableName: String
         get() = item.readableName
     val readablePrice: String
@@ -61,9 +63,6 @@ data class Purchase(
     fun remove() = MainRepository.delete(this)
 
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelPurchase.CREATOR
-
         fun from(p: RealmPurchase): Purchase {
             return Purchase(p.id, Item.from(p.item!!), p.date!!, p.amount)
         }
@@ -83,18 +82,16 @@ open class RealmPurchase(
     }
 }
 
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 open class FuturePurchase(
         @PrimaryKey open var id: String = Db.randomUuidString(),
         open var item: Item? = null,
         open var creationDate: Date? = null,
         open var lastUpdate: Date? = null,
         open var amount: Float = 1f
-) : PaperParcelable {
+) : Parcelable {
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelPurchase.CREATOR
-
         fun from(p: RealmFuturePurchase): FuturePurchase {
             return FuturePurchase(p.id, Item.from(p.item!!), p.creationDate, p.lastUpdate, p.amount)
         }

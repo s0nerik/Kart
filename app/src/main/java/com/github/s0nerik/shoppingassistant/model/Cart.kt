@@ -1,6 +1,8 @@
 package com.github.s0nerik.shoppingassistant.model
 
+import android.annotation.SuppressLint
 import android.databinding.ObservableList
+import android.os.Parcelable
 import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
 import com.github.s0nerik.shoppingassistant.ext.realmListOf
@@ -8,8 +10,7 @@ import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import paperparcel.PaperParcel
-import paperparcel.PaperParcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -17,16 +18,14 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
-@PaperParcel
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class Cart(
         val id: String = Db.randomUuidString(),
         val date: Date = Date(),
         val purchases: List<Purchase>
-) : PaperParcelable {
+) : Parcelable {
     companion object {
-        @JvmField
-        val CREATOR = PaperParcelCart.CREATOR
-
         private val _purchases = observableListOf<Purchase>()
 
         fun get(): ObservableList<Purchase> = _purchases
