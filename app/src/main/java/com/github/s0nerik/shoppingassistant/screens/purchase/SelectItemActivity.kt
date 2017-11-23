@@ -62,7 +62,7 @@ class SelectItemActivity : BaseBoundVmActivity<ActivitySelectItemBinding, Select
     override fun finish() {
         animator.disappear {
             selectedItem?.let {
-                setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_ITEM, it.id))
+                setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_ITEM, it))
             } ?: setResult(Activity.RESULT_CANCELED)
             super.finish()
         }
