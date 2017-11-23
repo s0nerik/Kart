@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screens.purchase.SelectItemActivity"
+            android:name=".screens.select_item.SelectItemActivity"
             android:theme="@style/AppTheme.CreatePurchaseActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
             android:launchMode="singleTop"

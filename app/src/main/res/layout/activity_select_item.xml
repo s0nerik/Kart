@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity"
+    tools:context="com.github.s0nerik.shoppingassistant.screens.select_item.SelectItemActivity"
     >
     <data>
         <import type="android.view.View"/>
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.select_item.SelectItemViewModel"
             />
     </data>
     <RelativeLayout

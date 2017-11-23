@@ -1,4 +1,4 @@
-package com.github.s0nerik.shoppingassistant.screens.purchase
+package com.github.s0nerik.shoppingassistant.screens.select_item
 
 import android.databinding.Bindable
 import android.support.v7.widget.RecyclerView
@@ -6,7 +6,6 @@ import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
 import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.R.id.*
 import com.github.s0nerik.shoppingassistant.base.BaseViewModel
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding

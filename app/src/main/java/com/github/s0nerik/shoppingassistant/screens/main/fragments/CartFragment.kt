@@ -22,7 +22,7 @@ import com.github.s0nerik.shoppingassistant.ext.KTransition
 import com.github.s0nerik.shoppingassistant.ext.KTransitionSet
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.RealmPurchase
-import com.github.s0nerik.shoppingassistant.screens.purchase.SelectItemActivity
+import com.github.s0nerik.shoppingassistant.screens.select_item.SelectItemActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import kotlinx.android.synthetic.main.fragment_cart.*

@@ -1,4 +1,4 @@
-package com.github.s0nerik.shoppingassistant.screens.purchase
+package com.github.s0nerik.shoppingassistant.screens.select_item
 
 import com.github.s0nerik.shoppingassistant.model.Item
 import io.reactivex.Maybe

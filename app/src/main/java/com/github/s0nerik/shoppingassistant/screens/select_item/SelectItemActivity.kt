@@ -1,31 +1,18 @@
-package com.github.s0nerik.shoppingassistant.screens.purchase
+package com.github.s0nerik.shoppingassistant.screens.select_item
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.WindowManager
-import com.github.nitrico.lastadapter.LastAdapter
-import com.github.nitrico.lastadapter.Type
-import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
-import com.github.s0nerik.shoppingassistant.base.BaseBoundActivity
 import com.github.s0nerik.shoppingassistant.base.BaseBoundVmActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivitySelectItemBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
-import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
-import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.startForResult
-import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Item
-import com.github.s0nerik.shoppingassistant.model.RealmItem
 import com.github.s0nerik.shoppingassistant.screens.product.CreateProductActivity
-import com.trello.rxlifecycle2.android.ActivityEvent
-import com.trello.rxlifecycle2.kotlin.bindUntilEvent
-import com.vicpin.krealmextensions.queryFirst
 import io.reactivex.Maybe
 import kotlinx.android.synthetic.main.activity_select_item.*
-import rx_activity_result2.RxActivityResult
 
 class SelectItemActivity : BaseBoundVmActivity<ActivitySelectItemBinding, SelectItemViewModel>(
     R.layout.activity_select_item, SelectItemViewModel::class
