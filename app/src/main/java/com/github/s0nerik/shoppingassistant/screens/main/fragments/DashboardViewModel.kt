@@ -20,6 +20,7 @@ import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
 import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import com.github.s0nerik.shoppingassistant.repositories.stats.StatsRepository
+import com.github.s0nerik.shoppingassistant.screens.main.MainViewModel
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
 import com.github.s0nerik.shoppingassistant.utils.weak
@@ -33,6 +34,8 @@ import java.text.DecimalFormat
  */
 class DashboardViewModel : BaseViewModel() {
     var interactor by weak<DashboardViewModelInteractor>()
+
+    private lateinit var mainVm: MainViewModel
 
     private val _recentPurchases = observableListOf<Purchase>()
 
@@ -64,6 +67,11 @@ class DashboardViewModel : BaseViewModel() {
 
     val showMoneySpent: Boolean
         @Bindable("dataPeriod") get() = MainRepository.getMoneySpent().blockingGet() > 0
+
+    fun init(mainVm: MainViewModel) {
+        this.mainVm = mainVm
+        mainVm.observeDataPeriodChanges().subscribe { this.dataPeriod = it }
+    }
 
     fun initRecentsRecycler(recentsRecycler: RecyclerView, scrollView: NestedScrollView) {
         LastAdapter(_recentPurchases, BR.item)

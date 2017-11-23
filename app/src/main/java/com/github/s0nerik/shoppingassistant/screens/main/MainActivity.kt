@@ -35,7 +35,7 @@ class MainActivity : BaseBoundVmActivity<ActivityMainBinding, MainViewModel>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.interactor = this
+        vm.init(this)
 
         toolbar.setOnMenuItemClickListener {
             if (it!!.itemId == R.id.settings)

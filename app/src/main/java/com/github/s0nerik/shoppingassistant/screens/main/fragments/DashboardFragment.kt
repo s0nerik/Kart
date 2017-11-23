@@ -74,7 +74,7 @@ class DashboardFragment : BaseBoundVmFragment<FragmentDashboardBinding, Dashboar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        vm.init(getActivityViewModel())
         vm.initRecentsRecycler(recentsRecycler, scrollView)
         vm.initStatsViewPager(childFragmentManager, statsPager, statsPagerTabs)
 
