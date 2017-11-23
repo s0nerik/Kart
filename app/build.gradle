@@ -148,7 +148,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
     // Misc
-    implementation 'com.github.ajalt:timberkt:1.2.0'
+    implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation "com.github.debop:koda-time:1.0.0"
     implementation 'com.github.vicpinm:krealmextensions:1.0.6'
     debugImplementation 'com.facebook.stetho:stetho:1.4.2'
