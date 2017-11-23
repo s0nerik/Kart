@@ -6,9 +6,10 @@
     >
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="vm"
-            type="com.github.s0nerik.shoppingassistant.screens.main.fragments.CartViewModel"
+            type="com.github.s0nerik.shoppingassistant.screens.main.cart.CartViewModel"
             />
     </data>
 
@@ -17,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
+        android:animateLayoutChanges="true"
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
@@ -32,6 +34,7 @@
         <LinearLayout
             android:id="@+id/emptyCart"
             android:layout_above="@+id/bottomButtons"
+            android:visibility='@{vm.items.empty ? View.VISIBLE : View.GONE}'
             style="@style/AppTheme.EmptyScreen.Layout"
             >
             <ImageView
@@ -63,6 +66,7 @@
             android:orientation="horizontal"
             android:background="@color/material_color_grey_50"
             android:elevation="8dp"
+            android:visibility='@{vm.items.empty ? View.GONE : View.VISIBLE}'
             >
             <Button
                 android:layout_width="match_parent"

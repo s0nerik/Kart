@@ -26,35 +26,32 @@ data class Cart(
         val purchases: List<Purchase>
 ) : Parcelable {
     companion object {
-        private val _purchases = observableListOf<Purchase>()
+        private val purchases = observableListOf<Purchase>()
 
-        fun get(): ObservableList<Purchase> = _purchases
+        fun get(): ObservableList<Purchase> = purchases
 
         fun add(purchase: Purchase) {
-            _purchases.add(purchase)
+            purchases.add(purchase)
         }
         fun add(item: Item, date: Date = Date()) {
             add(Purchase(item = item, date = date))
         }
         @JvmStatic
         fun remove(purchase: Purchase) {
-            _purchases.remove(purchase)
+            purchases.remove(purchase)
         }
         fun save() {
-            val cart = Cart(purchases = _purchases)
+            val cart = Cart(purchases = purchases)
             MainRepository.save(cart)
-            _purchases.clear()
+            purchases.clear()
         }
         fun clear() {
-            _purchases.clear()
+            purchases.clear()
         }
-        fun isEmpty(): Boolean {
-            return _purchases.size == 0
-        }
+        fun isEmpty(): Boolean = purchases.size == 0
 
-        fun from(c: RealmCart): Cart {
-            return Cart(c.id, c.date, c.purchases.map { Purchase.from(it) }.toMutableList())
-        }
+        fun from(c: RealmCart): Cart =
+                Cart(c.id, c.date, c.purchases.map { Purchase.from(it) }.toMutableList())
     }
 }
 

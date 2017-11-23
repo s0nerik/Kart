@@ -9,7 +9,7 @@ import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundVmActivity
 import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
 import com.github.s0nerik.shoppingassistant.model.RealmPurchase
-import com.github.s0nerik.shoppingassistant.screens.main.fragments.CartFragment
+import com.github.s0nerik.shoppingassistant.screens.main.cart.CartFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.PurchaseListsFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.history.HistoryFragment

@@ -55,11 +55,19 @@ open class BaseViewModel : ViewModel(), android.databinding.Observable {
             onComplete: () -> Unit = {}
     ): Disposable = takeUntilCleared().subscribe(onNext, onError, onComplete)
 
+    fun <T> Flowable<T>.subscribeUntilCleared(
+            onNext: (T) -> Unit
+    ): Disposable = takeUntilCleared().subscribe(onNext, {}, {})
+
     fun <T> Observable<T>.subscribeUntilCleared(
             onNext: (T) -> Unit,
             onError: (Throwable) -> Unit = {},
             onComplete: () -> Unit = {}
     ): Disposable = takeUntilCleared().subscribe(onNext, onError, onComplete)
+
+    fun <T> Observable<T>.subscribeUntilCleared(
+            onNext: (T) -> Unit
+    ): Disposable = takeUntilCleared().subscribe(onNext, {}, {})
 
     fun <T> Maybe<T>.subscribeUntilCleared(
             onSuccess: (T) -> Unit,
@@ -67,11 +75,19 @@ open class BaseViewModel : ViewModel(), android.databinding.Observable {
             onComplete: () -> Unit = {}
     ): Disposable = takeUntilCleared().subscribe(onSuccess, onError, onComplete)
 
+    fun <T> Maybe<T>.subscribeUntilCleared(
+            onSuccess: (T) -> Unit
+    ): Disposable = takeUntilCleared().subscribe(onSuccess, {}, {})
+
     fun <T> Single<T>.subscribeUntilCleared(
             onSuccess: (T) -> Unit,
             onError: (Throwable) -> Unit = {},
             onComplete: () -> Unit = {}
     ): Disposable = takeUntilCleared().subscribe(onSuccess, onError, onComplete)
+
+    fun <T> Single<T>.subscribeUntilCleared(
+            onSuccess: (T) -> Unit
+    ): Disposable = takeUntilCleared().subscribe(onSuccess, {}, {})
     //endregion
 
     fun <T> ObservableField<T>.asLiveData(): LiveData<T> {
