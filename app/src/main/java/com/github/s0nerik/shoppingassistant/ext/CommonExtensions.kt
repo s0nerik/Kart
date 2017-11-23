@@ -3,6 +3,7 @@ package com.github.s0nerik.shoppingassistant.ext
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import android.view.View
+import android.view.ViewTreeObserver
 import com.github.s0nerik.shoppingassistant.SUPPORTED_CURRENCIES
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -50,3 +51,15 @@ val currenciesSorted: List<Currency>
             .toList()
             .sortedBy { it.symbol }
             .sortedBy { it.symbol.length }
+
+fun View.doAfterLayout(removeCondition: () -> Boolean = { true }, block: () -> Unit) {
+    viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+            if (removeCondition())
+                viewTreeObserver.removeOnPreDrawListener(this)
+            block()
+            return false
+        }
+
+    })
+}

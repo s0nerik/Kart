@@ -13,11 +13,14 @@ import android.support.annotation.MenuRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.Toolbar
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.TextView
+import com.github.s0nerik.shoppingassistant.ext.doAfterLayout
 import com.github.s0nerik.shoppingassistant.ext.safe
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.windowManager
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -180,4 +183,23 @@ private fun getNavBarHeight(c: Context): Int {
 
 private fun isTablet(c: Context): Boolean {
     return c.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
+}
+
+@BindingAdapter("adjustBottomListHeight")
+fun adjustBottomListHeight(card: CardView, enabled: Boolean) {
+    if (enabled) {
+        card.doAfterLayout {
+            val location = IntArray(2)
+            card.getLocationOnScreen(location)
+            val x = location[0]
+            val y = location[1]
+            val displayMetrics = DisplayMetrics()
+            card.context.windowManager
+                    .defaultDisplay
+                    .getMetrics(displayMetrics)
+            val displayHeight = displayMetrics.heightPixels
+            card.layoutParams.height = displayHeight - y + getStatusBarHeight(card.context)
+            card.requestLayout()
+        }
+    }
 }

@@ -51,6 +51,13 @@ class DashboardViewModel : BaseViewModel() {
             notifyPropertyChanged(BR.dataPeriod)
         }
 
+    var adjustRecentPurchasesHeight: Boolean = true
+    @Bindable get
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.adjustRecentPurchasesHeight)
+    }
+
     val moneySpentAmountString: String
         @Bindable("dataPeriod") get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
                 MainRepository.getMoneySpent(dataPeriod.startDate).blockingGet()
