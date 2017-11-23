@@ -41,6 +41,8 @@ data class Purchase(
     val readableAmount: String
         get() {
             val priceChange = item.priceHistory!!.getPriceChangeForDate(date)
+            priceChange?.quantityQualifier = Price.QuantityQualifier.ITEM // TODO()
+
             return if (amount > 1f && priceChange != null)
                 when (priceChange.quantityQualifier) {
                     Price.QuantityQualifier.ITEM -> "%.0f".format(amount)
