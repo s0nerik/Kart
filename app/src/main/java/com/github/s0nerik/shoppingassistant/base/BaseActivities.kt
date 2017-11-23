@@ -58,8 +58,8 @@ abstract class BaseActivity(
     }
 
     final override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         activityResults.onNext(ActivityResult(requestCode, resultCode, data))
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     protected fun awaitActivityResult(requestCode: Int): Maybe<ActivityResult> = activityResults.filter { it.requestCode == requestCode }.firstElement()
