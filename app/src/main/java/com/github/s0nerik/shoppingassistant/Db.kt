@@ -4,6 +4,8 @@ import android.content.Context
 import com.github.s0nerik.shoppingassistant.FakeDataProvider.createDummyPurchases
 import com.github.s0nerik.shoppingassistant.FakeDataProvider.createDummyShops
 import com.github.s0nerik.shoppingassistant.model.*
+import com.github.s0nerik.shoppingassistant.repositories.stats.IStatsRepository
+import io.reactivex.Single
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.Sort
@@ -17,7 +19,7 @@ import kotlin.reflect.KClass
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-object Db {
+object Db : IStatsRepository {
     private val ctx: Context
         get() = App.context
 
@@ -96,10 +98,11 @@ object Db {
         return Db.recentPurchases(fromDate).map { Purchase.from(it) }.sumByDouble { it.fullPrice.toDouble() }
     }
 
-    fun statsDistribution(fromDate: Date = Date(0)): Map<Category?, List<Purchase>> {
-        return purchases
+    override fun getPurchaseCategoryDistribution(fromDate: Date): Single<Map<Category?, List<Purchase>>> {
+        return Single.just(purchases
                 .filter { it.date!! >= fromDate }
-                .groupBy { it.item?.category }
+                .groupBy { it.item?.category })
+
     }
 
     fun randomUuidString(): String {

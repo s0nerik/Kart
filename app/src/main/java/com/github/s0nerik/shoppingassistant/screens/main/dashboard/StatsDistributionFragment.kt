@@ -2,6 +2,7 @@ package com.github.s0nerik.shoppingassistant.screens.main.dashboard
 
 import android.os.Bundle
 import android.view.View
+import com.github.s0nerik.shoppingassistant.Db
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseBoundVmFragment
 import com.github.s0nerik.shoppingassistant.databinding.FragmentStatsDistributionBinding
@@ -18,7 +19,7 @@ class StatsDistributionFragment : BaseBoundVmFragment<FragmentStatsDistributionB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vm.init(getActivityViewModel())
+        vm.init(getActivityViewModel(), Db)
         vm.initDistributionChart(rvLegend, chart)
     }
 }

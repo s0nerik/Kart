@@ -47,9 +47,7 @@ class StatsDistributionViewModel : BaseViewModel() {
                             .sortedByDescending { it.value }
                             .limit(10)
 
-                    val legendItems = pieEntries.map {
-                        DistributionLegendItem(getColor(ITEM_COLORS[legendItems.size % ITEM_COLORS.size]), it.label)
-                    }
+                    val legendItems = pieEntries.mapIndexed { i, it -> DistributionLegendItem(getColor(ITEM_COLORS[i % ITEM_COLORS.size]), it.label) }
 
                     pieEntries to legendItems
                 }

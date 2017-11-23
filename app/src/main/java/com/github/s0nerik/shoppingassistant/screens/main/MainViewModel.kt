@@ -12,7 +12,10 @@ class MainViewModel : BaseViewModel() {
 
     var dashboardDataPeriod: DashboardDataPeriod = DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod)
         @Bindable get
-        private set
+        private set(value) {
+            field = value
+            notifyPropertyChanged(BR.dashboardDataPeriod)
+        }
 
     var state: State? = null
         @Bindable("dashboardDataPeriod") get
@@ -30,22 +33,10 @@ class MainViewModel : BaseViewModel() {
     fun observeDataPeriodChanges() = observePropertyChanges(BR.dashboardDataPeriod).map { it.dashboardDataPeriod }
 
     fun selectDashboardPeriod() {
-        TODO()
-//        val menu = PopupMenu(activity, activity.btnPeriod, Gravity.TOP.or(Gravity.RIGHT), 0, R.style.Base_Widget_AppCompat_PopupMenu_Overflow)
-//        menu.inflate(R.menu.dashboard_popup_period)
-//        menu.setOnMenuItemClickListener {
-//            val period = when (it.itemId) {
-//                R.id.today -> DashboardDataPeriod.TODAY
-//                R.id.yesterday -> DashboardDataPeriod.YESTERDAY
-//                R.id.last_week -> DashboardDataPeriod.LAST_WEEK
-//                R.id.last_month -> DashboardDataPeriod.LAST_MONTH
-//                R.id.six_months -> DashboardDataPeriod.SIX_MONTHS
-//                R.id.last_year -> DashboardDataPeriod.LAST_YEAR
-//                else -> throw IllegalArgumentException()
-//            }
-//            DashboardFragment.vm.dataPeriod = period
-//            true
-//        }
-//        menu.show()
+        interactor?.let {
+            it.selectDashboardPeriod().subscribe {
+                dashboardDataPeriod = it
+            }
+        }
     }
 }
