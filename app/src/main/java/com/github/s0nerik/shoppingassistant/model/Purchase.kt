@@ -96,14 +96,6 @@ open class FuturePurchase(
             return FuturePurchase(p.id, Item.from(p.item!!), p.creationDate, p.lastUpdate, p.amount)
         }
     }
-
-    fun confirm() {
-        TODO()
-    }
-
-    fun remove() {
-        TODO()
-    }
 }
 
 open class RealmFuturePurchase(

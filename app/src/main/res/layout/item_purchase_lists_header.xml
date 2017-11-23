@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data>
-        <variable name="item" type="com.github.s0nerik.shoppingassistant.screens.main.fragments.PurchasesListHeaderViewModel" />
+        <variable name="item" type="com.github.s0nerik.shoppingassistant.screens.main.purchase_lists.items.Header" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,8 +22,9 @@
             android:maxLines="1"
             android:textAppearance="@style/MaterialTypography.Regular.Body2"
             android:textColor="@color/textColorPrimary"
-            android:text='@{item.readableDate, default=December_12}'
+            android:text='@{item.readableDate}'
             android:elevation="0dp"
+            tools:text="December 12"
             />
         <!--<TextView-->
             <!--android:id="@+id/tvAmount"-->

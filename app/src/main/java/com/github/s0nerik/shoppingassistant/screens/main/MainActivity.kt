@@ -11,8 +11,8 @@ import com.github.s0nerik.shoppingassistant.databinding.ActivityMainBinding
 import com.github.s0nerik.shoppingassistant.model.RealmPurchase
 import com.github.s0nerik.shoppingassistant.screens.main.cart.CartFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.DashboardFragment
-import com.github.s0nerik.shoppingassistant.screens.main.fragments.PurchaseListsFragment
 import com.github.s0nerik.shoppingassistant.screens.main.fragments.history.HistoryFragment
+import com.github.s0nerik.shoppingassistant.screens.main.purchase_lists.PurchaseListsFragment
 import com.github.s0nerik.shoppingassistant.screens.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity

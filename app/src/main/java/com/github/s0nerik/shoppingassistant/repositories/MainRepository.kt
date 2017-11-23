@@ -15,6 +15,7 @@ interface IMainRepository {
     fun init()
 
     fun getPurchases(page: Int = -1, perPage: Int = 10) : Single<List<Purchase>>
+    fun getFuturePurchases(page: Int = -1, perPage: Int = 10) : Single<List<FuturePurchase>>
     fun getRecentPurchases(fromDate: Date? = null, page: Int = -1, perPage: Int = 10) : Single<List<Purchase>>
 
     fun getItems(page: Int = -1, perPage: Int = 10) : Single<List<Item>>

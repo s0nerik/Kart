@@ -66,6 +66,16 @@ class RealmMainRepositoryImpl : IMainRepository {
         }
     }
 
+    override fun getFuturePurchases(page: Int, perPage: Int): Single<List<FuturePurchase>> {
+        return Single.fromCallable {
+            if (page >= 0) TODO("Implement paging")
+
+            realm.where(RealmFuturePurchase::class.java)
+                    .findAllSorted("lastUpdate", Sort.DESCENDING)
+                    .map { FuturePurchase.from(it) }
+        }
+    }
+
     override fun getRecentPurchases(fromDate: Date?, page: Int, perPage: Int): Single<List<Purchase>> {
         return Single.fromCallable {
             if (page >= 0) TODO("Implement paging")
