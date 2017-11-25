@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
  * LinkedIn: https://linkedin.com/in/sonerik
  */
 
-object Db : IStatsRepository {
+object Db: IStatsRepository {
     private val ctx: Context
         get() = App.context
 
@@ -44,7 +44,7 @@ object Db : IStatsRepository {
         realm.use {
             it.executeTransaction {
                 val categories = JSONArray(ctx.resources.openRawResource(R.raw.categories).bufferedReader().use { it.readText() })
-                for (i in 0..(categories.length() - 1)) {
+                    for (i in 0..(categories.length() - 1)) {
                     val category = categories.getJSONObject(i)
                     val name = category.getString("name")
                     val iconId = ctx.resources.getIdentifier(category.getString("icon"), "drawable", ctx.packageName)
@@ -94,14 +94,20 @@ object Db : IStatsRepository {
         return query.findAllSorted("date", Sort.DESCENDING)
     }
 
+    fun getRecentPurchases(fromDate: Date? = null): Single<List<Purchase>> {
+        var query = realm.where(RealmPurchase::class.java)
+        fromDate?.let { query = query.greaterThan("date", it) }
+        return Single.just(query.findAllSorted("date", Sort.DESCENDING).map { Purchase.from(it) })
+    }
+
     fun moneySpent(fromDate: Date = Date(0)): Double {
         return Db.recentPurchases(fromDate).map { Purchase.from(it) }.sumByDouble { it.fullPrice.toDouble() }
     }
 
     override fun getPurchaseCategoryDistribution(fromDate: Date): Single<Map<Category?, List<Purchase>>> {
         return Single.just(purchases
-                .filter { it.date!! >= fromDate }
-                .groupBy { it.item?.category })
+                .filter { it.date >= fromDate }
+                .groupBy { it.item.category })
 
     }
 

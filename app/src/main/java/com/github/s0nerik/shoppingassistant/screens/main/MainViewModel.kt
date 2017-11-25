@@ -6,6 +6,7 @@ import com.github.s0nerik.shoppingassistant.DashboardDataPeriod
 import com.github.s0nerik.shoppingassistant.MainPrefs
 import com.github.s0nerik.shoppingassistant.base.BaseViewModel
 import com.github.s0nerik.shoppingassistant.utils.weak
+import io.reactivex.Observable
 
 class MainViewModel : BaseViewModel() {
     private var interactor by weak<MainViewModelInteractor>()
@@ -30,7 +31,8 @@ class MainViewModel : BaseViewModel() {
         state = State.DASHBOARD
     }
 
-    fun observeDataPeriodChanges() = observePropertyChanges(BR.dashboardDataPeriod).map { it.dashboardDataPeriod }
+    fun observeDataPeriodChanges(): Observable<DashboardDataPeriod> =
+            observePropertyChanges(BR.dashboardDataPeriod).map { it.dashboardDataPeriod }
 
     fun selectDashboardPeriod() {
         interactor?.let {

@@ -140,7 +140,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/statsCard"
                     android:layout_marginTop="16dp"
-                    android:visibility='@{vm.showRecents ? View.VISIBLE : View.GONE}'
                     app:cardCornerRadius="1dp"
                     app:adjustBottomListHeight='@{vm.adjustRecentPurchasesHeight}'>
 

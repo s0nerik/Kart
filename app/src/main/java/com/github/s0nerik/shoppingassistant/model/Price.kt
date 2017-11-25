@@ -67,8 +67,8 @@ open class RealmPrice(
         @PrimaryKey var id: String = Db.randomUuidString(),
         var value: Float? = null,
         var date: Date = Date(),
-        var currencyCode: String = "",
-        var quantityQualifierName: String = ""
+        var currencyCode: String = MainPrefs.defaultCurrencyCode,
+        var quantityQualifierName: String = Price.QuantityQualifier.ITEM.name
 ) : RealmObject() {
     companion object {
         fun from(e: Price): RealmPrice {

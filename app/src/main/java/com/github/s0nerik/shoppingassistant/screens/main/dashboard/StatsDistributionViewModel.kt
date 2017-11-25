@@ -7,9 +7,9 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IValueFormatter
-import com.github.nitrico.lastadapter.BR
 import com.github.nitrico.lastadapter.LastAdapter
 import com.github.nitrico.lastadapter.Type
+import com.github.s0nerik.shoppingassistant.BR
 import com.github.s0nerik.shoppingassistant.R
 import com.github.s0nerik.shoppingassistant.base.BaseViewModel
 import com.github.s0nerik.shoppingassistant.databinding.ItemStatsDistributionBinding
@@ -46,6 +46,7 @@ class StatsDistributionViewModel : BaseViewModel() {
                     val pieEntries = it.map { PieEntry(it.value.size.toFloat(), it.key?.name) }
                             .sortedByDescending { it.value }
                             .limit(10)
+
 
                     val legendItems = pieEntries.mapIndexed { i, it -> DistributionLegendItem(getColor(ITEM_COLORS[i % ITEM_COLORS.size]), it.label) }
 
