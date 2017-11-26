@@ -110,7 +110,7 @@ dependencies {
     // Data binding dependencies
     kapt "com.android.databinding:compiler:$android_plugin_version"
     implementation 'com.github.k-kagurazaka:filtered-observable-collection:1.0.1'
-    implementation 'com.github.nitrico.lastadapter:lastadapter:2.2.0'
+    implementation 'com.github.nitrico.lastadapter:lastadapter:2.2.2'
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
