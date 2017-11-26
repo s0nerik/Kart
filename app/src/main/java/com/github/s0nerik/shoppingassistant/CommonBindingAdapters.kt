@@ -88,13 +88,67 @@ fun applyNavBarMargin(view: View, apply: Boolean) {
     }
 }
 
+private val navBarGlobalLayoutListeners = WeakHashMap<View, ViewTreeObserver.OnGlobalLayoutListener>()
+
 // TODO: Add windowSystemUiVisibility listener to handle System UI changes
 @BindingAdapter("applyNavBarPadding")
 fun applyNavBarPadding(view: View, apply: Boolean) {
-    if (!apply) return
-
     val navBarHeight = getNavBarHeight(view.context)
+
+    if (!apply) {
+//        navBarGlobalLayoutListeners[view]?.let {
+//            view.viewTreeObserver.removeOnGlobalLayoutListener(it)
+//            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom - navBarHeight)
+//        }
+        return
+    }
+
     view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom + navBarHeight)
+
+//    navBarGlobalLayoutListeners[view] = object : ViewTreeObserver.OnGlobalLayoutListener {
+//        private var isFirstLayout = true
+//
+//        private var initialInaccessibleHeight: Int = 0
+//        private var lastInaccesibleHeight: Int = 0
+//
+//        private var isKeyboardShown = false
+//
+//        override fun onGlobalLayout() {
+//            val r = Rect()
+//            view.getWindowVisibleDisplayFrame(r)
+//            val screenHeight = view.rootView.height
+//
+//            // r.bottom is the position above soft keypad or device button.
+//            // if keypad is shown, the r.bottom is smaller than that before.
+//            val inaccesibleHeight = screenHeight - r.bottom
+//            "inaccesibleHeight = $inaccesibleHeight".log()
+//            if (isFirstLayout) {
+//                initialInaccessibleHeight = inaccesibleHeight
+//                isFirstLayout = false
+//                return
+//            }
+//
+//            if (inaccesibleHeight > initialInaccessibleHeight && !isKeyboardShown) {
+//                // keyboard is opened
+//                isKeyboardShown = true
+//                view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom - navBarHeight)
+//            } else if (inaccesibleHeight == initialInaccessibleHeight && isKeyboardShown) {
+//                // keyboard is closed
+//                isKeyboardShown = false
+//                view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom + navBarHeight)
+//            }
+//
+//            lastInaccesibleHeight = inaccesibleHeight
+////            if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+////                // keyboard is opened
+////                view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom - navBarHeight)
+////            } else {
+////                // keyboard is closed
+////                view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom + navBarHeight)
+////            }
+//        }
+//    }
+//    view.viewTreeObserver.addOnGlobalLayoutListener(navBarGlobalLayoutListeners[view])
 }
 
 @BindingAdapter("applyStatusBarMargin")
@@ -183,6 +237,14 @@ private fun getNavBarHeight(c: Context): Int {
 
 private fun isTablet(c: Context): Boolean {
     return c.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
+}
+
+private fun findTopParent(view: View): View? {
+    var v = view.parent as? View
+    while ((v?.parent as? View) != null) {
+        v = v?.parent as? View
+    }
+    return v
 }
 
 @BindingAdapter("adjustBottomListHeight")

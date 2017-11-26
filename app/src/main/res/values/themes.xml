@@ -14,6 +14,6 @@
     </style>
 
     <style name="AppTheme.CreateProductActivity" parent="AppTheme.Transparent">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/bgSemiTransparent</item>
     </style>
 </resources>

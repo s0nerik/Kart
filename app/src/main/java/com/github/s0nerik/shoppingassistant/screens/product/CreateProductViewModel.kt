@@ -135,5 +135,6 @@ class CreateProductViewModel : BaseViewModel(), SelectPriceViewModelInteractor {
 
     override fun onPriceSelected(price: Price) {
         this.price = price
+        state = State.CREATE_PRODUCT
     }
 }
