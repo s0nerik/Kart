@@ -14,14 +14,15 @@ import com.github.s0nerik.shoppingassistant.*
 import com.github.s0nerik.shoppingassistant.base.BaseViewModel
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseBinding
 import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
-import com.github.s0nerik.shoppingassistant.ext.asLiveData
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
+import com.github.s0nerik.shoppingassistant.ext.observeOnMainThread
 import com.github.s0nerik.shoppingassistant.model.Cart
 import com.github.s0nerik.shoppingassistant.model.Purchase
+import com.github.s0nerik.shoppingassistant.repositories.IMainRepository
 import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import com.github.s0nerik.shoppingassistant.repositories.stats.StatsRepository
+import com.github.s0nerik.shoppingassistant.screens.main.MainViewModel
 import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsDistributionFragment
-import com.github.s0nerik.shoppingassistant.screens.main.dashboard.StatsExpensesFragment
 import com.github.s0nerik.shoppingassistant.utils.weak
 import java.text.DecimalFormat
 
@@ -34,12 +35,9 @@ import java.text.DecimalFormat
 class DashboardViewModel : BaseViewModel() {
     var interactor by weak<DashboardViewModelInteractor>()
 
-    private val _recentPurchases = observableListOf<Purchase>()
-
-    private val recentPurchases = MainRepository.getRecentPurchases()
-            .doOnSuccess { _recentPurchases += it }
-            .takeUntilCleared()
-            .asLiveData()
+    private lateinit var mainVm: MainViewModel
+    lateinit var repo: IMainRepository
+    private val recentPurchases = observableListOf<Purchase>()
 
     var dataPeriod: DashboardDataPeriod = DashboardDataPeriod.from(MainPrefs.expensesLimitPeriod)
         @Bindable get
@@ -48,9 +46,16 @@ class DashboardViewModel : BaseViewModel() {
             notifyPropertyChanged(BR.dataPeriod)
         }
 
+    var adjustRecentPurchasesHeight: Boolean = false
+        @Bindable get
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.adjustRecentPurchasesHeight)
+        }
+
     val moneySpentAmountString: String
         @Bindable("dataPeriod") get() = "${MainPrefs.defaultCurrency.symbol} ${DecimalFormat("0.##").format(
-                MainRepository.getMoneySpent(dataPeriod.startDate).blockingGet()
+                repo.getMoneySpent(dataPeriod.startDate).blockingGet()
         )}"
 
     val expensesLimitString: String
@@ -59,14 +64,32 @@ class DashboardViewModel : BaseViewModel() {
     val showDistribution: Boolean
         @Bindable("dataPeriod") get() = StatsRepository.getPurchaseCategoryDistribution().blockingGet().keys.size > 2
 
-    val showRecents: Boolean
-        @Bindable("dataPeriod") get() = MainRepository.getRecentPurchases().blockingGet().isNotEmpty()
-
     val showMoneySpent: Boolean
-        @Bindable("dataPeriod") get() = MainRepository.getMoneySpent().blockingGet() > 0
+        @Bindable("dataPeriod") get() = repo.getMoneySpent().blockingGet() > 0
+
+    fun init(mainVm: MainViewModel, repo: IMainRepository = MainRepository) {
+        this.mainVm = mainVm
+        this.repo = repo
+        mainVm.observeDataPeriodChanges()
+                .map {
+                    dataPeriod = it
+                    it
+                }
+                .flatMapSingle {
+                    repo.getRecentPurchases(it.startDate)
+                }
+                .takeUntilCleared()
+                .observeOnMainThread()
+                .subscribe {
+                    recentPurchases.clear()
+//                    recentPurchases.forEach { recentPurchases.remove(it) }
+                    recentPurchases += it
+//                    adjustRecentPurchasesHeight = recentPurchases.isEmpty()
+                }
+    }
 
     fun initRecentsRecycler(recentsRecycler: RecyclerView, scrollView: NestedScrollView) {
-        LastAdapter(_recentPurchases, BR.item)
+        LastAdapter(recentPurchases, BR.item)
                 .type { _, _ -> Type<ItemPurchaseBinding>(R.layout.item_purchase) }
                 .into(recentsRecycler)
 
@@ -80,7 +103,6 @@ class DashboardViewModel : BaseViewModel() {
 
     fun initStatsViewPager(childFragmentManager: FragmentManager, pager: ViewPager, pagerTabs: TabLayout) {
         val statsDistributionFragment = StatsDistributionFragment()
-        val statsExpensesFragment = StatsExpensesFragment()
 
         val statsAdapter: PagerAdapter = object : FragmentPagerAdapter(childFragmentManager) {
             val fragments = listOf(statsDistributionFragment)

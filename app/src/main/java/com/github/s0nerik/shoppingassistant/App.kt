@@ -65,7 +65,7 @@ open class App : Application() {
     }
 
     protected open fun initDatabase() {
-        Db.initDatabase(this, false, true, true, true, true)
+        Db.initDatabase(this, true, true, true, true, true)
     }
 
     private fun configureTimber() {

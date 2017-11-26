@@ -117,6 +117,8 @@ open class BaseViewModel : ViewModel(), android.databinding.Observable {
 
             this@observePropertyChanges.addOnPropertyChangedCallback(callback)
             emitter.setCancellable { this@observePropertyChanges.removeOnPropertyChangedCallback(callback) }
+
+            emitter.onNext(this@observePropertyChanges)
         }.takeUntilCleared()
     }
 

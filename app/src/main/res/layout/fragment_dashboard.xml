@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:visibility='@{vm.showDistribution ? View.VISIBLE : View.GONE}'
+                    android:visibility='@{vm.showDistribution ? View.VISIBLE : View.VISIBLE}'
                     app:cardCornerRadius="1dp"
                     >
 
@@ -140,9 +140,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/statsCard"
                     android:layout_marginTop="16dp"
-                    android:visibility='@{vm.showRecents ? View.VISIBLE : View.GONE}'
                     app:cardCornerRadius="1dp"
-                    >
+                    app:adjustBottomListHeight='@{vm.adjustRecentPurchasesHeight}'>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -156,7 +155,7 @@
                             android:layout_marginBottom="12dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="16dp"
-                            android:text="Recent _purchases"
+                            android:text="Recent purchases"
                             android:textAppearance="@style/MaterialTypography.Regular.Body2"
                             />
 
