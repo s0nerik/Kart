@@ -11,6 +11,8 @@ import java.util.*
  * GitHub: https://github.com/s0nerik
  * LinkedIn: https://linkedin.com/in/sonerik
  */
+
+// TODO: implement paging
 interface IMainRepository {
     fun init()
 

@@ -24,6 +24,7 @@ class SelectCurrencyViewModel : BaseViewModel() {
     }
 
     fun initRecycler(recycler: RecyclerView) {
+        // TODO: load currenciesSorted async
         LastAdapter(currenciesSorted, BR.item)
                 .type { item, _ ->
                     Type<ItemCurrencyBinding>(R.layout.item_currency)

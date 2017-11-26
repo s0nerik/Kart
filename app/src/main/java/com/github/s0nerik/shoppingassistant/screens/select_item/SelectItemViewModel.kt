@@ -11,10 +11,14 @@ import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemBinding
 import com.github.s0nerik.shoppingassistant.databinding.ItemPurchaseItemHorizontalBinding
 import com.github.s0nerik.shoppingassistant.ext.RecyclerDivider
 import com.github.s0nerik.shoppingassistant.ext.observableListOf
+import com.github.s0nerik.shoppingassistant.ext.observeOnMainThread
+import com.github.s0nerik.shoppingassistant.ext.subscribeOnIoThread
 import com.github.s0nerik.shoppingassistant.model.Item
 import com.github.s0nerik.shoppingassistant.repositories.IMainRepository
 import com.github.s0nerik.shoppingassistant.repositories.MainRepository
 import com.github.s0nerik.shoppingassistant.utils.weak
+import io.reactivex.rxkotlin.Singles
+import java.util.concurrent.TimeUnit
 
 class SelectItemViewModel : BaseViewModel() {
     private var interactor by weak<SelectItemVmInteractor>()
@@ -27,28 +31,29 @@ class SelectItemViewModel : BaseViewModel() {
     private val horizontalItemAdapterType = Type<ItemPurchaseItemHorizontalBinding>(R.layout.item_purchase_item_horizontal)
             .onClick { interactor?.onItemSelected(it.binding.item!!) }
 
-    val frequents by lazy { observableListOf(mainRepo.getFrequentItems().blockingGet()) }
-    val favorites by lazy { observableListOf(mainRepo.getFavoriteItems().blockingGet()) }
-    val items by lazy { observableListOf(mainRepo.getItems().blockingGet()) }
-
+    val frequents = observableListOf<Item>()
+    val favorites = observableListOf<Item>()
+    val items = observableListOf<Item>()
     val filteredSearchResults = observableListOf<Item>()
 
+    //region Bindable properties
     var searchText: String = ""
         @Bindable get
         set(value) {
             field = value
             notifyPropertyChanged(BR.searchText)
-
-            filteredSearchResults.clear()
-            filteredSearchResults += items.filter { it.readableName.contains(searchText, true) }
         }
 
     val isSearching: Boolean
         @Bindable("searchText") get() = searchText.isNotEmpty()
+    //endregion
 
     fun init(interactor: SelectItemVmInteractor, mainRepo: IMainRepository = MainRepository) {
         this.interactor = interactor
         this.mainRepo = mainRepo
+
+        loadData()
+        observeSearchQueryChanges()
     }
 
     fun initViews(favoritesRecycler: RecyclerView, frequentsRecycler: RecyclerView, searchResultsRecycler: RecyclerView) {
@@ -64,7 +69,7 @@ class SelectItemViewModel : BaseViewModel() {
                     .into(recycler)
 
             isNestedScrollingEnabled = false
-            setHasFixedSize(true)
+//            setHasFixedSize(true)
 
             addItemDecoration(RecyclerDivider.vertical)
         }
@@ -83,12 +88,35 @@ class SelectItemViewModel : BaseViewModel() {
 
     private fun initSearchResults(recycler: RecyclerView) {
         with(recycler) {
-            LastAdapter(filteredSearchResults, BR.item)
+            LastAdapter(filteredSearchResults, BR.item, false)
                     .type { _, _ -> itemAdapterType }
                     .into(recycler)
 
             isNestedScrollingEnabled = false
         }
+    }
+
+    private fun loadData() {
+        Singles.zip(
+                mainRepo.getFrequentItems().subscribeOnIoThread(),
+                mainRepo.getFavoriteItems().subscribeOnIoThread(),
+                mainRepo.getItems().subscribeOnIoThread(),
+                { frequents, favorites, items -> Triple(frequents, favorites, items) }
+        ).observeOnMainThread().subscribeUntilCleared {
+            frequents += it.first
+            favorites += it.second
+            items += it.third
+        }
+    }
+
+    private fun observeSearchQueryChanges() {
+        observePropertyChanges(BR.searchText)
+                .throttleLast(1000, TimeUnit.MILLISECONDS)
+                .observeOnMainThread()
+                .subscribeUntilCleared {
+                    filteredSearchResults.clear()
+                    filteredSearchResults += items.filter { it.readableName.contains(searchText, true) }
+                }
     }
 
     fun clearSearch() {
