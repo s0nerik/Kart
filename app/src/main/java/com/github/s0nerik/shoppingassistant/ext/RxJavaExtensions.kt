@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.bundleOf
-import org.reactivestreams.Subscription
 import rx_activity_result2.RxActivityResult
 
 
@@ -28,7 +26,7 @@ inline fun <reified TActivity: Activity, TResult> Activity.startForResult(result
             }
 }
 
-inline fun <reified TActivity: Activity> Activity.startForResultCompletable(extras: Bundle = Bundle.EMPTY): Completable {
+inline fun <reified TActivity: Activity> Activity.startForResult(extras: Bundle = Bundle.EMPTY): Completable {
     return RxActivityResult.on(this)
             .startIntent(Intent(this, TActivity::class.java).putExtras(extras))
             .firstElement()
@@ -36,11 +34,11 @@ inline fun <reified TActivity: Activity> Activity.startForResultCompletable(extr
             .ignoreElement()
 }
 
-inline fun <reified TActivity: Activity> Activity.startForResult(vararg extras: Pair<String, Any>): Completable =
-        startForResultCompletable<TActivity>(bundleOf(*extras))
+inline fun <reified TActivity: Activity, TResult> Activity.startForResult(resultKey: String, vararg extras: Pair<String, Any>): Maybe<TResult> =
+        startForResult<TActivity, TResult>(resultKey, bundleOf(*extras))
 
 inline fun <reified TActivity: Activity> Activity.startForResultCompletable(vararg extras: Pair<String, Any>): Completable =
-        startForResultCompletable<TActivity>(bundleOf(*extras))
+        startForResult<TActivity>(bundleOf(*extras))
 
 //region Scheduler extensions
 fun <T> Flowable<T>.subscribeOnIoThread(): Flowable<T> = subscribeOn(Schedulers.io())
