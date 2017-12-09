@@ -61,19 +61,24 @@ fun elevateViewOnSwipe(swipeLayout: SwipeLayout, oldView: View?, newView: View) 
     elevationListeners.remove(oldView)
 
     elevationListeners[newView] = object : SimpleSwipeListener() {
-        var startElevation: Float = 0f
+        private var startElevation: Float = 0f
+        private var isOpened: Boolean = false
 
         override fun onStartOpen(layout: SwipeLayout) {
+            if (isOpened) return
             startElevation = newView.elevation
             newView.elevation = startElevation + newView.dip(1)
         }
 
         override fun onOpen(layout: SwipeLayout) {
-            newView.elevation = startElevation
+            if (isOpened) return
+            newView.elevation = startElevation + newView.dip(1)
+            isOpened = true
         }
 
         override fun onClose(layout: SwipeLayout) {
             newView.elevation = startElevation
+            isOpened = false
         }
     }
     swipeLayout.addSwipeListener(elevationListeners[newView])
